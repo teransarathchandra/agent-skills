@@ -44,4 +44,4 @@ claude plugin validate .
 
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, `chore:`).
 - Versions follow semver. A new skill is a minor version; a change that alters a skill's output format is a major version once we pass 1.0.
-- To release: move the Unreleased notes under a new `## [x.y.z] - date` heading, set the same version in `.claude-plugin/plugin.json`, and tag `vx.y.z`. CI fails if the two disagree.
+- To release: move the Unreleased notes under a new `## [x.y.z] - date` heading, set the same version in `.claude-plugin/plugin.json`, and push the tag `vx.y.z`. The release workflow checks the tag against `plugin.json`, runs the validator and creates the GitHub release from the changelog notes.

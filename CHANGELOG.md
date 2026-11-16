@@ -12,3 +12,4 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - Claude Code plugin and marketplace manifests.
 - `scripts/validate_skills.py` and its tests, run in CI.
 - Skill template, contributing guide, security policy and code of conduct.
+- Release workflow: pushing a `vX.Y.Z` tag validates the repo and publishes a GitHub release from these notes.
