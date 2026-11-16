@@ -11,6 +11,7 @@ Agent skills for real engineering work. Each skill is a plain Markdown file that
 |---|---|---|
 | [`pr-review-with-ticket-context`](skills/pr-review-with-ticket-context/SKILL.md) | You want a PR reviewed against its Jira ticket. It finds the real root cause, then gives two grids: comments on the files the PR changed, and gaps outside the PR | `git`, `gh`; best with the [Jira delivery MCP](https://github.com/teransarathchandra/jira-mcp-server) |
 | [`sanitize-skill-for-public`](skills/sanitize-skill-for-public/SKILL.md) | You are about to publish a skill, prompt or notes written for private or work use. It finds private names, keys and links, rewrites them as fictional stand-ins and proves the copy is clean with a scan. It never publishes | Python 3.9+ for the bundled scanner |
+| [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | You are applying for jobs, including abroad or with visa sponsorship. It builds an ATS-safe CV from your real evidence, writes one cover letter per job ad, syncs your job-site profile and fills in applications with a browser agent. It always stops before Submit | A .docx tool (Node.js 18+ and the `docx` package for the bundled letter script); a browser tool such as the Playwright MCP for applications |
 
 More will be added here as they are tested on real work.
 
