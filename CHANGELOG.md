@@ -4,10 +4,19 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-17
+
 ### Added
 
 - `job-application-assistant` skill: builds an ATS-safe CV from the candidate's own evidence, writes one cover letter per job ad, triages ads by work-rights clauses, syncs the job-site profile and fills in applications with a browser agent. It always stops before Submit and keeps salary and ID data out of files.
 - `scripts/build_letter.js` inside that skill, with a placeholder template in `assets/cover-letter.json`: builds a one-page cover letter (.docx) and refuses to run while placeholders are left.
+- Cover art: `docs/assets/banner.svg` for the README and `docs/assets/social-preview.png` (1280x640) for the GitHub social preview.
+- `SUPPORT.md`.
+- The validator now checks that every relative link and image in `README.md` exists.
+
+### Changed
+
+- README redesigned: banner, badges, why, skills table with example prompts, install and update steps, how-it-works diagram, repository layout, development and acknowledgements.
 
 ## [0.2.0] - 2026-11-16
 
