@@ -4,6 +4,13 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-16
+
+### Added
+
+- `sanitize-skill-for-public` skill: turns a skill or notes written for private or work use into a fictional, public-safe copy, and proves it with a scan. Prepares only; never publishes.
+- `scripts/scan_terms.py` inside that skill: scans files, file names and git history for a private term list and for risky patterns (emails, ticket keys, ids, dates, internal links, secrets, home paths). Refuses a term list stored inside the scanned folder.
+
 ## [0.1.0] - 2026-11-16
 
 ### Added
@@ -12,3 +19,4 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - Claude Code plugin and marketplace manifests.
 - `scripts/validate_skills.py` and its tests, run in CI.
 - Skill template, contributing guide, security policy and code of conduct.
+- Release workflow: pushing a `vX.Y.Z` tag validates the repo and publishes a GitHub release from these notes.
