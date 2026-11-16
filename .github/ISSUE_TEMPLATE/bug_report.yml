@@ -1,0 +1,36 @@
+name: Bug report
+description: A skill gave a wrong, unsafe or confusing result
+labels: [bug]
+body:
+  - type: input
+    id: skill
+    attributes:
+      label: Skill
+      description: Folder name under `skills/`
+      placeholder: pr-review-with-ticket-context
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: Agent and version
+      placeholder: Claude Code 2.1.x, Codex, Cursor...
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened
+      description: Do not paste private data (names, emails, keys, internal ticket text).
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce

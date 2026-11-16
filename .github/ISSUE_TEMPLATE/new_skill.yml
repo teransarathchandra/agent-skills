@@ -1,0 +1,22 @@
+name: Skill idea
+description: Suggest a new skill or a change to an existing one
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What goes wrong today when an agent does this task without a skill?
+    validations:
+      required: true
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: What the skill should make the agent do
+    validations:
+      required: true
+  - type: textarea
+    id: trigger
+    attributes:
+      label: When it should load
+      description: The situations, in the user's words, that should trigger it.
