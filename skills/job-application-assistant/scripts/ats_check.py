@@ -31,8 +31,15 @@ W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 W = f"{{{W_NS}}}"
 
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+# A run of digits, spaces, brackets and hyphens. It only counts as a phone number when it holds
+# PHONE_DIGITS digits: 9 is the shortest common national number with its area code, 15 is the
+# E.164 maximum. Below 9 a date range such as "2019 - 2023" (8 digits) would match.
 PHONE_RE = re.compile(r"\+?\d[\d ()-]{6,}\d")
+PHONE_DIGITS = range(9, 16)
 
+# Fonts installed with Windows, macOS or Microsoft Office, plus their metric-compatible open
+# twins (Carlito, Liberation) and the most common web fonts. A font outside this list may be
+# missing on the recruiter's machine, and Word then substitutes one with different widths.
 COMMON_FONTS = {
     "arial", "aptos", "book antiqua", "calibri", "cambria", "carlito", "garamond",
     "georgia", "helvetica", "helvetica neue", "lato", "liberation sans", "liberation serif",
@@ -81,7 +88,7 @@ def _paragraphs(root: ET.Element) -> list[tuple[str, str]]:
 def _has_contact(text: str) -> bool:
     if EMAIL_RE.search(text):
         return True
-    return any(9 <= sum(c.isdigit() for c in m.group(0)) <= 15 for m in PHONE_RE.finditer(text))
+    return any(sum(c.isdigit() for c in m.group(0)) in PHONE_DIGITS for m in PHONE_RE.finditer(text))
 
 
 def _fonts(root: ET.Element) -> set[str]:
@@ -137,8 +144,8 @@ def check_docx(path: str | Path) -> dict:
     for cols in document.iter(f"{W}cols"):
         num = cols.get(f"{W}num", "1")
         if num.isdigit() and int(num) > 1:
-            warnings.append("the page uses more than one column; parsers often merge columns line by line. "
-                            "Use one column")
+            warnings.append("the page uses more than one column; Word's columns parse better than tables, but "
+                            "some parsers still merge them line by line. One column is safe everywhere")
             break
 
     fonts = _fonts(document) | (_fonts(styles) if styles is not None else set())
@@ -178,9 +185,13 @@ def load_terms(path: str | Path) -> list[list[str]]:
     return groups
 
 
+# Terms this short (Go, R, C#, AWS, SQL) are often ordinary words in another case ("go", "r"),
+# so they match case-sensitively. Longer terms match in any case ("Kubernetes", "kubernetes").
+CASE_SENSITIVE_MAX_LEN = 3
+
+
 def _term_pattern(alias: str) -> re.Pattern:
-    # Short terms (Go, R, C#, AWS) match case-sensitively so "go" or "aws" in prose do not count.
-    flags = 0 if len(alias) <= 3 else re.IGNORECASE
+    flags = 0 if len(alias) <= CASE_SENSITIVE_MAX_LEN else re.IGNORECASE
     return re.compile(rf"(?<![A-Za-z0-9]){re.escape(alias)}(?![A-Za-z0-9])", flags)
 
 

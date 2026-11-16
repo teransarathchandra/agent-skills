@@ -20,12 +20,19 @@ const USAGE = `usage: node build_letter.js <letter.json> <output.docx> [--force]
   --force   overwrite <output.docx> if it already exists
   --help    show this help`;
 
+// Page sizes in twentieths of a point (twips): A4 is 210 x 297 mm, US Letter 8.5 x 11 in.
 const PAPER = {
   a4: { width: 11906, height: 16838 },
   letter: { width: 12240, height: 15840 },
 };
-const FONT = 'Calibri';
-const ACCENT = '1D4E89';
+// 1300 twips is about 0.9 in (23 mm): inside the 0.5 to 1 in range readers expect, and wide
+// enough for six paragraphs at 11 pt to fit one page.
+const MARGIN = 1300;
+const FONT = 'Calibri'; // installed with Microsoft Office; Carlito is its metric twin elsewhere
+const BODY_SIZE = 22; // half-points: 11 pt
+const ACCENT = '1D4E89'; // dark blue; prints legibly in greyscale
+// Body word counts. 150 to 250 suits an optional letter field; 250 to 400 is the usual full
+// letter and fits one page at 11 pt with MARGIN; past 450 it no longer fits, so the build stops.
 const WORDS = { short: 150, long: 400, max: 450 };
 const PLACEHOLDER_RE = /\[[A-Z][A-Z ,./-]+[^\]]*\]/g;
 
@@ -97,7 +104,7 @@ function parseArgs(argv) {
 
 function buildDocument(letter, docx) {
   const { Document, Paragraph, TextRun, BorderStyle } = docx;
-  const run = (text, options = {}) => new TextRun({ text, font: FONT, size: 22, ...options });
+  const run = (text, options = {}) => new TextRun({ text, font: FONT, size: BODY_SIZE, ...options });
   const para = (text, { bold = false, after = 180 } = {}) =>
     new Paragraph({ children: [run(text, { bold })], spacing: { after, line: 300 } });
 
@@ -128,12 +135,12 @@ function buildDocument(letter, docx) {
   return new Document({
     creator: name,
     title: `${name} Cover Letter`,
-    styles: { default: { document: { run: { font: FONT, size: 22 } } } },
+    styles: { default: { document: { run: { font: FONT, size: BODY_SIZE } } } },
     sections: [{
       properties: {
         page: {
           size: PAPER[String(letter.paper || 'a4').toLowerCase()],
-          margin: { top: 1300, bottom: 1300, left: 1300, right: 1300 },
+          margin: { top: MARGIN, bottom: MARGIN, left: MARGIN, right: MARGIN },
         },
       },
       children,

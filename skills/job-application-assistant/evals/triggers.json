@@ -1,0 +1,21 @@
+{
+  "should_trigger": [
+    "Can you rewrite my resume so it gets past applicant tracking systems?",
+    "Write a cover letter for this job ad, here's the link.",
+    "Which of these jobs should I apply for? I need visa sponsorship.",
+    "My LinkedIn profile still shows my old job, can you sync it with my new CV?",
+    "Fill in this job application form for me but don't submit it.",
+    "Is this recruiter message a scam? They want me to pay for training.",
+    "I have an interview on Friday for the backend role, help me prepare stories from my CV.",
+    "Use my degree certificate and transcript to fix the education section of my CV."
+  ],
+  "should_not_trigger": [
+    "Write a job description for the backend engineer we are hiring.",
+    "Build an applicant tracking system for our HR team in Django.",
+    "Review this pull request against its Jira ticket.",
+    "Convert this Word document to PDF.",
+    "Summarise this research paper for me.",
+    "Write a resignation letter to my manager.",
+    "Screen these 200 resumes and rank the candidates for our opening."
+  ]
+}

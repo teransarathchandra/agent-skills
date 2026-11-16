@@ -15,12 +15,18 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - Tests for both scripts (`tests/test_ats_check.py`, `tests/build_letter.test.js`); CI now runs the Node tests too.
 - `references/example.md`: a fictional end-to-end run (intake, checker output, tracker, stop-before-Submit report), and `assets/terms-example.txt` for `ats_check.py --terms`.
 - The validator's privacy scan now also covers `.js`, `.mjs`, `.cjs` and `.ts` files in skills.
+- `evals/evals.json` (8 scenarios: no tracker connected, missing paths, a scam recruiter, a keyword without evidence, a work-rights clause, stop before Submit, current salary, bulk automation) and `evals/triggers.json` for `job-application-assistant`.
+- The validator checks the shape of `evals/evals.json` and `evals/triggers.json` when present, and requires a `## Contents` list in reference files over 100 lines.
+- `docs/authoring-skills.md`: rules from Anthropic's skill-authoring guide (third-person trigger descriptions, references one level deep, copyable checklists, scripts run through their interpreter, documented constants, cited sources) and a section on evaluations.
+- Research-backed guidance: fuller scam signs (payment methods, fake cheques, cloned sites, deepfake interviews), how to verify a recruiter and where to report; checking an employer's AI policy before drafting; asking for human review of a solely automated rejection under GDPR Article 22; a note on how sure the ATS layout rules are. Sources listed with the month checked.
 
 ### Changed
 
 - `build_letter.js` checks every field's type, warns on letters under 150 or over 400 words and stops over 450, adds `--check` (no install needed), `--force` and `--help`, refuses to overwrite by default, and loads `docx` only when building. `scripts/package.json` pins `docx` to 9.15.2.
 - The tracker table gains Applied and Follow up columns and more statuses.
 - Plugin and marketplace descriptions name all three skills; new keywords `job-search`, `cv`, `ats`.
+- `job-application-assistant` SKILL.md: a copyable progress checklist; scripts are called through `python`/`node`; `ats_check.py` is re-run until it exits 0; the description lists triggers only.
+- Both scripts document why each constant has its value.
 
 ## [0.3.0] - 2026-11-17
 

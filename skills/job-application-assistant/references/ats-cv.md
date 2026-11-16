@@ -2,9 +2,24 @@
 
 An applicant tracking system (ATS) turns the CV into plain text and matches it against the job ad. Anything it cannot parse is lost. Build for the parser first, then for the person.
 
+## Contents
+
+- Layout
+- Summary
+- Keywords from the ad
+- Bullets that show results
+- One version per region
+- File format
+- Checking the page count
+- Check with ats_check.py
+- Building the .docx
+- Honest framing
+- Metadata
+- How sure this is
+
 ## Layout
 
-- One column. No tables, text boxes, columns, icons, skill bars or photo.
+- One column. No tables, text boxes, icons, skill bars or photo. Word's own column feature parses better than columns built from tables or text boxes, but some systems still read across them line by line, so one column is the safe choice.
 - Real text. Never an image or a scanned PDF. Test: open the PDF and select the text.
 - Built-in heading styles, with standard names, in this order: **Summary, Skills, Experience, Projects, Publications, Education, Certifications.** Skills sit near the top so a recruiter sees the keywords first.
 - Contact block at the top of the body as plain text: name, title, city and country (with time zone if applying abroad), phone, email, profile and repo links, and one line on work preference ("Open to remote, hybrid and on-site roles; willing to relocate"). **Never in the page header or footer**: many parsers skip those parts and the CV arrives without a name.
@@ -118,3 +133,7 @@ A .docx carries author, company and edit history in its properties.
 
 - Set `creator` to the candidate's name and `title` to "[CANDIDATE NAME] CV" when generating.
 - To clean a file someone else edited: in Word on Windows, File > Info > Check for Issues > Inspect Document > remove Document Properties and Personal Information, then save. On a Mac, Word > Preferences > Security > tick "Remove personal information from this file on save", then save again.
+
+## How sure this is
+
+ATS vendors do not publish how their parsers treat each layout feature. The rules above are the points that career-service guides and resume-checking tools agree on (checked 2026-11): headers and footers, text boxes and shapes are the most often lost; tables are read out of order by some systems and fine in others; Word's built-in columns parse better than table-based ones. Claims that a named system "ignores headers" come from third-party testing, not vendor documentation. When a candidate asks why a rule exists, say this plainly, and prefer the layout that is safe in every system over one that works in most.
