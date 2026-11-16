@@ -23,7 +23,7 @@ Two or three lines under the contact block: the target title (the ad's own title
 
 Recruiters search the ATS for the ad's own terms, and many systems rank by them.
 
-1. List the ad's terms: required and preferred skills, tools, certifications, methods and the job title. Write them to a `terms.txt` (one per line, aliases with `|`, for example `AWS|Amazon Web Services`).
+1. List the ad's terms: required and preferred skills, tools, certifications, methods and the job title. Write them to a `terms.txt` (one per line, aliases with `|`, for example `AWS|Amazon Web Services`; see [../assets/terms-example.txt](../assets/terms-example.txt)).
 2. Use the ad's exact spelling ("Node.js", not "Node"; "CI/CD", not "pipelines"). Write the long form and the acronym once each: "Amazon Web Services (AWS)".
 3. Put each term where it was used: the Skills list, and the bullet that shows it. A term only in the Skills list is weak; a term in a bullet is evidence.
 4. **Only where the evidence supports it.** A missing term the candidate has not used goes in the letter as a stated gap, never in the CV. Never hide keywords (white text, tiny font): ATS show recruiters the plain text, and it reads as cheating.

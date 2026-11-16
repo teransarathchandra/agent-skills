@@ -85,6 +85,11 @@ class SkillTests(unittest.TestCase):
         errors = self.run_skill(GOOD + "\ntoken ghp_" + "a" * 30 + "\n")
         self.assertTrue(any("secret" in e for e in errors))
 
+    def test_script_files_are_scanned(self):
+        for name in ("scripts/tool.js", "scripts/tool.mjs", "scripts/tool.cjs", "scripts/tool.ts"):
+            errors = self.run_skill(GOOD, extra={name: "// mail jane.doe@corp.com\n"})
+            self.assertTrue(any("email address" in e and name in e for e in errors), name)
+
 
 class RepositoryTests(unittest.TestCase):
     def test_this_repository_is_valid(self):

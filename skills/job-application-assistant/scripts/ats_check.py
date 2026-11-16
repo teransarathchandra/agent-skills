@@ -219,6 +219,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"ERROR  {error}")
         for warning in result["warnings"]:
             print(f"WARN   {warning}")
+        if not result["errors"] and not result["warnings"]:
+            print("OK  no structural problems found")
         if "keywords" in result:
             kw = result["keywords"]
             total = len(kw["found"]) + len(kw["missing"])
@@ -226,8 +228,6 @@ def main(argv: list[str] | None = None) -> int:
             if kw["missing"]:
                 print(f"  missing: {', '.join(kw['missing'])}")
                 print("  Add a missing term only where the candidate's evidence supports it.")
-        if not result["errors"] and not result["warnings"]:
-            print("OK  no structural problems found")
     return 1 if result["errors"] else 0
 
 

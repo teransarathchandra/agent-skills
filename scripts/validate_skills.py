@@ -26,7 +26,8 @@ SECRET_RES = [
     re.compile(r"sk-[A-Za-z0-9]{20,}"),
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
 ]
-ALLOWED_EMAIL_DOMAINS = ("example.com", "example.org", "users.noreply.github.com")
+SCANNED_SUFFIXES = {".md", ".py", ".sh", ".js", ".mjs", ".cjs", ".ts", ".json", ".txt", ".yml", ".yaml"}
+ALLOWED_EMAIL_DOMAINS =("example.com", "example.org", "users.noreply.github.com")
 MAX_NAME = 64
 MAX_DESCRIPTION = 1024
 MAX_COMPATIBILITY = 500
@@ -125,7 +126,7 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
 
     check_links(skill_file, body, errors)
     for file in sorted(skill_dir.rglob("*")):
-        if file.is_file() and file.suffix in {".md", ".py", ".sh", ".json", ".txt", ".yml", ".yaml"}:
+        if file.is_file() and file.suffix in SCANNED_SUFFIXES:
             check_privacy(file, file.read_text(encoding="utf-8"), errors)
 
 

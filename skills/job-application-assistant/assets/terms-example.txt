@@ -1,0 +1,12 @@
+# Terms from one job ad, for scripts/ats_check.py --terms.
+# One term per line, spelled as the ad spells it. Put aliases on one line with "|";
+# the first alias names the term in the report. Lines starting with "#" are comments.
+# Copy this file into the private working folder, one per job.
+C#
+.NET
+ASP.NET Core
+Azure|Microsoft Azure
+SQL Server
+REST APIs|REST
+Kubernetes|AKS
+TypeScript

@@ -13,11 +13,14 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - `references/interview-prep.md`: STAR stories, gap answers and questions for the employer, built from the same evidence as the CV.
 - Guidance on ad keywords, action-and-result bullets, more regional CV formats, scam and ghost-job checks, job sites' rules on automation, AI-use and voluntary diversity questions, and follow-ups.
 - Tests for both scripts (`tests/test_ats_check.py`, `tests/build_letter.test.js`); CI now runs the Node tests too.
+- `references/example.md`: a fictional end-to-end run (intake, checker output, tracker, stop-before-Submit report), and `assets/terms-example.txt` for `ats_check.py --terms`.
+- The validator's privacy scan now also covers `.js`, `.mjs`, `.cjs` and `.ts` files in skills.
 
 ### Changed
 
 - `build_letter.js` checks every field's type, warns on letters under 150 or over 400 words and stops over 450, adds `--check` (no install needed), `--force` and `--help`, refuses to overwrite by default, and loads `docx` only when building. `scripts/package.json` pins `docx` to 9.15.2.
 - The tracker table gains Applied and Follow up columns and more statuses.
+- Plugin and marketplace descriptions name all three skills; new keywords `job-search`, `cv`, `ats`.
 
 ## [0.3.0] - 2026-11-17
 
