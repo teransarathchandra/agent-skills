@@ -1,0 +1,22 @@
+{
+  "paper": "a4",
+  "candidate": {
+    "name": "[CANDIDATE NAME]",
+    "contactLines": [
+      "[CITY, COUNTRY] | [PHONE] | [EMAIL]",
+      "[PROFILE URL] | [REPO URL]"
+    ]
+  },
+  "date": "[DD Month YYYY]",
+  "recipient": ["[CONTACT NAME or Hiring Team]", "[EMPLOYER]", "[EMPLOYER CITY]"],
+  "subject": "Application for [TARGET ROLE]",
+  "salutation": "Dear [CONTACT NAME or Hiring Team],",
+  "paragraphs": [
+    "[WHY THIS JOB: one or two sentences tied to something specific in the ad.]",
+    "[EVIDENCE: the candidate's real work mapped to the ad's top two or three requirements, naming the technology the ad names.]",
+    "[SOMETHING EXTRA: a publication, open-source project, certification or domain match. State any gap plainly.]",
+    "[LOGISTICS: current location, work rights, relocation, remote-contractor option, notice period, time-zone overlap.]",
+    "[CLOSE: one sentence asking for a conversation.]"
+  ],
+  "closing": "Yours sincerely,"
+}
