@@ -160,6 +160,21 @@ def validate_manifests(errors: list[str]) -> None:
             errors.append(".claude-plugin/marketplace.json: set 'version' only in plugin.json, not in the entry")
 
 
+def validate_readme(errors: list[str]) -> None:
+    """Every relative link and image in README.md must point at a file that exists."""
+    readme = ROOT / "README.md"
+    if not readme.is_file():
+        errors.append("README.md: file not found")
+        return
+    text = readme.read_text(encoding="utf-8")
+    targets = LINK_RE.findall(text) + re.findall(r'(?:src|href)="([^"]+)"', text)
+    for target in targets:
+        if re.match(r"^(https?:|mailto:|#)", target):
+            continue
+        if not (ROOT / target.split("#", 1)[0].split("?", 1)[0]).exists():
+            errors.append(f"README.md: broken relative link or image: {target}")
+
+
 def main() -> int:
     errors: list[str] = []
     skills_root = ROOT / "skills"
@@ -169,6 +184,7 @@ def main() -> int:
     for skill_dir in skill_dirs:
         validate_skill(skill_dir, errors)
     validate_manifests(errors)
+    validate_readme(errors)
     if errors:
         print(f"{len(errors)} problem(s) found:\n")
         for error in errors:

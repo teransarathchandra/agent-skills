@@ -1,19 +1,47 @@
-# agent-skills
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="agent-skills: skills for real engineering work" width="100%">
+</p>
 
-[![ci](https://github.com/teransarathchandra/agent-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/teransarathchandra/agent-skills/actions/workflows/ci.yml)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+<p align="center">
+  <a href="https://github.com/teransarathchandra/agent-skills/actions/workflows/ci.yml"><img src="https://github.com/teransarathchandra/agent-skills/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/teransarathchandra/agent-skills/releases"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fteransarathchandra%2Fagent-skills%2Fmain%2F.claude-plugin%2Fplugin.json&query=%24.version&label=version&color=7c9cff" alt="Version"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license"></a>
+  <a href="https://agentskills.io"><img src="https://img.shields.io/badge/format-Agent_Skills-5eead4" alt="Agent Skills format"></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome"></a>
+</p>
 
-Agent skills for real engineering work. Each skill is a plain Markdown file that teaches an AI coding agent one job and the checks that stop it getting that job wrong. They follow the open [Agent Skills](https://agentskills.io) format, so they work in Claude Code and in other agents that read `SKILL.md`.
+<p align="center">
+  Plain Markdown skills that teach an AI coding agent one job, and the checks that stop it getting that job wrong.<br>
+  They follow the open <a href="https://agentskills.io">Agent Skills</a> format, so they work in Claude Code and in any agent that reads <code>SKILL.md</code>.
+</p>
+
+<p align="center">
+  <a href="#skills">Skills</a> ·
+  <a href="#install">Install</a> ·
+  <a href="#use-it">Use it</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#development">Development</a> ·
+  <a href="#contributing">Contributing</a>
+</p>
+
+## Why
+
+An agent with no guidance will review a PR by skimming the diff, rewrite a CV with invented numbers, or paste a customer's name into a public file. These skills put the steps and the stop signs in writing, so the agent does the careful version every time:
+
+- **Evidence first.** Findings and claims are checked against the real file, ticket or source before they are reported.
+- **Private by default.** Skills that touch tickets, code or personal documents tell the agent not to copy names, emails, keys or quotes anywhere.
+- **Stops before the point of no return.** Read-only unless you ask. Posting, pushing, submitting or publishing needs your word.
+- **Short and plain.** Output reads like a teammate wrote it.
 
 ## Skills
 
-| Skill | Use it when | Needs |
-|---|---|---|
-| [`pr-review-with-ticket-context`](skills/pr-review-with-ticket-context/SKILL.md) | You want a PR reviewed against its Jira ticket. It finds the real root cause, then gives two grids: comments on the files the PR changed, and gaps outside the PR | `git`, `gh`; best with the [Jira delivery MCP](https://github.com/teransarathchandra/jira-mcp-server) |
-| [`sanitize-skill-for-public`](skills/sanitize-skill-for-public/SKILL.md) | You are about to publish a skill, prompt or notes written for private or work use. It finds private names, keys and links, rewrites them as fictional stand-ins and proves the copy is clean with a scan. It never publishes | Python 3.9+ for the bundled scanner |
-| [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | You are applying for jobs, including abroad or with visa sponsorship. It builds an ATS-safe CV from your real evidence, writes one cover letter per job ad, syncs your job-site profile and fills in applications with a browser agent. It always stops before Submit | A .docx tool (Node.js 18+ and the `docx` package for the bundled letter script); a browser tool such as the Playwright MCP for applications |
+| Skill | What it does | Try saying | Needs |
+|---|---|---|---|
+| [`pr-review-with-ticket-context`](skills/pr-review-with-ticket-context/SKILL.md) | Reviews a pull request against its Jira ticket. Finds the real root cause, then returns two grids: comments on the files the PR changed, and gaps outside the PR | "Review PR 123 for ABC-456." | `git`, `gh`; best with the [Jira delivery MCP](https://github.com/teransarathchandra/jira-mcp-server) |
+| [`sanitize-skill-for-public`](skills/sanitize-skill-for-public/SKILL.md) | Turns a skill, prompt or notes written for private or work use into a fictional, public-safe copy and proves it is clean with a scan. Prepares only; never publishes | "Make this skill safe to publish." | Python 3.9+ for the bundled scanner |
+| [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | Builds an ATS-safe CV from your real evidence, writes one cover letter per job ad, syncs your job-site profile and fills in applications with a browser agent. Always stops before Submit | "Rebuild my CV for ATS and write a cover letter for this ad." | A .docx tool (Node.js 18+ and the `docx` package for the bundled letter script); a browser tool such as the Playwright MCP |
 
-More will be added here as they are tested on real work.
+Each skill folder holds a `SKILL.md`, plus `references/` (longer guides and worked examples), `scripts/` and `assets/` where it needs them. Every example in this repository is fictional.
 
 ## Install
 
@@ -23,6 +51,8 @@ More will be added here as they are tested on real work.
 /plugin marketplace add teransarathchandra/agent-skills
 /plugin install teran-skills@teransarathchandra
 ```
+
+Update later with `/plugin marketplace update teransarathchandra`.
 
 **Other agents** (copies editable files into your project):
 
@@ -34,25 +64,63 @@ npx skills@latest add teransarathchandra/agent-skills
 
 ## Use it
 
-Ask in plain words. For example:
+Ask in plain words. The agent loads the skill from its description, so you do not need a command:
 
 ```text
 Review PR 123 for ABC-456.
 ```
 
-The agent loads the skill from its description, so you do not need a command. In Claude Code you can also run it by name: `/teran-skills:pr-review-with-ticket-context`.
+In Claude Code you can also run a skill by name: `/teran-skills:pr-review-with-ticket-context`.
 
-## What these skills promise
+## How it works
 
-- **Private by default.** Skills that read tickets or code tell the agent not to copy names, emails, keys or quotes anywhere. `sanitize-skill-for-public` is how skills here get cleaned before release.
-- **Read-only by default.** Posting, pushing or editing needs a request from you.
-- **Evidence first.** Findings are checked against the real file and line before they are reported.
-- **Short and plain.** Output reads like a teammate wrote it.
+An agent does not read every skill in full. It reads only the name and description of each one, and loads more only when a task needs it, so unused skills cost almost nothing.
+
+```mermaid
+flowchart LR
+  A[Agent starts] --> B[Reads each skill's name and description]
+  B --> C{Does the task match a description?}
+  C -- yes --> D[Loads that SKILL.md]
+  D --> E[Opens references/ or runs scripts/ only when a step needs them]
+  C -- no --> F[Skill stays unloaded]
+```
+
+That is why every description here starts with **"Use when"**: it is the one line the agent uses to decide.
+
+## Repository layout
+
+```text
+skills/<name>/SKILL.md        one skill per folder; the folder name equals the skill name
+skills/<name>/references/     longer guides and worked examples a skill links to
+skills/<name>/scripts/        helper scripts a skill runs
+skills/<name>/assets/         templates a skill fills in
+template/SKILL.md             copy this to start a new skill
+scripts/validate_skills.py    the checks CI runs on every skill and manifest
+tests/                        tests for the scripts
+docs/                         guides and cover art
+.claude-plugin/               Claude Code plugin and marketplace manifests
+```
+
+## Development
+
+No dependencies. Python 3.9 or newer.
+
+```bash
+python scripts/validate_skills.py              # skills, manifests, README links (what CI runs)
+python -W error -m unittest discover -s tests
+claude plugin validate .                       # Claude Code's own manifest check
+```
+
+CI runs the first two on every push and pull request. `main` is protected: changes go through a pull request with a passing check. Releases are tags (`vX.Y.Z`) that the release workflow turns into a GitHub release from the [CHANGELOG](CHANGELOG.md).
 
 ## Contributing
 
-Ideas and fixes are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/authoring-skills.md](docs/authoring-skills.md). Report security problems privately: see [SECURITY.md](SECURITY.md).
+Ideas and fixes are welcome. Open a [skill idea](https://github.com/teransarathchandra/agent-skills/issues/new?template=new_skill.yml) or read [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/authoring-skills.md](docs/authoring-skills.md) first. Please keep private data out of anything you submit; [`sanitize-skill-for-public`](skills/sanitize-skill-for-public/SKILL.md) exists for exactly that. Report security problems privately: see [SECURITY.md](SECURITY.md). Questions: see [SUPPORT.md](SUPPORT.md).
+
+## Acknowledgements
+
+Built on the open [Agent Skills specification](https://agentskills.io/specification). The repository layout was shaped by looking at [mattpocock/skills](https://github.com/mattpocock/skills) and [anthropics/skills](https://github.com/anthropics/skills).
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) © Teran Sarathchandra

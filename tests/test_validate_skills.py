@@ -93,7 +93,37 @@ class RepositoryTests(unittest.TestCase):
             if skill_dir.is_dir():
                 v.validate_skill(skill_dir, errors)
         v.validate_manifests(errors)
+        v.validate_readme(errors)
         self.assertEqual(errors, [])
+
+
+class ReadmeTests(unittest.TestCase):
+    def check(self, readme_text, files=()):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            if readme_text is not None:
+                (root / "README.md").write_text(readme_text, encoding="utf-8")
+            for name in files:
+                (root / name).parent.mkdir(parents=True, exist_ok=True)
+                (root / name).write_text("x", encoding="utf-8")
+            old_root, v.ROOT = v.ROOT, root
+            try:
+                errors: list[str] = []
+                v.validate_readme(errors)
+                return errors
+            finally:
+                v.ROOT = old_root
+
+    def test_missing_readme(self):
+        self.assertTrue(any("not found" in e for e in self.check(None)))
+
+    def test_broken_image_and_link_are_reported(self):
+        errors = self.check('<img src="docs/assets/banner.svg"> and [guide](docs/guide.md)')
+        self.assertEqual(len(errors), 2)
+
+    def test_existing_targets_external_and_anchors_pass(self):
+        text = '<img src="docs/assets/banner.svg"> [guide](docs/guide.md#top) [web](https://example.com) [here](#skills)'
+        self.assertEqual(self.check(text, ["docs/assets/banner.svg", "docs/guide.md"]), [])
 
 
 if __name__ == "__main__":
