@@ -39,7 +39,7 @@ An agent with no guidance will review a PR by skimming the diff, rewrite a CV wi
 |---|---|---|---|
 | [`pr-review-with-ticket-context`](skills/pr-review-with-ticket-context/SKILL.md) | Reviews a pull request against its Jira ticket. Finds the real root cause, then returns two grids: comments on the files the PR changed, and gaps outside the PR | "Review PR 123 for ABC-456." | `git`, `gh`; best with the [Jira delivery MCP](https://github.com/teransarathchandra/jira-mcp-server) |
 | [`sanitize-skill-for-public`](skills/sanitize-skill-for-public/SKILL.md) | Turns a skill, prompt or notes written for private or work use into a fictional, public-safe copy and proves it is clean with a scan. Prepares only; never publishes | "Make this skill safe to publish." | Python 3.9+ for the bundled scanner |
-| [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | Builds an ATS-safe CV from your real evidence, writes one cover letter per job ad, syncs your job-site profile and fills in applications with a browser agent. Always stops before Submit | "Rebuild my CV for ATS and write a cover letter for this ad." | A .docx tool (Node.js 18+ and the `docx` package for the bundled letter script); a browser tool such as the Playwright MCP |
+| [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | Asks what it needs as choices with a recommended answer, builds an ATS-safe CV from your real evidence and checks it with a parser-style script, tailors it to each ad's keywords, writes one cover letter per job, flags scam ads, syncs your job-site profile, fills in applications with a browser agent and preps STAR interview stories. Always stops before Submit | "Rebuild my CV for ATS and write a cover letter for this ad." | A .docx tool (Node.js 18+ and the `docx` package for the bundled letter script); a browser tool such as the Playwright MCP |
 
 Each skill folder holds a `SKILL.md`, plus `references/` (longer guides and worked examples), `scripts/` and `assets/` where it needs them. Every example in this repository is fictional.
 
@@ -103,15 +103,16 @@ docs/                         guides and cover art
 
 ## Development
 
-No dependencies. Python 3.9 or newer.
+No dependencies to install. Python 3.9 or newer, and Node.js 18 or newer for the letter-script tests.
 
 ```bash
 python scripts/validate_skills.py              # skills, manifests, README links (what CI runs)
 python -W error -m unittest discover -s tests
+node --test tests/*.test.js                    # build_letter.js; needs no npm install
 claude plugin validate .                       # Claude Code's own manifest check
 ```
 
-CI runs the first two on every push and pull request. `main` is protected: changes go through a pull request with a passing check. Releases are tags (`vX.Y.Z`) that the release workflow turns into a GitHub release from the [CHANGELOG](CHANGELOG.md).
+CI runs the first three on every push and pull request. `main` is protected: changes go through a pull request with a passing check. Releases are tags (`vX.Y.Z`) that the release workflow turns into a GitHub release from the [CHANGELOG](CHANGELOG.md).
 
 ## Contributing
 

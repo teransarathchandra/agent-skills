@@ -4,6 +4,21 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-17
+
+### Added
+
+- `job-application-assistant` 0.2.0: an intake step (`references/intake.md`) that asks for every missing input as a choice with a recommended answer, including the paths to the old CV, degree certificate and transcript, and a fallback ladder when the work tracker (for example a Jira MCP) is not connected.
+- `scripts/ats_check.py` in that skill (standard library only): reads a CV .docx the way a parser does and reports contact details hidden in headers or footers, tables, text boxes, images, columns, uncommon fonts, non-standard headings and mixed date styles, plus keyword coverage against a job ad's terms.
+- `references/interview-prep.md`: STAR stories, gap answers and questions for the employer, built from the same evidence as the CV.
+- Guidance on ad keywords, action-and-result bullets, more regional CV formats, scam and ghost-job checks, job sites' rules on automation, AI-use and voluntary diversity questions, and follow-ups.
+- Tests for both scripts (`tests/test_ats_check.py`, `tests/build_letter.test.js`); CI now runs the Node tests too.
+
+### Changed
+
+- `build_letter.js` checks every field's type, warns on letters under 150 or over 400 words and stops over 450, adds `--check` (no install needed), `--force` and `--help`, refuses to overwrite by default, and loads `docx` only when building. `scripts/package.json` pins `docx` to 9.15.2.
+- The tracker table gains Applied and Follow up columns and more statuses.
+
 ## [0.3.0] - 2026-11-17
 
 ### Added
