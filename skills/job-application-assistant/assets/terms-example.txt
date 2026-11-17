@@ -1,6 +1,8 @@
 # Terms from one job ad, for scripts/ats_check.py --terms.
 # One term per line, spelled as the ad spells it. Put aliases on one line with "|";
-# the first alias names the term in the report. Lines starting with "#" are comments.
+# the first alias names the term in the report. An alias is another name for the same
+# thing (Azure|Microsoft Azure), never a broader term (not REST APIs|API, not CI/CD|CI),
+# or the report counts weaker evidence as a match. Lines starting with "#" are comments.
 # Copy this file into the private working folder, one per job.
 C#
 .NET

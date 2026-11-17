@@ -105,6 +105,15 @@ class CheckDocxTests(unittest.TestCase):
         path.write_text("not a zip", encoding="utf-8")
         self.assertTrue(a.check_docx(path)["errors"])
 
+    def test_eval_fixture_still_shows_its_problems(self):
+        # evals/evals.json expects these findings; if the checker changes, update the eval too.
+        fixture = (Path(__file__).resolve().parent.parent / "skills" / "job-application-assistant"
+                   / "evals" / "files" / "cv-with-ats-problems.docx")
+        result = a.check_docx(fixture)
+        self.assertTrue(any("header or footer" in e for e in result["errors"]))
+        for expected in ("table", "Papyrus", "About Me", "date"):
+            self.assertTrue(any(expected in w for w in result["warnings"]), expected)
+
 
 class KeywordTests(unittest.TestCase):
     def test_load_terms_supports_aliases_and_comments(self):

@@ -47,13 +47,13 @@ Signs of a ghost job (an ad with no real vacancy behind it): reposted unchanged 
 
 ## Site rules on automation
 
-Some job sites forbid bots and automated tools in their terms of use (LinkedIn's user agreement is one). Before step 7 on a site, check its terms. Where automation is not allowed, prepare an answer sheet (every screening answer, the files to attach, the letter text) and the candidate fills the form. Where it is allowed, the agent works in the candidate's own logged-in session, at human pace, one application at a time, and never scrapes search results in bulk.
+Some job sites forbid bots and automated tools in their terms of use (LinkedIn's user agreement is one). Before steps 6 and 7 on a site, check its terms. Where automation is not allowed, prepare an answer sheet (every screening answer, the files to attach, the letter text) and the candidate fills the form; for a profile, an edit sheet instead (see below). Where it is allowed, the agent works in the candidate's own logged-in session, at human pace, one application at a time, and never scrapes search results in bulk.
 
 ## Profile sync
 
 Job sites send the profile with the application, so it must agree with the CV.
 
-1. Read the whole profile: roles, dates, descriptions, education, certifications, skills, location, phone.
+1. Read the whole profile: roles, dates, descriptions, education, certifications, skills, location, phone. Where the site forbids automated tools (LinkedIn does), do not open the profile with the browser tool: ask the candidate for the text or the site's own PDF export, and in step 4 give them an edit sheet (each field, its current text, the new text) to make the changes themselves.
 2. List what is wrong or missing, for example:
    - a past role still marked "Present";
    - a completed degree shown as "in progress" or "expected";
