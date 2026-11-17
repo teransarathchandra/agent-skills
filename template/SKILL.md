@@ -27,3 +27,6 @@ Show the exact shape of the answer. Link a worked example in `references/`.
 ## Mistakes to avoid
 
 - The failure you saw most often while testing this skill.
+
+<!-- Add evals/evals.json (three or more scenarios) and evals/triggers.json; see docs/authoring-skills.md#evaluations. -->
+

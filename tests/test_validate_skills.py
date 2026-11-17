@@ -1,3 +1,4 @@
+import json
 import sys
 import tempfile
 import unittest
@@ -85,6 +86,41 @@ class SkillTests(unittest.TestCase):
         errors = self.run_skill(GOOD + "\ntoken ghp_" + "a" * 30 + "\n")
         self.assertTrue(any("secret" in e for e in errors))
 
+    def test_valid_evals_pass(self):
+        evals = json.dumps([{"skills": ["sample-skill"], "query": "q", "files": [], "expected_behavior": ["does x"]}])
+        triggers = json.dumps({"should_trigger": ["a"], "should_not_trigger": ["b"]})
+        self.assertEqual(self.run_skill(GOOD, extra={"evals/evals.json": evals, "evals/triggers.json": triggers}), [])
+
+    def test_bad_evals_are_reported(self):
+        cases = {
+            "not a list": json.dumps({"query": "q"}),
+            "wrong skill": json.dumps([{"skills": ["other"], "query": "q", "expected_behavior": ["x"]}]),
+            "no query": json.dumps([{"skills": ["sample-skill"], "query": "", "expected_behavior": ["x"]}]),
+            "no behaviour": json.dumps([{"skills": ["sample-skill"], "query": "q", "expected_behavior": []}]),
+            "missing file": json.dumps([{"skills": ["sample-skill"], "query": "q", "files": ["nope.pdf"],
+                                         "expected_behavior": ["x"]}]),
+            "bad json": "[",
+        }
+        for label, content in cases.items():
+            errors = self.run_skill(GOOD, extra={"evals/evals.json": content})
+            self.assertTrue(any("evals.json" in e for e in errors), label)
+
+    def test_bad_triggers_are_reported(self):
+        errors = self.run_skill(GOOD, extra={"evals/triggers.json": json.dumps({"should_trigger": []})})
+        self.assertTrue(any("triggers.json" in e for e in errors))
+
+    def test_long_reference_needs_contents(self):
+        long_text = "# Ref\n\n" + "line\n" * 101
+        errors = self.run_skill(GOOD, extra={"references/long.md": long_text})
+        self.assertTrue(any("Contents" in e for e in errors))
+        ok = "# Ref\n\n## Contents\n\n- a\n\n" + "line\n" * 101
+        self.assertEqual(self.run_skill(GOOD, extra={"references/long.md": ok}), [])
+
+    def test_script_files_are_scanned(self):
+        for name in ("scripts/tool.js", "scripts/tool.mjs", "scripts/tool.cjs", "scripts/tool.ts"):
+            errors = self.run_skill(GOOD, extra={name: "// mail jane.doe@corp.com\n"})
+            self.assertTrue(any("email address" in e and name in e for e in errors), name)
+
 
 class RepositoryTests(unittest.TestCase):
     def test_this_repository_is_valid(self):
@@ -120,6 +156,12 @@ class ReadmeTests(unittest.TestCase):
     def test_broken_image_and_link_are_reported(self):
         errors = self.check('<img src="docs/assets/banner.svg"> and [guide](docs/guide.md)')
         self.assertEqual(len(errors), 2)
+
+    def test_picture_srcset_is_checked(self):
+        errors = self.check('<picture><source srcset="docs/assets/dark.svg"><img src="docs/assets/light.svg"></picture>',
+                            ["docs/assets/light.svg"])
+        self.assertEqual(len(errors), 1)
+        self.assertIn("dark.svg", errors[0])
 
     def test_existing_targets_external_and_anchors_pass(self):
         text = '<img src="docs/assets/banner.svg"> [guide](docs/guide.md#top) [web](https://example.com) [here](#skills)'

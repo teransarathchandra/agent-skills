@@ -4,14 +4,14 @@
     "name": "Teran Sarathchandra",
     "url": "https://github.com/teransarathchandra"
   },
-  "description": "Agent skills by Teran Sarathchandra for real engineering work.",
+  "description": "Agent skills by Teran Sarathchandra for real work.",
   "plugins": [
     {
       "name": "teran-skills",
       "source": "./",
-      "description": "Agent skills for real engineering work: PR review with Jira context, and more to come.",
+      "description": "Agent skills for real work: PR review with Jira context, public-safe skill sanitizing, and an evidence-based job application assistant.",
       "category": "engineering",
-      "tags": ["code-review", "jira", "debugging"]
+      "tags": ["code-review", "jira", "debugging", "job-search", "cv"]
     }
   ]
 }

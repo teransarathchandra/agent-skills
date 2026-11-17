@@ -26,11 +26,14 @@ SECRET_RES = [
     re.compile(r"sk-[A-Za-z0-9]{20,}"),
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
 ]
-ALLOWED_EMAIL_DOMAINS = ("example.com", "example.org", "users.noreply.github.com")
+SCANNED_SUFFIXES = {".md", ".py", ".sh", ".js", ".mjs", ".cjs", ".ts", ".json", ".txt", ".yml", ".yaml"}
+ALLOWED_EMAIL_DOMAINS =("example.com", "example.org", "users.noreply.github.com")
 MAX_NAME = 64
 MAX_DESCRIPTION = 1024
 MAX_COMPATIBILITY = 500
 MAX_BODY_LINES = 500
+# Anthropic's skill-authoring guide: reference files over 100 lines get a table of contents.
+MAX_REFERENCE_LINES_WITHOUT_TOC = 100
 
 
 def parse_frontmatter(text: str) -> tuple[dict, str, str | None]:
@@ -84,6 +87,64 @@ def check_links(path: Path, body: str, errors: list[str]) -> None:
             errors.append(f"{path.relative_to(ROOT)}: broken relative link: {target}")
 
 
+def check_references(skill_dir: Path, errors: list[str]) -> None:
+    """Long reference files open with a contents list, so a partial read still shows their scope."""
+    for ref in sorted((skill_dir / "references").glob("*.md")):
+        lines = ref.read_text(encoding="utf-8").splitlines()
+        if len(lines) > MAX_REFERENCE_LINES_WITHOUT_TOC and not any(l.strip() == "## Contents" for l in lines):
+            errors.append(f"{ref.relative_to(ROOT)}: over {MAX_REFERENCE_LINES_WITHOUT_TOC} lines; "
+                          "add a '## Contents' list near the top")
+
+
+def _is_text_list(value: object, allow_empty: bool = False) -> bool:
+    return (isinstance(value, list) and (allow_empty or bool(value))
+            and all(isinstance(v, str) and v.strip() for v in value))
+
+
+def check_evals(skill_dir: Path, name: str, errors: list[str]) -> None:
+    """evals/evals.json and evals/triggers.json are optional; when present they must be well formed."""
+    evals_file = skill_dir / "evals" / "evals.json"
+    if evals_file.is_file():
+        rel = evals_file.relative_to(ROOT)
+        try:
+            evals = json.loads(evals_file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            errors.append(f"{rel}: invalid JSON ({exc})")
+            evals = None
+        if evals is not None and (not isinstance(evals, list) or not evals):
+            errors.append(f"{rel}: must be a non-empty list of evaluations")
+        elif evals:
+            for i, case in enumerate(evals, 1):
+                where = f"{rel}: evaluation {i}"
+                if not isinstance(case, dict):
+                    errors.append(f"{where} must be an object")
+                    continue
+                if name not in case.get("skills", []):
+                    errors.append(f"{where}: 'skills' must include {name!r}")
+                if not isinstance(case.get("query"), str) or not case["query"].strip():
+                    errors.append(f"{where}: 'query' must be non-empty text")
+                if not _is_text_list(case.get("expected_behavior")):
+                    errors.append(f"{where}: 'expected_behavior' must be a non-empty list of text")
+                files = case.get("files", [])
+                if not _is_text_list(files, allow_empty=True):
+                    errors.append(f"{where}: 'files' must be a list of paths")
+                    continue
+                for f in files:
+                    if not (evals_file.parent / f).exists():
+                        errors.append(f"{where}: file not found: {f}")
+    triggers_file = skill_dir / "evals" / "triggers.json"
+    if triggers_file.is_file():
+        rel = triggers_file.relative_to(ROOT)
+        try:
+            triggers = json.loads(triggers_file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            errors.append(f"{rel}: invalid JSON ({exc})")
+            return
+        for key in ("should_trigger", "should_not_trigger"):
+            if not isinstance(triggers, dict) or not _is_text_list(triggers.get(key)):
+                errors.append(f"{rel}: '{key}' must be a non-empty list of prompts")
+
+
 def validate_skill(skill_dir: Path, errors: list[str]) -> None:
     rel = skill_dir.relative_to(ROOT)
     skill_file = skill_dir / "SKILL.md"
@@ -124,8 +185,10 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
         errors.append(f"{rel}/SKILL.md: body is over {MAX_BODY_LINES} lines; move detail into references/")
 
     check_links(skill_file, body, errors)
+    check_references(skill_dir, errors)
+    check_evals(skill_dir, name or skill_dir.name, errors)
     for file in sorted(skill_dir.rglob("*")):
-        if file.is_file() and file.suffix in {".md", ".py", ".sh", ".json", ".txt", ".yml", ".yaml"}:
+        if file.is_file() and file.suffix in SCANNED_SUFFIXES:
             check_privacy(file, file.read_text(encoding="utf-8"), errors)
 
 
@@ -167,7 +230,7 @@ def validate_readme(errors: list[str]) -> None:
         errors.append("README.md: file not found")
         return
     text = readme.read_text(encoding="utf-8")
-    targets = LINK_RE.findall(text) + re.findall(r'(?:src|href)="([^"]+)"', text)
+    targets = LINK_RE.findall(text) + re.findall(r'(?:src|href|srcset)="([^"]+)"', text)
     for target in targets:
         if re.match(r"^(https?:|mailto:|#)", target):
             continue

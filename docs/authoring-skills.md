@@ -16,7 +16,7 @@ A folder with a `SKILL.md`. The agent reads only the `name` and `description` at
 | `compatibility` | No | Max 500 characters. Say what the skill needs (tools, network) |
 | `metadata` | No | String key/value map, for example `author` and `version` |
 
-Write the description for the agent, not for people. Say the trigger, then what the skill does. A description that only says what the skill is ("Helps with PRs") does not get loaded at the right time.
+Write the description for the agent, not for people, in the third person. Say the trigger, then what the skill does, with the words a user would actually type ("resume", "cover letter", "visa sponsorship"). A description that only says what the skill is ("Helps with PRs") does not get loaded at the right time. Keep the skill's rules and workflow out of the description: an agent that reads a summary of the steps may follow the summary instead of loading the skill.
 
 ## Structure that works
 
@@ -24,6 +24,15 @@ Write the description for the agent, not for people. Say the trigger, then what 
 2. **Numbered steps**, each one a thing the agent can do and check.
 3. **Output format** with the exact shape of the answer, and a worked example in `references/`.
 4. **Mistakes to avoid**, taken from real runs.
+
+More rules, from [Anthropic's skill-authoring guide](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) and our own runs:
+
+- **Ask with a recommendation.** When the skill needs an input the user has not given (a file path, a tool that is not connected), it asks with concrete options and marks one "(Recommended)" with a reason, and it says what to do when a tool is missing. See `job-application-assistant/references/intake.md`.
+- **References one level deep.** Link every reference file straight from `SKILL.md`. A reference over 100 lines opens with a `## Contents` list (the validator checks this).
+- **A checklist for long workflows** that the agent copies into its reply and ticks off.
+- **Scripts are run, not read.** Write the command with its interpreter (`python scripts/check.py`, `node scripts/build.js`), never the bare path: some installs strip the executable bit. Scripts handle their own errors with a clear message, and every constant says why it has its value.
+- **A check-fix-repeat loop** for anything with a validator: run it, fix, run again until it passes.
+- **Cite sources** for facts that can change (laws, site terms, vendor behaviour), with the month they were checked.
 
 ## Before you publish
 
@@ -45,3 +54,14 @@ Run it on a real task in a fresh session and check:
 - Is the output in the format you defined? Are the facts it cites true?
 
 Fix the skill, not the answer. Add the failure to "Mistakes to avoid".
+
+### Evaluations
+
+Write them down so every change can be re-checked. Both files are optional; the validator checks their shape when present.
+
+- `evals/evals.json`: at least three scenarios, each `{"skills": ["<name>"], "query": "...", "files": [], "expected_behavior": ["...", "..."]}`. Each expected behaviour is something a reader can check as true or false. Cover the rules the skill exists for, especially the "never" ones.
+- `evals/triggers.json`: `{"should_trigger": [...], "should_not_trigger": [...]}`, with near misses in the second list (for a job-search skill, "write a job description for our opening").
+
+Run each scenario in a fresh session with the skill installed, and once without it: if the agent passes without the skill, that part of the skill is not earning its tokens. Try the models you expect people to use (Haiku, Sonnet, Opus); what is clear to Opus may be too thin for Haiku.
+
+Running them with subagents works well: one agent per model and condition, told to read `SKILL.md` (or, for the baseline, to open no files), to list the tool calls it would make instead of making them, and to write its full answer to a file, since long results come back truncated. Describe an environment in which every expected behaviour is possible: if a scenario expects the agent to read a file at a path, say that path is readable. Score each expected behaviour as pass or fail, fix the skill where two or more models fail the same item, then re-run only the changed scenarios. The skill's wording can cause failures too: "copy this checklist into your reply" made Opus paste it into every answer, including one-line ones.
