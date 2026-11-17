@@ -27,6 +27,7 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - Plugin and marketplace descriptions name all three skills; new keywords `job-search`, `cv`, `ats`.
 - `job-application-assistant` SKILL.md: a copyable progress checklist; scripts are called through `python`/`node`; `ats_check.py` is re-run until it exits 0; the description lists triggers only.
 - Both scripts document why each constant has its value.
+- After running the evals with subagents on Haiku, Sonnet and Opus (with and without the skill): triage now records every dropped ad in the tracker as `Skipped: <reason>` (Haiku and Sonnet left it out), and the progress checklist is used only for multi-step requests, kept in the agent's todo tool when it has one (Opus had pasted it into every reply). Two expected behaviours added to the evals to cover both, and `docs/authoring-skills.md` describes how to run evals with subagents.
 
 ## [0.3.0] - 2026-11-17
 
