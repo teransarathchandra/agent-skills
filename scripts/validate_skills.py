@@ -230,7 +230,7 @@ def validate_readme(errors: list[str]) -> None:
         errors.append("README.md: file not found")
         return
     text = readme.read_text(encoding="utf-8")
-    targets = LINK_RE.findall(text) + re.findall(r'(?:src|href)="([^"]+)"', text)
+    targets = LINK_RE.findall(text) + re.findall(r'(?:src|href|srcset)="([^"]+)"', text)
     for target in targets:
         if re.match(r"^(https?:|mailto:|#)", target):
             continue

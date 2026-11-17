@@ -157,6 +157,12 @@ class ReadmeTests(unittest.TestCase):
         errors = self.check('<img src="docs/assets/banner.svg"> and [guide](docs/guide.md)')
         self.assertEqual(len(errors), 2)
 
+    def test_picture_srcset_is_checked(self):
+        errors = self.check('<picture><source srcset="docs/assets/dark.svg"><img src="docs/assets/light.svg"></picture>',
+                            ["docs/assets/light.svg"])
+        self.assertEqual(len(errors), 1)
+        self.assertIn("dark.svg", errors[0])
+
     def test_existing_targets_external_and_anchors_pass(self):
         text = '<img src="docs/assets/banner.svg"> [guide](docs/guide.md#top) [web](https://example.com) [here](#skills)'
         self.assertEqual(self.check(text, ["docs/assets/banner.svg", "docs/guide.md"]), [])

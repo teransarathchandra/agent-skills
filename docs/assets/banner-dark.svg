@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-labelledby="t d">
+  <title id="t">agent-skills</title>
+  <desc id="d">agent-skills: plain-Markdown skills that teach an AI agent one job, and the checks that keep it honest. Beside the name, an excerpt of a SKILL.md file: name careful-work, description Use when the work has to be right.</desc>
+  <rect width="1280" height="320" rx="12" fill="#13171A"/>
+  <text x="72" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="68" font-weight="700" letter-spacing="-1.6" fill="#E4E8E6">agent-skills</text>
+  <text x="74" y="194" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#9AA6A0">Plain-Markdown skills that teach an AI agent</text>
+  <text x="74" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" fill="#9AA6A0">one job, and the checks that keep it honest.</text>
+  <rect x="640" y="77" width="568" height="167" rx="10" fill="#1A1F23" stroke="#2B3338"/>
+  <text x="662" y="99" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#9AA6A0">SKILL.md</text>
+  <line x1="640" y1="111" x2="1208" y2="111" stroke="#2B3338"/>
+  <text x="675" y="133" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" fill="#56615C">1</text>
+  <text x="694" y="133" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" xml:space="preserve"><tspan fill="#9AA6A0">---</tspan></text>
+  <text x="675" y="161" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" fill="#56615C">2</text>
+  <text x="694" y="161" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" xml:space="preserve"><tspan fill="#5BC0B4">name</tspan><tspan fill="#E4E8E6">: careful-work</tspan></text>
+  <text x="675" y="189" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" fill="#56615C">3</text>
+  <text x="694" y="189" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" xml:space="preserve"><tspan fill="#5BC0B4">description</tspan><tspan fill="#E4E8E6">: Use when the work has to be right.</tspan></text>
+  <text x="675" y="217" text-anchor="end" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" fill="#56615C">4</text>
+  <text x="694" y="217" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" xml:space="preserve"><tspan fill="#9AA6A0">---</tspan></text>
+</svg>
