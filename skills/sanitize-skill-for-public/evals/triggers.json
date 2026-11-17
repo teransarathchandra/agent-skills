@@ -1,0 +1,16 @@
+{
+  "should_trigger": [
+    "Make this skill safe to open-source.",
+    "Remove the company names and ticket keys from these notes before I post them on the team wiki.",
+    "Anonymize this playbook so I can share it on my blog.",
+    "Is there anything private in this prompt before I publish it to the marketplace?",
+    "I wrote this skill at work; can it go in my public GitHub repo as it is?",
+    "Publish this skill to the plugin marketplace."
+  ],
+  "should_not_trigger": [
+    "Anonymize this CSV of customer records for our analytics team.",
+    "Scan my repository for leaked AWS keys.",
+    "Write a privacy policy for my mobile app.",
+    "Redact the names in this PDF contract."
+  ]
+}

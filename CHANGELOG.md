@@ -4,7 +4,23 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-17
+
+### Added
+
+- Evals for `pr-review-with-ticket-context` (6 scenarios: no Jira connected, private ticket data with subagents, a fix that misses the root cause in another file, uncommitted local changes, several `gh` accounts, posting findings) and `sanitize-skill-for-public` (7 scenarios, one hands-on with a fictional private playbook in `evals/files/private-notes/`), each with trigger prompts.
+- A test that keeps the sanitizer fixture's scanner hits in step with its eval.
+
+### Changed
+
+- Results from running the evals with subagents on Haiku, Sonnet and Opus, with and without the skills: with them, about 36 to 37 of 39 checks; without, about 22 to 28. Trigger prompts routed 20/20 on every model, against competing code-review, Jira and security skills.
+- `pr-review-with-ticket-context` 0.2.0: when the Jira MCP is not connected, asks how to get the ticket as options with one recommended (connect the MCP); when asked to post, shows the exact comments first and posts only Section A rows of Medium and above, with Section B going to the ticket.
+- `sanitize-skill-for-public` 0.2.0: asks how to build the term list as options with one recommended (draft it from the source material); a new mistake entry against a quiet name swap that leaves an identifying story.
+- Both descriptions now list only when to use the skill, without a summary of the workflow. Routing stayed at 20/20 after the change.
+- Hands-on runs of the sanitizer on Haiku and Sonnet produced copies that pass the scanner with a stricter term list than the agents were given.
+
 ## [0.4.0] - 2026-11-17
+
 
 ### Added
 

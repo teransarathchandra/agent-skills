@@ -1,11 +1,11 @@
 ---
 name: sanitize-skill-for-public
-description: Use when a skill, prompt, playbook or set of notes written for private or work use is about to be published or shared (public repo, marketplace, blog, team wiki), or when asked to remove private details, anonymize or make something safe to open-source. Finds names, company and product terms, ticket keys, internal links and secrets, rewrites them as fictional stand-ins, and proves the result is clean with a scan. Prepares a copy for review; never publishes.
+description: Use when a skill, prompt, playbook or set of notes written for private or work use is about to be published or shared (public repo, plugin marketplace, blog, team wiki), or when asked to remove names, company or product terms, ticket keys or internal links from it, anonymize it, or make it safe to open-source.
 license: MIT
 compatibility: Needs Python 3.9+ to run scripts/scan_terms.py. Git is optional, for checking history.
 metadata:
   author: teransarathchandra
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # Sanitize a skill for public release
@@ -23,7 +23,12 @@ A skill written during real work carries the incident it came from: a person's n
 ## Steps
 
 1. **Copy.** Copy the skill to a work folder outside the private source. Do the rest there.
-2. **Build the term list.** Ask the owner for every private identifier, or read the source material they point you to. Put one per line in a file outside the work folder, for example `~/private-terms.txt`. Include variants: first name alone, surname, nickname, abbreviation, handle. Categories and where to look: [references/identifier-categories.md](references/identifier-categories.md).
+2. **Build the term list.** Unless the owner already listed the private identifiers, ask how to get them, as options with one recommended:
+   a) **Point me to the source material (tickets, notes, the original repo) and I draft the list for you to confirm (Recommended: it finds the variants people forget)**
+   b) Give me the list yourself
+   c) Both: your list, and I add what I find in the files
+
+   Then read the files yourself for anything the list missed. Put one per line in a file outside the work folder, for example `~/private-terms.txt`. Include variants: first name alone, surname, nickname, abbreviation, handle. Categories and where to look: [references/identifier-categories.md](references/identifier-categories.md).
 3. **Scan.**
    ```bash
    python3 scripts/scan_terms.py --terms ~/private-terms.txt <work-folder>
@@ -59,4 +64,5 @@ See [references/example.md](references/example.md) for a before-and-after.
 - Cleaning the body but not the frontmatter, file names or metadata.
 - Saving the term list inside the repository, or mentioning it in a commit.
 - Treating a clean scan as the finish line.
+- Doing a plain name swap when asked and staying quiet about the story, dates and numbers that still identify. Do the swap if the owner insists, and say what risk remains.
 - Publishing from a history that still holds the original text.

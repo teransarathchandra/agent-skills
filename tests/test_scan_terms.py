@@ -125,6 +125,14 @@ class ScanTests(unittest.TestCase):
         empty.write_text("# only a comment\n", encoding="utf-8")
         self.assertEqual(run(["--terms", str(empty), str(self.work)])[0], 2)
 
+    def test_eval_fixture_still_has_its_private_details(self):
+        # evals/evals.json expects these hits; if the scanner or fixture changes, update the eval too.
+        fixture = SCRIPT.parent.parent / "evals" / "files" / "private-notes"
+        code, out, _ = run(["--terms", str(self.terms), str(fixture)])
+        self.assertEqual(code, 1)
+        for label in ("Dana Whitfield", "Northwind", "email", "ticket-key", "internal-url", "home-path", "date"):
+            self.assertIn(label, out, label)
+
 
 if __name__ == "__main__":
     unittest.main()
