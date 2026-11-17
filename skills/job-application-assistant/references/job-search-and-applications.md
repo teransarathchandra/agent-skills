@@ -4,7 +4,8 @@
 
 - Triage, and remote work from another country
 - Scams and ghost jobs
-- Site rules on automation
+- Site rules on automation (LinkedIn, Seek, Indeed, employer sites)
+- Job sites by region
 - Profile sync
 - Filling in an application (screening questions, AI use, diversity questions)
 - After applying
@@ -47,7 +48,32 @@ Signs of a ghost job (an ad with no real vacancy behind it): reposted unchanged 
 
 ## Site rules on automation
 
-Some job sites forbid bots and automated tools in their terms of use (LinkedIn's user agreement is one). Before steps 6 and 7 on a site, check its terms. Where automation is not allowed, prepare an answer sheet (every screening answer, the files to attach, the letter text) and the candidate fills the form; for a profile, an edit sheet instead (see below). Where it is allowed, the agent works in the candidate's own logged-in session, at human pace, one application at a time, and never scrapes search results in bulk.
+Some job sites forbid bots and automated tools in their terms of use. Before steps 6 and 7 on a site, check its terms. Where automation is not allowed, prepare an answer sheet (every screening answer, the files to attach, the letter text) and the candidate fills the form; for a profile, an edit sheet instead (see below). Where it is allowed, the agent works in the candidate's own logged-in session, at human pace, one application at a time, and never scrapes search results in bulk.
+
+| Site | What its terms say | So the agent |
+|---|---|---|
+| LinkedIn | User Agreement 8.2 bars bots and other automated methods | Prepares; the candidate edits the profile and applies |
+| Seek (also JobStreet and Jobsdb) | Website Terms 9(b): no automated process, script, tool or bot to access, search or collect information, except through an API Seek provides | Prepares; the candidate creates the account and applies |
+| Indeed | Terms of Service A.3: no automation, scripting or bots to automate Indeed Apply, except Indeed's own tools; the candidate must review and adopt all content before submitting | Prepares; the candidate applies, or switches on Indeed's own Apply For Me in their account if it is offered |
+| An employer's own careers site | Varies; read the site's terms | Fills the form in the candidate's logged-in session where allowed; stops before Submit |
+
+Creating an account counts too: on these sites the candidate signs up. The agent supplies a setup sheet (headline, summary, skills, the CV to upload, the visibility settings to pick) so it takes minutes. Passwords and email or phone verification are always the candidate's.
+
+## Job sites by region
+
+Offer these in intake question 26, plus the employers' own careers pages, which are recommended everywhere: they cut out the middleman and are the safest against scams.
+
+| Region | Main sites |
+|---|---|
+| Australia and New Zealand | Seek, LinkedIn, Indeed |
+| UK and Ireland | LinkedIn, Indeed, Reed, Totaljobs |
+| USA and Canada | LinkedIn, Indeed, Glassdoor; Wellfound for startups |
+| Germany, Austria, Switzerland | StepStone, LinkedIn, XING |
+| India | Naukri, LinkedIn |
+| Gulf states | Bayt, LinkedIn, GulfTalent |
+| Singapore, Malaysia, Hong Kong | JobStreet or Jobsdb, LinkedIn |
+
+Read each site's terms before steps 6 and 7; the table above covers only the sites checked so far.
 
 ## Profile sync
 
@@ -111,3 +137,5 @@ Checked 2026-11; re-check before relying on them.
 - US Federal Trade Commission, job scams: <https://consumer.ftc.gov/articles/job-scams>, and reporting at <https://reportfraud.ftc.gov>.
 - LinkedIn Help, prohibited software and extensions (User Agreement section 8.2 bars bots and automated methods): <https://www.linkedin.com/help/linkedin/answer/a1341387>.
 - GDPR Article 22, automated individual decision-making: <https://gdpr-info.eu/art-22-gdpr/>.
+- Seek Website Terms and Conditions, clause 9(b), last updated 20 July 2026: <https://au.seek.com/terms>.
+- Indeed Terms of Service, section A.3 (Applying to Jobs), last updated 29 September 2026: <https://www.indeed.com/legal>.

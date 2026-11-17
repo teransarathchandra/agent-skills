@@ -8,26 +8,18 @@ Everything below is fictional: the candidate, the employers, the ads and the fil
 
 The message answers the role (question 1) and a region (question 2). The agent asks the rest of the first groups in one message:
 
-> Before I start, a few choices. Reply with numbers and letters, for example `5a ~/JobSearch/old/CV.docx`.
+> Before I start, a few choices. Reply `ok` to take every recommended answer, or change only what you want, for example `ok, 7b, 5: ~/JobSearch/old/CV.docx`.
 >
-> 2. Besides Australia? a) **Also fully remote roles anywhere (Recommended: no visa needed, widest pool)** b) Australia only c) Add New Zealand
-> 5. Most recent CV? a) **Path to the .docx (Recommended: cleanest text)** b) Path to a PDF c) No CV, build from your profile
-> 6. Degree certificate? a) **Path to the scan or PDF (Recommended: the title must match it exactly)** b) Type the exact title, institution and date c) No degree
-> 7. Grades on the CV? a) **Only if strong: give the transcript path (Recommended)** b) No grades
-> 12. Right to work in Australia? a) Citizen or permanent resident b) A visa that allows work c) Need sponsorship. Answer as it is.
+> 2. Besides Australia? a) **Also fully remote roles anywhere (Recommended: no visa needed, widest pool)** b) Australia only c) Other: type the countries
+> 5. Most recent CV? a) **Path to the .docx (Recommended: cleanest text)** b) Path to a PDF c) Other: type a path or "none"
+> 6. Degree certificate? a) **Path to the scan or PDF (Recommended: the title must match it exactly)** b) Type the exact title, institution and date c) Other: type it
+> 7. Grades on the CV? a) **Only if strong: give the transcript path (Recommended)** b) No grades c) Other: type it
+> 12. No work tracker is connected. Where can I find what you worked on? (pick any) a) **Your GitHub or GitLab pull requests, reviews and commits (Recommended: real, dated evidence)** b) Local repo paths c) A tracker export (CSV or PDF) d) **Performance reviews or release notes (Recommended if you have them)** e) Other: type it
+> 13. Right to work in Australia? a) Citizen or permanent resident b) A visa that allows work c) Need sponsorship. Answer as it is.
 
-**Candidate:** `2a 5a ~/JobSearch/old/CV.docx 6a ~/JobSearch/docs/degree.pdf 7b 12c`
+**Candidate:** `ok, 7b, 5: ~/JobSearch/old/CV.docx, 6: ~/JobSearch/docs/degree.pdf, 12a,c ~/JobSearch/docs/tickets.csv, 13c`
 
-No work tracker is connected, so the next group starts with:
-
-> Your work tracker is not connected. How should I get evidence of your current work?
-> a) **Connect the tracker tool now, then tell me (Recommended: real ticket titles and dates)**
-> b) Export your tickets to CSV and give me the path
-> c) Paste ticket titles
-> d) Use git history only
-> e) Skip; I will mark every claim "to verify"
-
-**Candidate:** `b ~/JobSearch/docs/tickets.csv`
+The agent plays the answers back in one line ("Australia plus remote; your GitHub PRs and reviews plus the ticket export as evidence; no grades; you need sponsorship") and starts. `gh auth status` shows the candidate's GitHub account, so it runs `gh search prs --author @me --merged` and `gh search prs --reviewed-by @me` for the time in the current role.
 
 ## 2. CV check
 
@@ -55,9 +47,25 @@ KEYWORDS  6/8 found (75%)
   Add a missing term only where the candidate's evidence supports it.
 ```
 
-The tickets show REST endpoints the candidate built, so "REST APIs" goes into that bullet. Nothing shows Kubernetes, so it stays off the CV and the letter names it as a gap.
+The tickets and merged pull requests show REST endpoints the candidate built, so "REST APIs" goes into that bullet. Nothing shows Kubernetes, so it stays off the CV and the letter names it as a gap.
 
-## 3. Tracker
+## 3. Job sites and accounts
+
+With the CV and the first letter passing their checks, the agent asks:
+
+> Your CV and letter are ready. Reply `ok` for the recommended choices.
+>
+> 26. Where should we apply? (pick any) a) **Employers' own careers pages (Recommended: no middleman, fewest scams)** b) **Seek (Recommended for Australia)** c) **LinkedIn (Recommended)** d) Indeed e) Other: type a site
+> 27. Accounts? a) **You create any you don't have, with my setup sheet (Recommended: about ten minutes per site)** b) You have them all c) Other: type it
+> 28. How should we apply? a) **I prepare each application and fill employers' own forms where allowed; you press Submit everywhere (Recommended)** b) Answer sheets only c) Other: type it
+>
+> I can't create the Seek, LinkedIn or Indeed accounts or click Apply there for you: their terms forbid bots and automated tools, and accounts that use them can be suspended. The setup sheet makes it quick.
+
+**Candidate:** `ok, 26a,b,c,d`
+
+The agent writes a setup sheet per site (headline, summary, skills, which CV to upload, profile visibility), and the candidate creates the Seek and Indeed accounts.
+
+## 4. Tracker
 
 | Job | Employer | Fit | Work-rights clause | CV and letter | Applied | Follow up | Status |
 |---|---|---|---|---|---|---|---|
@@ -66,7 +74,7 @@ The tickets show REST endpoints the candidate built, so "REST APIs" goes into th
 | Software Engineer (remote) | Example Software | Strong: C#, React | Remote, contractor accepted | `CV_A4.docx`, `Letter_Example_Software.docx` | 17 Nov 2026 | 28 Nov 2026 | Submitted by you |
 | Backend Developer | "Example Careers" | – | – | – | – | – | Skipped: recruiter asked for a fee to "process the visa" (scam pattern) |
 
-## 4. Stop before Submit
+## 5. Stop before Submit
 
 > **Senior .NET Developer, Example Logistics: ready for your Submit.**
 > Filled in: name, email, phone, location (Overseas), profile URL.

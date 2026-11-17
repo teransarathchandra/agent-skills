@@ -4,6 +4,15 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-17
+
+### Changed
+
+- `job-application-assistant` 0.3.0, easier questions: every question lists the recommended answer first, ends with a typed "Other", and the candidate can reply `ok` to take every recommended answer or change only some (`ok, 2c, 5: ~/CV.docx`). Pick-many questions say "(pick any)". The agent uses a structured question tool when it has one, and plays the answers back before starting.
+- Without Jira or tracker access, the evidence question is a pick-any list: GitHub, GitLab or Bitbucket pull requests, reviews, issues and commits (recommended, with the `gh search` commands and a per-command work-account token); local repos; other trackers or exports; performance reviews and release notes.
+- A new question once the CV and letter pass their checks: which job sites (recommended per region, with a new "Job sites by region" table), accounts and how to apply. On Seek, Indeed and LinkedIn the candidate creates the account from a setup sheet and applies from an answer sheet, because their terms forbid automated tools (Seek Website Terms 9(b), Indeed Terms of Service A.3, LinkedIn User Agreement 8.2; sources in the guide). Passwords, verification and Submit stay with the candidate.
+- Four new eval scenarios (easy first message, GitHub evidence with a work account, the job-sites question, a request to create Seek and Indeed accounts and apply). With the skill, Haiku, Sonnet and Opus passed them; without it, Sonnet scored about 5 of 15.
+
 ## [0.5.0] - 2026-11-17
 
 ### Added
