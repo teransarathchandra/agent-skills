@@ -49,7 +49,7 @@ node scripts/build_letter.js --check ~/JobSearch/letter.json  # validate and cou
 node scripts/build_letter.js ~/JobSearch/letter.json ~/JobSearch/"[CANDIDATE NAME]_Cover_Letter_[EMPLOYER].docx"
 ```
 
-The script refuses to run while a `[PLACEHOLDER]` is left, checks every field, warns when the body is under 150 or over 400 words, stops over 450, and will not overwrite an existing file unless you pass `--force`. `paper` is `a4` or `letter`. Keep one JSON per job in the private folder; they hold the candidate's contact details, so never commit them.
+The script refuses to run while a `[PLACEHOLDER]` is left, checks every field, warns when the body is under 150 or over 400 words, stops over 450, and will not overwrite an existing file unless you pass `--force`. Leave `--force` off by default; add it only to rebuild a letter you built earlier in the same session, after the candidate asked for a change. `paper` is `a4` or `letter`. Keep one JSON per job in the private folder; they hold the candidate's contact details, so never commit them.
 
 Check the result is one page (see [ats-cv.md](ats-cv.md#checking-the-page-count)). Six paragraphs at 400 words is the usual limit on A4 with 11 pt text.
 
