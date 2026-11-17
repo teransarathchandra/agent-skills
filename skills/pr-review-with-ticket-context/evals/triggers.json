@@ -1,0 +1,16 @@
+{
+  "should_trigger": [
+    "Review PR 123 for ABC-456.",
+    "Does this pull request actually fix the bug in PROJ-88?",
+    "Check PR #42 against its Jira ticket before I approve it.",
+    "Is the fix in PR 310 the real root cause of ABC-77, or just a patch?",
+    "Review the open PR for the offline-save bug ticket."
+  ],
+  "should_not_trigger": [
+    "Write a PR description for my changes.",
+    "Create a Jira ticket for this crash.",
+    "Merge PR 123 once CI passes.",
+    "What should I work on next from my Jira board?",
+    "Refactor this function to be more readable."
+  ]
+}

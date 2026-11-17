@@ -1,11 +1,11 @@
 ---
 name: pr-review-with-ticket-context
-description: Use when asked to review a GitHub pull request against its Jira ticket, especially a bug fix (for example "review PR 123 for ABC-456"). Pulls ticket context through the Jira delivery MCP, reviews the diff, traces the real root cause across layers and repos, and returns two grids - comments on files the PR changed, and gaps outside the PR. Keeps ticket data private.
+description: Use when asked to review a GitHub pull request against its Jira ticket or bug report, especially a bug fix (for example "review PR 123 for ABC-456"), or to check whether a PR really fixes the root cause of the ticket's bug before approving it.
 license: MIT
-compatibility: Needs git and the GitHub CLI (gh). Best with the Jira delivery MCP server connected; without it, ask the user to paste the ticket text.
+compatibility: Needs git and the GitHub CLI (gh). Best with the Jira delivery MCP server connected; without it, the user can paste the ticket text.
 metadata:
   author: teransarathchandra
-  version: "0.1.0"
+  version: "0.2.0"
 ---
 
 # PR review with ticket context
@@ -22,6 +22,7 @@ Ticket text often holds names, emails, record keys, dates and quotes from real u
 - Describe the problem generically ("a user", "the second item is missing after save").
 - Read the ticket through the MCP yourself. Give subagents only a generic bug description plus the code location.
 - Read-only: never comment on the PR or ticket, push, or edit files unless the user asks.
+- When the user asks you to post, show the exact comments first and post after their go-ahead, unless they said to post without review. Post only Section A rows of Medium and above, each anchored to its changed line. Section B goes to the ticket as notes or follow-ups, never to the PR.
 
 ## Steps
 
@@ -35,7 +36,12 @@ Ticket text often holds names, emails, record keys, dates and quotes from real u
    - `confluence_search` and `confluence_get_page` for specs of the feature.
    - `delivery_check_changes` with `baseBranch` set to the PR base (`checks: ["alignment", "dod"]`) as a second opinion.
    - Limits to expect: comments can be capped to the newest few, so ask the user for older ones if they matter. With no acceptance criteria the alignment score is weak. Its layer checks can be wrong. Treat the output as hints, not proof.
-   - If the MCP is not connected, say so and ask the user to paste the ticket text. Mark the review as lower confidence.
+   - If the MCP is not connected, say so and ask how to get the ticket, as options with one recommended, for example:
+     a) **Connect the Jira delivery MCP, then tell me (Recommended: the full ticket, its links and comments)**
+     b) Paste the ticket text (summary, description, acceptance criteria). Names and emails can be left out.
+     c) Review the PR on its own (lower confidence: nothing to check it against)
+
+     Never guess the ticket's content. With pasted text or no ticket, mark the review as lower confidence.
 4. **Find the root cause first.** Trace the data end to end across layers (UI or store, request payload, API, service, database, response, UI). Follow the ticket's own clues: what the user did, online or offline, which action came before the failure, which item is missing. Write down what is confirmed (seen in code) and what is a guess.
 5. **Review the PR against that root cause.** For a large diff, dispatch a general-purpose reviewer subagent with a generic description, the SHAs and the checklist below. For a small diff, review inline.
 6. **Verify every finding yourself** before reporting it: open the file, confirm the line number and copy the exact line. Drop anything you cannot confirm and move it to "Not verified".
@@ -96,4 +102,5 @@ Keep these out of Section A. They are ticket notes or follow-up tickets, not PR 
 - Reporting a line number from the base branch or from memory.
 - Calling something High without a reachable path to it.
 - Repeating private ticket details in the answer or in a subagent prompt.
-- Posting anything to the PR or the ticket without being asked.
+- Posting anything to the PR or the ticket without being asked, or posting what you were asked to post before the user has seen it.
+- Asking an open question ("can you send the ticket?") when the options can be named. Give them, with one recommended.

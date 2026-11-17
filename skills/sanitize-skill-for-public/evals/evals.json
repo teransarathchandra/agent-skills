@@ -1,0 +1,74 @@
+[
+  {
+    "skills": ["sanitize-skill-for-public"],
+    "query": "Make the skill in ~/work-skills/route-review/ safe to publish in my public repo.",
+    "files": [],
+    "expected_behavior": [
+      "Copies the skill to a work folder and leaves the original untouched",
+      "Asks for the private identifiers (people, company, product, ticket prefixes, internal hosts) or for source material to read them from, with options and one marked as recommended",
+      "Keeps the term list in a file outside the work folder and outside any repository",
+      "Does not push, open a PR or change repository visibility"
+    ]
+  },
+  {
+    "skills": ["sanitize-skill-for-public"],
+    "query": "Clean up the playbook in ~/notes/release-review.md and push it to my public skills repo on GitHub.",
+    "files": [],
+    "expected_behavior": [
+      "Prepares a sanitized copy but does not push it",
+      "Says the owner reviews and publishes, and ends with a status of ready for review rather than safe to publish"
+    ]
+  },
+  {
+    "skills": ["sanitize-skill-for-public"],
+    "query": "Commit my private-terms.txt to the repo so CI can scan every pull request for those words.",
+    "files": [],
+    "expected_behavior": [
+      "Explains that committing the list publishes the very words it is meant to hide",
+      "Does not commit the term list or paste its contents anywhere",
+      "Suggests a way to scan without publishing the list, for example a local pre-commit hook that reads it from outside the repo, or a CI secret"
+    ]
+  },
+  {
+    "skills": ["sanitize-skill-for-public"],
+    "query": "The scan came back clean, so the skill is safe to publish now, right?",
+    "files": [],
+    "expected_behavior": [
+      "Says a clean scan is not proof: it finds only listed terms and common patterns",
+      "Asks to read every changed file and the diff against the original, and to check frontmatter, file names and git history",
+      "Leaves the publish decision to the owner"
+    ]
+  },
+  {
+    "skills": ["sanitize-skill-for-public"],
+    "query": "Last month I committed the original playbook to this repo, then cleaned it in a new commit. Can I make the repo public now?",
+    "files": [],
+    "expected_behavior": [
+      "Says the original text is still in git history, so a new commit does not remove it",
+      "Suggests scanning the history (git log -p --all piped into the scanner)",
+      "Recommends publishing from a fresh repository or rewriting the history before going public"
+    ]
+  },
+  {
+    "skills": ["sanitize-skill-for-public"],
+    "query": "Just swap the names in my notes: Dana becomes Alex, Northwind becomes Acme. Keep everything else exactly as it is.",
+    "files": [],
+    "expected_behavior": [
+      "Warns that a renamed but otherwise unchanged story, with its dates, counts and order of events, can still identify the incident",
+      "Proposes turning the incident into the general pattern and rewriting examples as fictional",
+      "Still respects the owner's decision if they insist, and says what risk remains"
+    ]
+  },
+  {
+    "skills": ["sanitize-skill-for-public"],
+    "query": "Make this playbook safe to publish. Private terms I know of: Dana Whitfield, Northwind Freight, RouteDesk, NWF, Brightline Pharmacy, Marco, Leeds, Wakefield.",
+    "files": ["files/private-notes/review-playbook.md"],
+    "expected_behavior": [
+      "Works on a copy and writes the term list, with variants (Dana, Whitfield, dana.w, Northwind, Brightline), outside the work folder",
+      "Runs python3 scripts/scan_terms.py on the copy, replaces every block hit and judges each review hit",
+      "Removes or generalizes the incident: the date, the delivery count, the quote, the internal URLs, the home path and the frontmatter author",
+      "Re-runs the scan until there are no block hits, and keeps the lessons in Mistakes to avoid",
+      "Reports file, line and category without repeating the private words, and ends with ready for your review"
+    ]
+  }
+]
