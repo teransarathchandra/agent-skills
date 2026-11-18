@@ -15,6 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 INSTALL = ROOT / "setup" / "install.sh"
 UNINSTALL = ROOT / "setup" / "uninstall.sh"
+BASH = shutil.which("bash") or "bash"
 
 
 @unittest.skipUnless(shutil.which("bash"), "bash is required")
@@ -39,7 +40,7 @@ class SetupInstallTest(unittest.TestCase):
 
     def run_script(self, script: Path, *args: str) -> subprocess.CompletedProcess:
         return subprocess.run(
-            ["bash", str(script), *args], env=self.env, capture_output=True, text=True, check=False
+            [BASH, str(script), *args], env=self.env, capture_output=True, text=True, check=False
         )
 
     def settings(self) -> dict:
@@ -116,6 +117,24 @@ class SetupInstallTest(unittest.TestCase):
         result = self.run_script(INSTALL, "--no-plugins", "--check")
         self.assertEqual(result.returncode, 1)
         self.assertIn("missing", result.stdout)
+
+
+    def test_check_fails_when_plugins_cannot_be_verified(self) -> None:
+        self.run_script(INSTALL, "--no-plugins", "--yes")
+        manifest = self.claude / ".agent-skills-install.json"
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+        data["plugins"] = ["flowbar@teransarathchandra"]
+        manifest.write_text(json.dumps(data), encoding="utf-8")
+        bin_dir = self.home / "bin"
+        bin_dir.mkdir()
+        for tool in ("python3", "shasum", "git", "cut", "date", "dirname", "grep"):
+            found = shutil.which(tool)
+            if found:
+                (bin_dir / tool).symlink_to(found)
+        self.env["PATH"] = str(bin_dir)  # no claude on PATH
+        result = self.run_script(INSTALL, "--check")
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("cannot be verified", result.stdout)
 
 
 if __name__ == "__main__":
