@@ -231,7 +231,7 @@ The skills do: they follow the open Agent Skills format. The agentic workflow (p
 <details>
 <summary><b>Is it safe to install?</b></summary>
 
-Everything is plain, readable files. CI validates every plugin and scans for secrets, emails and personal paths, and the installer is tested against a throwaway home directory. Mods run unsandboxed as you, like any Claude Code mod, so read them first; both make no network calls of their own and never edit files.
+Everything is plain, readable files. CI validates every plugin and scans for secrets, emails and personal paths, and the installer is tested against a throwaway home directory. Mods run unsandboxed as you, like any Claude Code mod, so read them first. Neither edits files. `flowbar` makes no network requests; `workbench` runs your `gh` CLI, which reads the open pull request's status from GitHub.
 
 </details>
 

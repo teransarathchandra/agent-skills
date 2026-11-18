@@ -65,7 +65,7 @@ Kit commands are namespaced: `/web-kit:visual-qa`. Scaffold commands come from e
 
 ## Mods
 
-Mods change Claude Code's own interface. Both are small, make no network calls of their own and never edit files.
+Mods change Claude Code's own interface. Both are small and never edit files. `flowbar` makes no network requests; `workbench` runs your `gh` CLI to read the open pull request's status from GitHub.
 
 - **flowbar**: a band above the prompt with ticked acceptance criteria in `SPEC.md`, the last verify result and running subagents; a toast when verify fails; `/kit` shows the project's kit, plugins and `/goal` line without calling the model.
 - **workbench**: a band with context-window use and the cost of the last turn and the session (a warning above 80%); `/workbench` opens a pane with the git branch, uncommitted changes, PR review and checks, and the files touched this session.
