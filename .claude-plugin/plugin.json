@@ -1,6 +1,6 @@
 {
   "name": "teran-skills",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Agent skills for real work: PR review with Jira context, public-safe skill sanitizing, and an evidence-based job application assistant.",
   "author": {
     "name": "Teran Sarathchandra",

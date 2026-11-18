@@ -15,7 +15,8 @@
 
 <p align="center">
   Plain Markdown skills that teach an AI coding agent one job, and the checks that stop it getting that job wrong.<br>
-  They follow the open <a href="https://agentskills.io">Agent Skills</a> format, so they work in Claude Code and in any agent that reads <code>SKILL.md</code>.
+  They follow the open <a href="https://agentskills.io">Agent Skills</a> format, so they work in Claude Code and in any agent that reads <code>SKILL.md</code>.<br>
+  Plus a one-paste <a href="#agentic-workflow-setup">agentic workflow setup</a> for Claude Code: a spec, a check Claude must pass, and the right toolkit for every kind of project.
 </p>
 
 <p align="center">
@@ -36,6 +37,7 @@ An agent with no guidance will review a PR by skimming the diff, rewrite a CV wi
 - **Private by default.** Skills that touch tickets, code or personal documents tell the agent not to copy names, emails, keys or quotes anywhere.
 - **Stops before the point of no return.** Read-only unless you ask. Posting, pushing, submitting or publishing needs your word.
 - **Short and plain.** Output reads like a teammate wrote it.
+- **A workflow, not just prompts.** The agentic setup turns "build me X" into a spec, a self-check Claude cannot skip and a fresh-context review, with toolkits that load only in the projects that need them.
 
 ## Skills
 
@@ -55,12 +57,21 @@ A complete Claude Code setup for building any project the agentic way: a spec, a
 Set up https://github.com/teransarathchandra/agent-skills for me by following its SETUP.md.
 ```
 
-The agent clones the repo, asks which profile you want, shows a dry run and installs after you say yes. Or run it yourself:
+The agent follows [SETUP.md](SETUP.md): it clones the repo, checks prerequisites, asks which profile you want, shows a dry run and installs only after you say yes. Or run it yourself:
 
 ```bash
 git clone https://github.com/teransarathchandra/agent-skills ~/agent-skills
 bash ~/agent-skills/setup/install.sh --profile recommended --dry-run   # then again with --yes
+bash ~/agent-skills/setup/install.sh --check                           # verify; exits 1 if anything is missing
 ```
+
+| Profile | Installs |
+|---|---|
+| `minimal` | The core files below and the two mods |
+| `recommended` | Minimal, plus `freelance-kit`, `builder-kit` and the official `superpowers`, `frontend-design`, `playwright` and `typescript-lsp` plugins |
+| `full` | Recommended, plus `plugin-dev`, `mcp-server-dev`, `agent-sdk-dev`, the `cc-safety-net` command guard and CLI tools (Ghostty, pnpm, gh, chezmoi, a status line) |
+
+The installer backs up anything it replaces, only sets settings that are unset and is safe to run again. `bash setup/uninstall.sh` removes what it created, restores files it replaced and keeps anything you edited.
 
 | Part | What you get |
 |---|---|
@@ -69,7 +80,21 @@ bash ~/agent-skills/setup/install.sh --profile recommended --dry-run   # then ag
 | 14 project kits | Web, mobile, API, AI apps, CLI and npm packages, desktop, browser and VS Code extensions, bots, automation, data and ML, games and 3D, video and docs, infra, Shopify and Stripe. Each has a `kit.json`, a `scripts/verify.sh` and a few commands; `/kickoff` installs one per project |
 | Work kits | `freelance-kit` (client onboarding, briefs, status reports, handover, security and license review) and `builder-kit` (scaffold your own plugins and MCP servers) |
 
-How to use it, with walkthroughs for a portfolio, a mobile app and a website: [docs/agentic-workflow.md](docs/agentic-workflow.md). Undo with `bash setup/uninstall.sh`.
+Then every project runs the same loop:
+
+```mermaid
+flowchart LR
+  A["/kickoff idea"] --> B[Interview, SPEC.md, scaffold]
+  B --> C[Kit installed in this project only]
+  C --> D["/goal: build until verify.sh passes"]
+  D --> E[Fresh review: ac-reviewer, /code-review]
+  E --> F["/commit-push-pr"]
+  F --> G{More unticked criteria?}
+  G -- yes --> D
+  G -- no --> H[Ship]
+```
+
+How to use it, which command to use when, and walkthroughs for a portfolio, a mobile app and a website: [docs/agentic-workflow.md](docs/agentic-workflow.md).
 
 ## Install
 
@@ -80,7 +105,7 @@ How to use it, with walkthroughs for a portfolio, a mobile app and a website: [d
 /plugin install teran-skills@teransarathchandra
 ```
 
-Update later with `/plugin marketplace update teransarathchandra`.
+Update later with `/plugin marketplace update teransarathchandra`. Any other plugin in the marketplace installs the same way, for example `/plugin install flowbar@teransarathchandra`, or a kit inside one project: `claude plugin install web-kit@teransarathchandra --scope project`. For the whole workflow, use the [agentic setup](#agentic-workflow-setup) instead.
 
 **Other agents** (copies editable files into your project):
 
@@ -99,6 +124,16 @@ Review PR 123 for ABC-456.
 ```
 
 In Claude Code you can also run a skill by name: `/teran-skills:pr-review-with-ticket-context`.
+
+With the agentic setup installed, start projects with a command and let the check drive the build:
+
+```text
+/kickoff my developer portfolio, using my CV and GitHub repos
+/kickoff a habit tracker mobile app with streaks
+/kickoff a Telegram bot that answers questions from our study notes
+```
+
+Inside a project, `/kit` shows its kit, plugins and `/goal` line, and `/workbench` opens the git and PR pane.
 
 ## How it works
 
@@ -124,9 +159,14 @@ skills/<name>/scripts/        helper scripts a skill runs
 skills/<name>/assets/         templates a skill fills in
 skills/<name>/evals/          scenarios and trigger prompts to re-run with an agent after a change
 template/SKILL.md             copy this to start a new skill
-scripts/validate_skills.py    the checks CI runs on every skill and manifest
-tests/                        tests for the scripts
-docs/                         guides and cover art
+plugins/<name>/               more plugins in the marketplace: 14 project kits (kit.json, scripts/verify.sh,
+                              skills), freelance-kit, builder-kit, and the flowbar and workbench mods
+setup/install.sh              the agentic setup installer (uninstall.sh reverses it)
+setup/claude/                 core files it places in ~/.claude: /kickoff, agents, hook, routing rules
+SETUP.md, AGENTS.md           instructions an AI agent follows to set this up or change it
+scripts/validate_skills.py    the checks CI runs on every skill, plugin, setup script and manifest
+tests/                        tests for the scripts and the installer
+docs/                         guides (including agentic-workflow.md) and cover art
 .claude-plugin/               Claude Code plugin and marketplace manifests
 ```
 
@@ -135,13 +175,14 @@ docs/                         guides and cover art
 No dependencies to install. Python 3.9 or newer, and Node.js 18 or newer for the letter-script tests.
 
 ```bash
-python scripts/validate_skills.py              # skills, manifests, README links (what CI runs)
-python -W error -m unittest discover -s tests
+python scripts/validate_skills.py              # skills, plugins, setup scripts, manifests, README links
+python -W error -m unittest discover -s tests  # includes installer tests in a throwaway home directory
 node --test tests/*.test.js                    # build_letter.js; needs no npm install
-claude plugin validate .                       # Claude Code's own manifest check
+claude plugin validate . --strict              # Claude Code's own check of the marketplace and every plugin
+bash setup/install.sh --no-plugins --dry-run   # see what the installer would change
 ```
 
-CI runs the first three on every push and pull request. A skill with an `evals/` folder also lists scenarios to run with an agent, with and without the skill, after you change it; see [docs/authoring-skills.md](docs/authoring-skills.md#evaluations). `main` is protected: changes go through a pull request with a passing check. Releases are tags (`vX.Y.Z`) that the release workflow turns into a GitHub release from the [CHANGELOG](CHANGELOG.md).
+CI runs all four checks on every push and pull request. A skill with an `evals/` folder also lists scenarios to run with an agent, with and without the skill, after you change it; see [docs/authoring-skills.md](docs/authoring-skills.md#evaluations). `main` is protected: changes go through a pull request with a passing check. Releases are tags (`vX.Y.Z`) that the release workflow turns into a GitHub release from the [CHANGELOG](CHANGELOG.md).
 
 ## Contributing
 
@@ -149,7 +190,7 @@ Ideas and fixes are welcome. Open a [skill idea](https://github.com/teransarathc
 
 ## Acknowledgements
 
-Built on the open [Agent Skills specification](https://agentskills.io/specification). The repository layout was shaped by looking at [mattpocock/skills](https://github.com/mattpocock/skills) and [anthropics/skills](https://github.com/anthropics/skills).
+Built on the open [Agent Skills specification](https://agentskills.io/specification). The repository layout was shaped by looking at [mattpocock/skills](https://github.com/mattpocock/skills) and [anthropics/skills](https://github.com/anthropics/skills). The agentic setup follows Anthropic's [Claude Code best practices](https://code.claude.com/docs/en/best-practices) and installs plugins from the [official marketplace](https://github.com/anthropics/claude-plugins-official), including [obra/superpowers](https://github.com/obra/superpowers); the mods were built with Claude Code's mod API.
 
 ## License
 
