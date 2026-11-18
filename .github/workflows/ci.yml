@@ -36,6 +36,9 @@ jobs:
       - name: Check setup script syntax
         run: bash -n setup/install.sh && bash -n setup/uninstall.sh && bash -n setup/claude/hooks/ts-gate.sh && for f in plugins/*/scripts/verify.sh; do bash -n "$f"; done
       - name: Install Claude Code
-        run: npm install -g --ignore-scripts @anthropic-ai/claude-code@2.1.327
+        # Scripts stay off for every package; only Claude Code's own installer runs, to fetch its native binary.
+        run: |
+          npm install -g --ignore-scripts @anthropic-ai/claude-code@2.1.327
+          node "$(npm root -g)/@anthropic-ai/claude-code/install.cjs"
       - name: Validate the marketplace and every plugin (strict)
         run: claude plugin validate . --strict
