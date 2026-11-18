@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Changed
+- README restructured for readability: a short pitch, "What's inside", a quick start first, one-sentence skill rows, the agentic workflow explained as spec, check and rules, collapsible details, and an FAQ.
+
+### Fixed
+- `setup/install.sh --check` now exits 1 when plugins are expected but cannot be verified because the `claude` CLI is missing, instead of reporting success.
+
 ## [0.7.0] - 2026-11-18
 
 ### Added

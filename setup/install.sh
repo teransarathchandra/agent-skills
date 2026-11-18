@@ -92,7 +92,7 @@ if [ "$CHECK" = 1 ]; then
       if printf '%s\n' "$list" | grep -qE "(^|[^A-Za-z0-9-])${id}([^A-Za-z0-9-]|$)"; then say "ok       plugin $id"; else say "missing  plugin $id"; missing=1; fi
     done
   else
-    say "skipped  plugins (claude CLI not found)"
+    say "missing  plugins cannot be verified: the claude CLI is not installed"; missing=1
   fi
   exit "$missing"
 fi
