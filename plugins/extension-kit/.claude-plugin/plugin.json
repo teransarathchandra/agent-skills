@@ -1,0 +1,7 @@
+{
+  "name": "extension-kit",
+  "description": "Browser extensions (WXT) and VS Code extensions: build, test, package, store submission.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

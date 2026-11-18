@@ -1,0 +1,6 @@
+{ "types": ["video", "slides", "docs-site"],
+  "stack": "Video: Remotion (React video; official agent skills: npx skills add remotion-dev/skills). Slides: Slidev (markdown). Docs: Astro Starlight. ffmpeg for post-processing",
+  "scaffold": { "video": "npx create-video@latest . && npx skills add remotion-dev/skills", "slides": "pnpm create slidev@latest .", "docs-site": "pnpm create astro@latest . -- --template starlight --install --git" },
+  "requires": { "video": "ffmpeg: brew install ffmpeg" },
+  "plugins": [],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown, or stop after 15 turns" }

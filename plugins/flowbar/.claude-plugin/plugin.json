@@ -1,0 +1,10 @@
+{
+  "name": "flowbar",
+  "version": "0.1.0",
+  "description": "Agentic flow band: SPEC.md progress, last verify result, running subagents, and a /kit command.",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Teran Sarathchandra"
+  },
+  "license": "MIT"
+}

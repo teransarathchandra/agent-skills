@@ -1,0 +1,7 @@
+{
+  "name": "mobile-kit",
+  "description": "Mobile app kit for Expo (React Native) and native iOS: simulator testing flows and store release steps.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

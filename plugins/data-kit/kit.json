@@ -1,0 +1,5 @@
+{ "types": ["data", "ml"],
+  "stack": "Python via uv + marimo (notebooks as plain .py, git-friendly, agent-friendly) + DuckDB + Polars + pytest + ruff; Streamlit or Evidence for shareable dashboards",
+  "scaffold": { "data": "uv init . && uv add marimo duckdb polars && uv add --dev pytest ruff", "ml": "uv init . && uv add marimo polars scikit-learn && uv add --dev pytest ruff" },
+  "plugins": [],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and the analysis answers every question in SPEC.md, or stop after 20 turns" }

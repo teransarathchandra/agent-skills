@@ -1,0 +1,9 @@
+{
+  "name": "builder-kit",
+  "description": "Scaffolds for Claude Code plugins and MCP servers.",
+  "author": {
+    "name": "Teran Sarathchandra"
+  },
+  "license": "MIT",
+  "version": "0.1.0"
+}

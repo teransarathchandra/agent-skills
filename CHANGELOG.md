@@ -3,6 +3,12 @@
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
+### Added
+- Agentic workflow setup: `setup/install.sh` (profiles `minimal`, `recommended`, `full`; `--dry-run`, `--check`, `--with-tools`), `setup/uninstall.sh`, and `SETUP.md`, which an AI agent follows when someone pastes this repository and asks for it to be set up. The installer backs up anything it replaces, only sets settings that are unset, and records what it added so uninstall reverses exactly that.
+- Core files the installer places in `~/.claude`: `/kickoff` (interview, `SPEC.md` with checkbox acceptance criteria, scaffold, `scripts/verify.sh`, Stop hook, the matching kit installed per project), `/commit-push-pr`, the `Explore` (Haiku), `ac-reviewer` and `browser-qa` agents, a TypeScript check hook and token-saving routing rules.
+- 18 plugins in this marketplace: 14 project kits (web, mobile, API, AI app, CLI/npm, desktop, extension, bot, automation, data, game, media, infra, commerce), `freelance-kit`, `builder-kit`, and the `flowbar` and `workbench` mods.
+- `docs/agentic-workflow.md`: the loop, which command to use when, and walkthroughs for a portfolio, a mobile app and a website.
+- The validator checks every plugin (manifest, marketplace entry, `kit.json`, executable `verify.sh`), the setup scripts, and scans `plugins/` and `setup/` for secrets, emails and personal home paths. New installer tests and a CI job that runs `claude plugin validate . --strict`.
 
 ## [0.6.0] - 2026-11-17
 

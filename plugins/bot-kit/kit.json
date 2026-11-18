@@ -1,0 +1,5 @@
+{ "types": ["slack-bot", "discord-bot", "telegram-bot", "whatsapp-bot"],
+  "stack": "Slack: Bolt for JS (official AI agent features). Discord: discord.js. Telegram: grammY. WhatsApp: Meta Cloud API webhooks. TypeScript + Vitest; Hono for webhook endpoints",
+  "scaffold": { "slack-bot": "pnpm init && pnpm add @slack/bolt && pnpm add -D typescript vitest tsx", "discord-bot": "pnpm init && pnpm add discord.js && pnpm add -D typescript vitest tsx", "telegram-bot": "pnpm init && pnpm add grammy && pnpm add -D typescript vitest tsx", "whatsapp-bot": "pnpm init && pnpm add hono @hono/node-server && pnpm add -D typescript vitest tsx" },
+  "plugins": { "slack-bot": ["slack@claude-plugins-official"], "discord-bot": ["discord@claude-plugins-official"] },
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and every command/event in SPEC.md has a handler test, or stop after 15 turns" }

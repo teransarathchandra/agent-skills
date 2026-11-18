@@ -1,0 +1,7 @@
+{
+  "name": "cli-kit",
+  "description": "CLI tools and npm packages: tsdown build, Vitest, pack check, trusted publishing.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

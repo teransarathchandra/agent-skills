@@ -1,0 +1,5 @@
+{ "types": ["game-2d", "game-3d", "3d-assets"],
+  "stack": "2D: Phaser 3 + Vite + TypeScript. 3D web: Three.js or React Three Fiber + drei. Native: Godot 4 (community Godot MCP servers, check activity first). Assets: Blender MCP (connected when Claude runs from your home folder)",
+  "scaffold": { "game-2d": "pnpm create vite@latest . --template vanilla-ts && pnpm add phaser", "game-3d": "pnpm create vite@latest . --template react-ts && pnpm add three @react-three/fiber @react-three/drei", "3d-assets": "Start Claude from your home folder so the Blender MCP is available" },
+  "plugins": [],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and the playtest screenshots show every scene in SPEC.md, or stop after 20 turns" }

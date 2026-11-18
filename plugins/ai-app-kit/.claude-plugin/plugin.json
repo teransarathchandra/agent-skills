@@ -1,0 +1,7 @@
+{
+  "name": "ai-app-kit",
+  "description": "AI-powered app kit: eval-first development, RAG decision guide, cost guard for Claude API features.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

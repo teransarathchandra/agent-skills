@@ -1,0 +1,5 @@
+{ "types": ["automation", "scraper"],
+  "stack": "TypeScript + Playwright (browser steps) + Crawlee (crawl queues) + node-cron or a hosted scheduler; n8n for no-code flows (community n8n-mcp, optional); scrapling MCP is available when Claude runs from your home folder",
+  "scaffold": { "automation": "pnpm init && pnpm add playwright && pnpm add -D typescript vitest tsx && npx playwright install chromium", "scraper": "pnpm dlx crawlee create . --template playwright-ts" },
+  "plugins": [],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and parsers pass on saved fixtures, or stop after 15 turns" }

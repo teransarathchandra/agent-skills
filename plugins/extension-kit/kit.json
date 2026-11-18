@@ -1,0 +1,5 @@
+{ "types": ["browser-extension", "vscode-extension"],
+  "stack": "Browser: WXT (Manifest V3, Vite, TypeScript) - Plasmo is in maintenance mode. VS Code: yo code template + @vscode/test-cli + @vscode/vsce, also publish to Open VSX (Cursor/VSCodium)",
+  "scaffold": { "browser-extension": "pnpm dlx wxt@latest init . --template react --pm pnpm", "vscode-extension": "npx --package yo --package generator-code -- yo code" },
+  "plugins": [],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown, or stop after 15 turns" }

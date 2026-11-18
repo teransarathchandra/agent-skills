@@ -1,0 +1,9 @@
+{
+  "name": "freelance-kit",
+  "description": "Freelance delivery workflow: onboard, brief, report, hand over.",
+  "author": {
+    "name": "Teran Sarathchandra"
+  },
+  "license": "MIT",
+  "version": "0.1.0"
+}

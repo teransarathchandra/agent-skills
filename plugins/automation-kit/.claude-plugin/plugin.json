@@ -1,0 +1,7 @@
+{
+  "name": "automation-kit",
+  "description": "Automation and scraping: Playwright, Crawlee, scheduled jobs, fixtures instead of live sites in tests.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

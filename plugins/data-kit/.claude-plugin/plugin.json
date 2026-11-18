@@ -1,0 +1,7 @@
+{
+  "name": "data-kit",
+  "description": "Data analytics and ML in Python: uv, marimo notebooks, DuckDB/Polars, pytest, ruff.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

@@ -20,6 +20,7 @@
 
 <p align="center">
   <a href="#skills">Skills</a> ·
+  <a href="#agentic-workflow-setup">Agentic setup</a> ·
   <a href="#install">Install</a> ·
   <a href="#use-it">Use it</a> ·
   <a href="#how-it-works">How it works</a> ·
@@ -45,6 +46,30 @@ An agent with no guidance will review a PR by skimming the diff, rewrite a CV wi
 | [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | Asks what it needs as quick choices (reply `ok` for the recommended answers, or type your own), builds an ATS-safe CV from your real evidence (work tickets, or your GitHub pull requests and reviews when there is no Jira) and checks it with a parser-style script, tailors it to each ad's keywords, writes one cover letter per job, flags scam ads, helps you pick job sites and set up accounts, fills in employer application forms with a browser agent and preps STAR interview stories. Always stops before Submit | "Rebuild my CV for ATS and write a cover letter for this ad." | Python 3.9+ for the ATS checker; a .docx tool (Node.js 18+ and the `docx` package for the bundled letter script); a browser tool such as the Playwright MCP |
 
 Each skill folder holds a `SKILL.md`, plus `references/` (longer guides and worked examples), `scripts/` and `assets/` where it needs them. Every example in this repository is fictional.
+
+## Agentic workflow setup
+
+A complete Claude Code setup for building any project the agentic way: a spec, a check Claude must pass, and the right toolkit per project type, loaded only where it is needed so sessions stay cheap. Paste this into Claude Code:
+
+```text
+Set up https://github.com/teransarathchandra/agent-skills for me by following its SETUP.md.
+```
+
+The agent clones the repo, asks which profile you want, shows a dry run and installs after you say yes. Or run it yourself:
+
+```bash
+git clone https://github.com/teransarathchandra/agent-skills ~/agent-skills
+bash ~/agent-skills/setup/install.sh --profile recommended --dry-run   # then again with --yes
+```
+
+| Part | What you get |
+|---|---|
+| Core | `/kickoff <idea>` (interview, `SPEC.md`, scaffold, verify script, Stop hook, the right kit), `/commit-push-pr`, the `Explore` (Haiku), `ac-reviewer` and `browser-qa` agents, a TypeScript check hook, token-saving routing rules |
+| Mods | [`flowbar`](plugins/flowbar/README.md): spec progress, last verify result and running agents above the prompt, plus `/kit`. [`workbench`](plugins/workbench/README.md): context use and turn cost, plus a git and PR pane |
+| 14 project kits | Web, mobile, API, AI apps, CLI and npm packages, desktop, browser and VS Code extensions, bots, automation, data and ML, games and 3D, video and docs, infra, Shopify and Stripe. Each has a `kit.json`, a `scripts/verify.sh` and a few commands; `/kickoff` installs one per project |
+| Work kits | `freelance-kit` (client onboarding, briefs, status reports, handover, security and license review) and `builder-kit` (scaffold your own plugins and MCP servers) |
+
+How to use it, with walkthroughs for a portfolio, a mobile app and a website: [docs/agentic-workflow.md](docs/agentic-workflow.md). Undo with `bash setup/uninstall.sh`.
 
 ## Install
 

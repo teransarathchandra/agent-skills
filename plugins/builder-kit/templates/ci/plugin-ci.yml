@@ -1,0 +1,20 @@
+name: plugin-ci
+on: [pull_request, push]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24 }
+      - run: npm install -g @anthropic-ai/claude-code
+      - run: claude plugin validate . --strict
+  # Nightly evals need an API key secret (ANTHROPIC_API_KEY). Enable when ready:
+  # eval:
+  #   if: github.event_name == 'schedule'
+  #   runs-on: ubuntu-latest
+  #   env: { ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }} }
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: npm install -g @anthropic-ai/claude-code
+  #     - run: claude plugin eval . --trust-plugin --threshold 0.8 --no-publish --max-cost-usd 5

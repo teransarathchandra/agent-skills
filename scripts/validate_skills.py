@@ -26,7 +26,11 @@ SECRET_RES = [
     re.compile(r"sk-[A-Za-z0-9]{20,}"),
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
 ]
-SCANNED_SUFFIXES = {".md", ".py", ".sh", ".js", ".mjs", ".cjs", ".ts", ".json", ".txt", ".yml", ".yaml"}
+SCANNED_SUFFIXES = {".md", ".py", ".sh", ".js", ".mjs", ".cjs", ".ts", ".tsx", ".json", ".txt", ".yml", ".yaml"}
+# A personal home-directory path in a shipped file breaks it on every other machine.
+HOME_PATH_RE = re.compile(r"/(?:Users|home)/(?!you\b|me\b|runner\b)[A-Za-z0-9._-]+/")
+SETUP_SCRIPTS = ("setup/install.sh", "setup/uninstall.sh")
+NON_KIT_PLUGINS = {"freelance-kit", "builder-kit"}
 ALLOWED_EMAIL_DOMAINS =("example.com", "example.org", "users.noreply.github.com")
 MAX_NAME = 64
 MAX_DESCRIPTION = 1024
@@ -223,6 +227,65 @@ def validate_manifests(errors: list[str]) -> None:
             errors.append(".claude-plugin/marketplace.json: set 'version' only in plugin.json, not in the entry")
 
 
+def scan_tree(directory: Path, errors: list[str]) -> None:
+    """Privacy and portability checks for every shipped text file under a directory."""
+    for file in sorted(directory.rglob("*")):
+        if file.is_file() and file.suffix in SCANNED_SUFFIXES and "node_modules" not in file.parts:
+            text = file.read_text(encoding="utf-8")
+            check_privacy(file, text, errors)
+            if HOME_PATH_RE.search(text):
+                errors.append(f"{file.relative_to(ROOT)}: contains a personal home-directory path")
+
+
+def validate_plugins(errors: list[str]) -> int:
+    """Each plugins/<name> is a valid plugin listed in the marketplace; kits ship kit.json and verify.sh."""
+    plugins_root = ROOT / "plugins"
+    if not plugins_root.is_dir():
+        return 0
+    market = load_json(ROOT / ".claude-plugin" / "marketplace.json", errors) or {}
+    sources = {entry.get("name"): entry.get("source") for entry in market.get("plugins", [])}
+    for entry_name, source in sources.items():
+        if isinstance(source, str) and source.startswith("./") and not (ROOT / source).is_dir():
+            errors.append(f".claude-plugin/marketplace.json: {entry_name} points at missing folder {source}")
+    dirs = sorted(p for p in plugins_root.iterdir() if p.is_dir())
+    for plugin_dir in dirs:
+        rel = plugin_dir.relative_to(ROOT)
+        manifest = load_json(plugin_dir / ".claude-plugin" / "plugin.json", errors)
+        if manifest is None:
+            continue
+        name = manifest.get("name")
+        if name != plugin_dir.name:
+            errors.append(f"{rel}: plugin.json name {name!r} must match the folder name")
+        if not SEMVER_RE.match(str(manifest.get("version", ""))):
+            errors.append(f"{rel}: plugin.json needs a version like 1.2.3")
+        if not manifest.get("license"):
+            errors.append(f"{rel}: plugin.json needs a license")
+        if sources.get(plugin_dir.name) != f"./plugins/{plugin_dir.name}":
+            errors.append(f".claude-plugin/marketplace.json: no entry with source ./plugins/{plugin_dir.name}")
+        if plugin_dir.name.endswith("-kit") and plugin_dir.name not in NON_KIT_PLUGINS:
+            kit = load_json(plugin_dir / "kit.json", errors)
+            if kit is not None:
+                if not isinstance(kit.get("types"), list) or not kit["types"]:
+                    errors.append(f"{rel}/kit.json: 'types' must be a non-empty list")
+                if not str(kit.get("goal", "")).startswith("/goal "):
+                    errors.append(f"{rel}/kit.json: 'goal' must be a /goal line")
+            verify = plugin_dir / "scripts" / "verify.sh"
+            if not verify.is_file():
+                errors.append(f"{rel}: scripts/verify.sh is missing")
+            elif not verify.stat().st_mode & 0o111:
+                errors.append(f"{rel}/scripts/verify.sh: must be executable")
+        scan_tree(plugin_dir, errors)
+    for script in SETUP_SCRIPTS:
+        path = ROOT / script
+        if not path.is_file():
+            errors.append(f"{script}: file not found")
+        elif not path.stat().st_mode & 0o111:
+            errors.append(f"{script}: must be executable")
+    if (ROOT / "setup").is_dir():
+        scan_tree(ROOT / "setup", errors)
+    return len(dirs)
+
+
 def validate_readme(errors: list[str]) -> None:
     """Every relative link and image in README.md must point at a file that exists."""
     readme = ROOT / "README.md"
@@ -247,13 +310,14 @@ def main() -> int:
     for skill_dir in skill_dirs:
         validate_skill(skill_dir, errors)
     validate_manifests(errors)
+    plugin_count = validate_plugins(errors)
     validate_readme(errors)
     if errors:
         print(f"{len(errors)} problem(s) found:\n")
         for error in errors:
             print(f"  - {error}")
         return 1
-    print(f"OK: {len(skill_dirs)} skill(s) and the plugin manifests are valid.")
+    print(f"OK: {len(skill_dirs)} skill(s), {plugin_count} plugin(s), the setup scripts and the manifests are valid.")
     return 0
 
 

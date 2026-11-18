@@ -28,6 +28,8 @@ claude plugin validate .
 | `template/SKILL.md` | Copy this to start a new skill |
 | `scripts/validate_skills.py` | The checks CI runs |
 | `.claude-plugin/` | Plugin and marketplace manifests |
+| `plugins/<name>/` | Extra plugins in the marketplace: project kits (`kit.json`, `scripts/verify.sh`, skills), `freelance-kit`, `builder-kit` and the `flowbar`/`workbench` mods |
+| `setup/` | The agentic workflow installer, uninstaller and the core files it places in `~/.claude`; `SETUP.md` tells an agent how to run it |
 | `docs/` | Guides for writing and publishing skills |
 
 ## Adding or changing a skill

@@ -1,0 +1,7 @@
+{ "types": ["api"],
+  "scaffold": { "api": "pnpm create hono@latest . --template nodejs --pm pnpm --install" },
+  "stack": "Hono + Zod (@hono/zod-openapi) + Drizzle ORM + Postgres (Neon) + Vitest",
+  "plugins": ["neon@claude-plugins-official"],
+  "optional": { "supabase instead of neon": "supabase@claude-plugins-official", "cloudflare workers deploy": "cloudflare@claude-plugins-official" },
+  "rules": ["Database MCP read-only and never pointed at production", "Schema changes only as reviewed Drizzle migration files"],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and every endpoint in SPEC.md has a passing contract test, or stop after 20 turns" }

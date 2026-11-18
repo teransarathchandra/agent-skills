@@ -1,0 +1,6 @@
+{ "types": ["desktop-tauri", "desktop-electron"],
+  "stack": "Tauri 2 (Rust backend, small binaries) or Electron via electron-vite (Node/Chromium parity); React + Vite frontend; Vitest; Playwright (_electron) or WebdriverIO @wdio/tauri-service for e2e",
+  "scaffold": { "desktop-tauri": "pnpm create tauri-app@latest . --template react-ts --manager pnpm", "desktop-electron": "pnpm create @quick-start/electron@latest . --template react-ts" },
+  "requires": { "desktop-tauri": "Rust toolchain: brew install rustup && rustup-init -y", "both": "Apple Developer ID certificate for signing/notarization (paid Apple Developer account)" },
+  "plugins": [],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown, or stop after 20 turns" }

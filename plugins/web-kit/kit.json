@@ -1,0 +1,5 @@
+{ "types": ["portfolio", "web-app"],
+  "scaffold": { "portfolio": "pnpm create astro@latest . -- --template minimal --typescript strict --install --git", "web-app": "pnpm create next-app@latest . --ts --tailwind --eslint --app --use-pnpm" },
+  "plugins": ["frontend-design@claude-plugins-official", "vercel@claude-plugins-official"],
+  "optional": { "database/auth": "supabase@claude-plugins-official", "cloudflare deploy": "cloudflare@claude-plugins-official", "errors after launch": "sentry@claude-plugins-official", "shadcn MCP (private registries only)": "pnpm dlx shadcn@latest mcp init --client claude" },
+  "goal": "/goal bash scripts/verify.sh exits 0 with its output shown, every page in SPEC.md exists, or stop after 15 turns" }
