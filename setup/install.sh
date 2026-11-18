@@ -79,10 +79,17 @@ if [ "$CHECK" = 1 ]; then
     if [ -f "$dest" ]; then say "ok       $dest"; else say "missing  $dest"; missing=1; fi
   done
   grep -q '<!-- agent-skills:start -->' "$CLAUDE_DIR/CLAUDE.md" 2>/dev/null && say "ok       routing rules in CLAUDE.md" || { say "missing  routing rules in CLAUDE.md"; missing=1; }
-  if [ "$HAVE_CLAUDE" = 1 ]; then
+  # Check what this machine actually installed (from the manifest); fall back to the chosen profile.
+  EXPECTED="$(MANIFEST="$MANIFEST" python3 -c 'import json,os; p=os.environ["MANIFEST"]; print("\n".join(json.load(open(p)).get("plugins", [])) if os.path.exists(p) else "")')"
+  if [ -z "$EXPECTED" ] && [ "$PLUGINS" = 1 ]; then
+    EXPECTED="$(for p in "${OWN_PLUGINS[@]}"; do echo "$p@$MARKET"; done; for p in ${OFFICIAL_PLUGINS[@]+"${OFFICIAL_PLUGINS[@]}"}; do echo "$p@claude-plugins-official"; done)"
+  fi
+  if [ -z "$EXPECTED" ]; then
+    say "skipped  plugins (none recorded)"
+  elif [ "$HAVE_CLAUDE" = 1 ]; then
     list="$(claude plugin list 2>/dev/null || true)"
-    for p in "${OWN_PLUGINS[@]}"; do
-      printf '%s\n' "$list" | grep -qE "(^|[^A-Za-z0-9-])$p@$MARKET([^A-Za-z0-9-]|$)" && say "ok       plugin $p@$MARKET" || say "missing  plugin $p@$MARKET"
+    for id in $EXPECTED; do
+      if printf '%s\n' "$list" | grep -qE "(^|[^A-Za-z0-9-])${id}([^A-Za-z0-9-]|$)"; then say "ok       plugin $id"; else say "missing  plugin $id"; missing=1; fi
     done
   else
     say "skipped  plugins (claude CLI not found)"
@@ -126,17 +133,24 @@ backup() { # file
 # ---------- core files ----------
 say "Core files"
 for pair in "${CORE_FILES[@]}"; do
-  src="$SETUP_DIR/${pair%%:*}"; dest="$CLAUDE_DIR/${pair#*:}"
+  src="$SETUP_DIR/${pair%%:*}"; dest="$CLAUDE_DIR/${pair#*:}"; origin=""; saved=""
+  # origin: created (new file), replaced (backed up first) or preexisting (already identical).
+  # The manifest keeps a path's first origin, so re-runs never forget what was there before.
   if [ -f "$dest" ] && [ "$(sha "$src")" = "$(sha "$dest")" ]; then
-    say "  unchanged  $dest"
+    say "  unchanged  $dest"; origin="preexisting"; saved=""
   elif [ "$DRY" = 1 ]; then
     [ -f "$dest" ] && say "  would update (backup first)  $dest" || say "  would add  $dest"
   else
-    if [ -f "$dest" ]; then backup "$dest"; say "  updated    $dest (backup in $BACKUP)"; else say "  added      $dest"; fi
+    if [ -f "$dest" ]; then
+      backup "$dest"; origin="replaced"; saved="$BACKUP/${pair#*:}"
+      say "  updated    $dest (backup in $BACKUP)"
+    else
+      origin="created"; saved=""; say "  added      $dest"
+    fi
     mkdir -p "$(dirname "$dest")"; cp "$src" "$dest"
     case "$dest" in *.sh) chmod +x "$dest" ;; esac
   fi
-  RECORD_FILES+=("$dest")
+  RECORD_FILES+=("$dest|${origin:-created}|${saved:-}")
 done
 
 # ---------- CLAUDE.md routing block ----------
@@ -246,8 +260,11 @@ path = os.environ["MANIFEST"]
 old = json.load(open(path)) if os.path.exists(path) else {}
 added = json.loads(os.environ["ADDED_JSON"] or "{}")
 files = {f["path"]: f for f in old.get("files", [])}
-for p in filter(None, os.environ["FILES"].split("\n")):
-    files[p] = {"path": p, "sha256": hashlib.sha256(open(p, "rb").read()).hexdigest()}
+for line in filter(None, os.environ["FILES"].split("\n")):
+    p, origin, saved = (line.split("|") + ["", ""])[:3]
+    entry = files.get(p, {"path": p, "origin": origin, "backup": saved or None})
+    entry["sha256"] = hashlib.sha256(open(p, "rb").read()).hexdigest()
+    files[p] = entry
 manifest = {
     "installedAt": time.strftime("%Y-%m-%dT%H:%M:%S"),
     "profile": os.environ["PROFILE"],

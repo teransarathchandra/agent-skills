@@ -27,7 +27,7 @@ if [ "$DRY" = 0 ] && [ "$YES" = 0 ]; then
 fi
 
 PLUGINS="$(MANIFEST="$MANIFEST" CLAUDE_DIR="$CLAUDE_DIR" DRY="$DRY" python3 - <<'PY'
-import hashlib, json, os, re
+import hashlib, json, os, re, shutil
 m = json.load(open(os.environ["MANIFEST"]))
 dry = os.environ["DRY"] == "1"
 claude_dir = os.environ["CLAUDE_DIR"]
@@ -35,10 +35,20 @@ verb = "would remove" if dry else "removed"
 
 for f in m.get("files", []):
     p = f["path"]
+    origin = f.get("origin", "created")  # manifests from before origins were recorded
     if not os.path.exists(p):
         continue
     if hashlib.sha256(open(p, "rb").read()).hexdigest() != f["sha256"]:
         print(f"MSG   kept (you changed it)  {p}")
+        continue
+    if origin == "preexisting":
+        print(f"MSG   kept (it was there before installing)  {p}")
+        continue
+    backup = f.get("backup")
+    if origin == "replaced" and backup and os.path.exists(backup):
+        if not dry:
+            shutil.copy2(backup, p)
+        print(f"MSG   {'would restore' if dry else 'restored'} your previous version  {p}")
         continue
     if not dry:
         os.remove(p)

@@ -92,5 +92,31 @@ class SetupInstallTest(unittest.TestCase):
         self.assertFalse((self.claude / ".agent-skills-install.json").exists())
 
 
+    def test_uninstall_keeps_identical_preexisting_files(self) -> None:
+        agents = self.claude / "agents"
+        agents.mkdir()
+        shutil.copy(ROOT / "setup" / "claude" / "agents" / "Explore.md", agents / "Explore.md")
+        self.run_script(INSTALL, "--no-plugins", "--yes")
+        self.run_script(UNINSTALL, "--yes")
+        self.assertTrue((agents / "Explore.md").exists(), "a file the user already had must survive")
+
+    def test_uninstall_restores_replaced_files_even_after_reinstall(self) -> None:
+        skill = self.claude / "skills" / "kickoff" / "SKILL.md"
+        skill.parent.mkdir(parents=True)
+        skill.write_text("my own kickoff\n", encoding="utf-8")
+        for _ in range(2):
+            self.run_script(INSTALL, "--no-plugins", "--yes")
+        self.assertNotEqual(skill.read_text(encoding="utf-8"), "my own kickoff\n")
+        self.run_script(UNINSTALL, "--yes")
+        self.assertEqual(skill.read_text(encoding="utf-8"), "my own kickoff\n")
+
+    def test_check_fails_when_a_core_file_is_missing(self) -> None:
+        self.run_script(INSTALL, "--no-plugins", "--yes")
+        (self.claude / "agents" / "ac-reviewer.md").unlink()
+        result = self.run_script(INSTALL, "--no-plugins", "--check")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("missing", result.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
