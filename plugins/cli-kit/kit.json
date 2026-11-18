@@ -1,0 +1,5 @@
+{ "types": ["cli", "npm-package"],
+  "stack": "TypeScript + commander + tsdown (bundler) + Vitest + Changesets; npm trusted publishing with provenance",
+  "scaffold": { "cli": "pnpm init && pnpm add commander && pnpm add -D typescript tsdown vitest @types/node @changesets/cli && npx tsc --init", "npm-package": "pnpm init && pnpm add -D typescript tsdown vitest @changesets/cli && npx tsc --init" },
+  "plugins": [],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown, or stop after 15 turns" }

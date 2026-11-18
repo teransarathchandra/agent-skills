@@ -1,0 +1,20 @@
+{
+  "types": [
+    "shopify",
+    "stripe-payments"
+  ],
+  "stack": "Shopify: Shopify CLI (apps: React Router template; themes: Liquid) + official AI toolkit plugin. Stripe: Stripe CLI + official plugin, Checkout or Payment Element, webhooks with signature checks. Stripe accounts are not available in every country (stripe.com/global); a client's own account works anywhere",
+  "scaffold": {
+    "shopify": "pnpm create @shopify/app@latest",
+    "stripe-payments": "pnpm add stripe && brew install stripe/stripe-cli/stripe"
+  },
+  "plugins": {
+    "shopify": [
+      "shopify-ai-toolkit@claude-plugins-official"
+    ],
+    "stripe-payments": [
+      "stripe@claude-plugins-official"
+    ]
+  },
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and every payment path in SPEC.md passes in test mode, or stop after 20 turns"
+}

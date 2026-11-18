@@ -1,0 +1,7 @@
+{
+  "name": "desktop-kit",
+  "description": "Desktop apps with Tauri 2 or Electron: build, test, sign and notarize on macOS.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

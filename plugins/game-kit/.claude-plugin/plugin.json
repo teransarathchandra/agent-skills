@@ -1,0 +1,7 @@
+{
+  "name": "game-kit",
+  "description": "Games and 3D: Phaser, Three.js / React Three Fiber, Godot; screenshot playtests; Blender MCP for assets.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

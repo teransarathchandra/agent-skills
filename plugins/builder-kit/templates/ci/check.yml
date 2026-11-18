@@ -1,0 +1,15 @@
+# Copy to .github/workflows/check.yml in TypeScript projects; make "check" a required status check.
+name: check
+on: [pull_request, push]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - uses: actions/dependency-review-action@v4
+        if: github.event_name == 'pull_request'

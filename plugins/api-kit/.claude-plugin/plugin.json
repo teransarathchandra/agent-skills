@@ -1,0 +1,7 @@
+{
+  "name": "api-kit",
+  "description": "Backend API kit: OpenAPI-first spec, contract tests, safe database migrations, CLI deploys.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

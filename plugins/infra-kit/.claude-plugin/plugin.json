@@ -1,0 +1,7 @@
+{
+  "name": "infra-kit",
+  "description": "DevOps and infrastructure: Docker, Terraform, GitHub Actions, cloud CLIs with read-only credentials.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

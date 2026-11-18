@@ -1,0 +1,7 @@
+{
+  "name": "media-kit",
+  "description": "Video, slides and docs sites: Remotion, Slidev, Astro Starlight; render checks.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

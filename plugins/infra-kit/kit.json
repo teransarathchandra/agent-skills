@@ -1,0 +1,6 @@
+{ "types": ["infra", "devops"],
+  "stack": "Docker (OrbStack or Docker Desktop), Terraform (official HashiCorp plugin) or Pulumi/SST in TypeScript, GitHub Actions, cloud CLIs (aws, wrangler, gcloud) with read-only profiles; MCP only for docs/schema lookup",
+  "scaffold": { "infra": "mkdir -p infra && cd infra && terraform init", "devops": "mkdir -p .github/workflows" },
+  "plugins": ["terraform@claude-plugins-official"],
+  "optional": { "aws": "aws-core@claude-plugins-official", "cloudflare": "cloudflare@claude-plugins-official" },
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and the plan shows only the changes in SPEC.md, or stop after 15 turns" }

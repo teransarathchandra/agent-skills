@@ -26,3 +26,16 @@ jobs:
         run: python -W error -m unittest discover -s tests
       - name: Run Node tests
         run: node --test tests/*.test.js
+
+  plugins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check setup script syntax
+        run: bash -n setup/install.sh && bash -n setup/uninstall.sh && bash -n setup/claude/hooks/ts-gate.sh && for f in plugins/*/scripts/verify.sh; do bash -n "$f"; done
+      - name: Install Claude Code
+        run: npm install -g --ignore-scripts @anthropic-ai/claude-code@2.1.327
+      - name: Validate the marketplace and every plugin (strict)
+        run: claude plugin validate . --strict

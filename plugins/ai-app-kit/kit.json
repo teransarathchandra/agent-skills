@@ -1,0 +1,5 @@
+{ "types": ["ai-app"],
+  "scaffold": { "ai-app": "Pair with web-kit or api-kit for the app shell; add @anthropic-ai/sdk and promptfoo" },
+  "plugins": [],
+  "uses": ["claude-api skill (built in)", "agent-sdk-dev plugin (installed) when the app needs a file/bash agent"],
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and the promptfoo pass rate is at least the threshold in SPEC.md, or stop after 20 turns" }

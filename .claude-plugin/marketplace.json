@@ -4,14 +4,196 @@
     "name": "Teran Sarathchandra",
     "url": "https://github.com/teransarathchandra"
   },
-  "description": "Agent skills by Teran Sarathchandra for real work.",
+  "description": "Agent skills by Teran Sarathchandra for real work, plus a complete agentic Claude Code setup: /kickoff, project kits, workflow mods and freelance tools.",
   "plugins": [
     {
       "name": "teran-skills",
       "source": "./",
       "description": "Agent skills for real work: PR review with Jira context, public-safe skill sanitizing, and an evidence-based job application assistant.",
       "category": "engineering",
-      "tags": ["code-review", "jira", "debugging", "job-search", "cv"]
+      "tags": [
+        "code-review",
+        "jira",
+        "debugging",
+        "job-search",
+        "cv"
+      ]
+    },
+    {
+      "name": "ai-app-kit",
+      "source": "./plugins/ai-app-kit",
+      "description": "AI-powered app kit: eval-first development, RAG decision guide, cost guard for Claude API features.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "api-kit",
+      "source": "./plugins/api-kit",
+      "description": "Backend API kit: OpenAPI-first spec, contract tests, safe database migrations, CLI deploys.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "automation-kit",
+      "source": "./plugins/automation-kit",
+      "description": "Automation and scraping: Playwright, Crawlee, scheduled jobs, fixtures instead of live sites in tests.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "bot-kit",
+      "source": "./plugins/bot-kit",
+      "description": "Chat bots for Slack, Discord, Telegram and WhatsApp: handler tests, tunnel smoke test, safe tokens.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "builder-kit",
+      "source": "./plugins/builder-kit",
+      "description": "Scaffolds for Claude Code plugins and MCP servers.",
+      "category": "development",
+      "tags": [
+        "workflow"
+      ]
+    },
+    {
+      "name": "cli-kit",
+      "source": "./plugins/cli-kit",
+      "description": "CLI tools and npm packages: tsdown build, Vitest, pack check, trusted publishing.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "commerce-kit",
+      "source": "./plugins/commerce-kit",
+      "description": "Shopify apps/themes and Stripe payments: official toolkits, test mode only, webhook safety.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "data-kit",
+      "source": "./plugins/data-kit",
+      "description": "Data analytics and ML in Python: uv, marimo notebooks, DuckDB/Polars, pytest, ruff.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "desktop-kit",
+      "source": "./plugins/desktop-kit",
+      "description": "Desktop apps with Tauri 2 or Electron: build, test, sign and notarize on macOS.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "extension-kit",
+      "source": "./plugins/extension-kit",
+      "description": "Browser extensions (WXT) and VS Code extensions: build, test, package, store submission.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "flowbar",
+      "source": "./plugins/flowbar",
+      "description": "Agentic flow band: SPEC.md progress, last verify result, running subagents, and a /kit command.",
+      "category": "productivity",
+      "tags": [
+        "mod"
+      ]
+    },
+    {
+      "name": "freelance-kit",
+      "source": "./plugins/freelance-kit",
+      "description": "Freelance delivery workflow: onboard, brief, report, hand over.",
+      "category": "productivity",
+      "tags": [
+        "workflow"
+      ]
+    },
+    {
+      "name": "game-kit",
+      "source": "./plugins/game-kit",
+      "description": "Games and 3D: Phaser, Three.js / React Three Fiber, Godot; screenshot playtests; Blender MCP for assets.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "infra-kit",
+      "source": "./plugins/infra-kit",
+      "description": "DevOps and infrastructure: Docker, Terraform, GitHub Actions, cloud CLIs with read-only credentials.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "media-kit",
+      "source": "./plugins/media-kit",
+      "description": "Video, slides and docs sites: Remotion, Slidev, Astro Starlight; render checks.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "mobile-kit",
+      "source": "./plugins/mobile-kit",
+      "description": "Mobile app kit for Expo (React Native) and native iOS: simulator testing flows and store release steps.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "web-kit",
+      "source": "./plugins/web-kit",
+      "description": "Portfolio, static site and full-stack web app kit: visual QA, launch checklist, verify script.",
+      "category": "development",
+      "tags": [
+        "kit",
+        "kickoff"
+      ]
+    },
+    {
+      "name": "workbench",
+      "source": "./plugins/workbench",
+      "description": "Context and turn-cost band, plus a /workbench pane with git branch, changes, PR status and files touched this session.",
+      "category": "productivity",
+      "tags": [
+        "mod"
+      ]
     }
   ]
 }

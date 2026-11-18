@@ -1,0 +1,7 @@
+{
+  "name": "commerce-kit",
+  "description": "Shopify apps/themes and Stripe payments: official toolkits, test mode only, webhook safety.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

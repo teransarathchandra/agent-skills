@@ -1,0 +1,7 @@
+{
+  "name": "web-kit",
+  "description": "Portfolio, static site and full-stack web app kit: visual QA, launch checklist, verify script.",
+  "version": "0.1.0",
+  "author": { "name": "Teran Sarathchandra" },
+  "license": "MIT"
+}

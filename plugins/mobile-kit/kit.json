@@ -1,0 +1,6 @@
+{ "types": ["mobile-expo", "mobile-ios"],
+  "scaffold": { "mobile-expo": "pnpm create expo-app@latest . --template default", "mobile-ios": "Create the project in Xcode (File > New > Project), then continue" },
+  "plugins": { "mobile-expo": ["expo@claude-plugins-official"], "mobile-ios": ["xcode@claude-plugins-official"] },
+  "requires": { "mobile-expo": "Xcode (iOS simulator) or Android Studio emulator; Maestro CLI: brew tap mobile-dev-inc/tap && brew install mobile-dev-inc/tap/maestro (needs Java 17+)", "mobile-ios": "Xcode 27+ (the xcode plugin needs it); install it from your own terminal if in-session install refuses" },
+  "mcp": { "maestro": "claude mcp add --scope project maestro -- maestro mcp" },
+  "goal": "/goal bash scripts/verify.sh exits 0 with output shown and maestro test .maestro/ passes, or stop after 20 turns" }
