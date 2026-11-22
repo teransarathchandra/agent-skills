@@ -114,3 +114,28 @@ test('LinkedIn hosts are recognised however they are written', async () => {
   for (const h of ['linkedin.com', 'www.linkedin.com', 'WWW.LinkedIn.com', 'www.linkedin.com.', 'au.linkedin.com..', 'lnkd.in']) assert.equal(isLinkedInHost(h), true, h);
   for (const h of ['example.com', 'notlinkedin.com', 'linkedin.com.example.com', '']) assert.equal(isLinkedInHost(h), false, h);
 });
+
+test('old bank answers unchanged', async () => {
+  const { years } = await import(MODULE);
+  assert.equal(years('How many years of work experience do you have with TypeScript?', bank), '4');
+  assert.equal(years('How many years of work experience do you have with Amazon Web Services (AWS)?', bank), '0');
+  assert.equal(years('How many years of work experience do you have with MongoDB?', bank), null);
+  assert.equal(years('How many years of professional experience do you have designing and developing object-oriented software?', bank), '5');
+});
+test('experience wins per key', async () => {
+  const { years, experienceOf } = await import(MODULE);
+  const b = { ...bank, experience: { total_years: 6, items: { typescript: 5, playwright: 3 } } };
+  assert.equal(years('How many years of work experience do you have with TypeScript?', b), '5');
+  assert.equal(years('How many years of work experience do you have with C#?', b), '2');
+  assert.equal(years('How many years of work experience do you have with Playwright?', b), '3');
+  assert.equal(experienceOf(b).total, 6);
+});
+test('credentials answer from items', async () => {
+  const { years, yesNo } = await import(MODULE);
+  const qa = { role_family: 'qa-testing', experience: { total_years: 4, items: { selenium: 3, istqb: true, jmeter: 1 } }, policy: {} };
+  assert.equal(years('How many years of work experience do you have with Selenium?', qa), '3');
+  assert.equal(yesNo('Do you hold an ISTQB certification?', qa, 'UK'), 'Yes');
+  assert.equal(yesNo('Are you a Certified ScrumMaster (CSM)?', qa, 'UK'), null);
+  assert.equal(years('How many years of experience do you have in this role?', qa), '4');
+  assert.equal(years('How many years of QA experience do you have?', qa), '4');
+});

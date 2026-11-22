@@ -35,6 +35,12 @@ export function yesNo(question, bank, country) {
   const custom = customAnswer(q, bank);
   if (custom && /^(yes|no)$/i.test(custom)) return custom[0].toUpperCase() + custom.slice(1).toLowerCase();
   if (custom) return null;
+  // "Do you hold / have / are you certified in X?" answers from a boolean experience item.
+  if (/hold|have|possess|certif|licen[cs]e|accredit/.test(q)) {
+    for (const [k, v] of Object.entries(experienceOf(bank).items)) {
+      if (typeof v === 'boolean' && q.includes(k)) return v ? 'Yes' : 'No';
+    }
+  }
   for (const rule of YES_NO_RULES) {
     if (!rule.re.test(q)) continue;
     const v = fact(rule.key, bank, country);
@@ -74,25 +80,60 @@ const SKILL_ALIASES = [
   ['cloud', /cloud/], ['apis', /\bapi/], ['leadership', /lead(ing|ership)?\b|manag|mentor/],
 ];
 
+// Wording that means "years in my own field", per role_family (see references/roles/).
+const FAMILY_WORDS = {
+  'software-engineering': /software|engineering|development|programming|full.?stack|web|object.?oriented/,
+  'qa-testing': /\bqa\b|quality assurance|testing/,
+  'devops-cloud': /devops|\bsre\b|infrastructure|site reliability/,
+  'data-analytics': /\bdata\b|analytics|analysis/,
+  'cybersecurity': /security|cyber/,
+  'technical-writing': /technical writing|documentation/,
+  'product-management': /product management|product manager/,
+  'project-delivery': /project (management|delivery)|scrum|agile/,
+  'business-analysis': /business analy/,
+  'ux-ui-design': /\bux\b|\bui\b|design/,
+  'it-customer-support': /support|service desk|help ?desk/,
+  'hr-recruiting': /recruit|talent acquisition|\bhr\b|human resources/,
+  'sales-account-management': /sales|account management/,
+  'marketing': /marketing/,
+  'finance-accounting': /finance|financial|accounting/,
+  'operations-admin': /operations|administrat/,
+};
+
+/** The role-neutral experience of a bank. `experience` wins over the 0.4.0 `years` block per key. */
+export function experienceOf(bank) {
+  const y = (bank && bank.years) || {};
+  const e = (bank && bank.experience) || {};
+  const items = {};
+  for (const [k, v] of Object.entries(y.skills || {})) items[low(k)] = v;
+  for (const [k, v] of Object.entries(e.items || {})) items[low(k)] = v;
+  const none = [...new Set([...(y.none || []), ...(e.none || [])].map(low))];
+  return { total: e.total_years !== undefined ? e.total_years : y.total, items, none };
+}
+
 /** Years of experience for "How many years of work experience do you have with X?". */
 export function years(question, bank) {
   const q = low(question);
   const custom = customAnswer(q, bank);
   if (custom && /^\d+$/.test(custom)) return custom;
-  const y = bank.years || {};
-  const skills = Object.fromEntries(Object.entries(y.skills || {}).map(([k, v]) => [low(k), v]));
+  const { total, items, none } = experienceOf(bank);
+  const skills = Object.fromEntries(Object.entries(items).filter(([, v]) => typeof v === 'number'));
   for (const [name, re] of SKILL_ALIASES) {
     if (re.test(q)) {
       if (skills[name] !== undefined) return String(skills[name]);
-      if ((y.none || []).map(low).includes(name)) return '0';
+      if (none.includes(name)) return '0';
       return null; // a technology the bank does not cover: ask, do not guess
     }
   }
-  // Exact key match for technologies outside the alias list ("Data Pipelines", "Forward Deployed Engineering").
+  // Exact key match for technologies outside the alias list ("Data Pipelines", "Selenium").
   for (const [k, v] of Object.entries(skills)) if (q.includes(k)) return String(v);
-  if ((y.none || []).some((n) => q.includes(low(n)))) return '0';
-  const generic = /years of (work |professional |relevant )?experience( do you have)?\??$/.test(q) || /software|engineering|development|programming|professional|full.?stack|web|object.?oriented/.test(q);
-  if (generic && y.total !== undefined) return String(y.total);
+  if (none.some((n) => q.includes(n))) return '0';
+  const family = FAMILY_WORDS[bank && bank.role_family];
+  const generic = /years of (work |professional |relevant )?experience( do you have)?\??$/.test(q)
+    || /in this role|relevant experience|similar role/.test(q)
+    || /software|engineering|development|programming|professional|full.?stack|web|object.?oriented/.test(q)
+    || Boolean(family && family.test(q));
+  if (generic && total !== undefined) return String(total);
   return null;
 }
 
