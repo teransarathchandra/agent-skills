@@ -71,6 +71,21 @@ class TriageTests(unittest.TestCase):
         r = triage.triage({"id": "1", "text": "Recruiter using Workday and Greenhouse. CIPD preferred."}, bank, "UK")
         self.assertEqual(r["verdict"], "apply")
 
+    def test_lowercase_short_keys_from_old_banks_still_match(self):
+        bank = {"years": {"skills": {"c#": 3, "go": 2, "r": 1}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "We use C# and Go"}, bank, "UK")
+        self.assertEqual(r["skills_matched"], ["c#", "go"])
+
+    def test_punctuation_keys_match(self):
+        bank = {"experience": {"items": {".net": 3, "ci/cd": 2, "c#": 1}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "Build .NET services with C# and CI/CD."}, bank, "UK")
+        self.assertEqual(r["skills_matched"], [".net", "c#", "ci/cd"])
+
+    def test_experience_overrides_years_and_credential_counts(self):
+        bank = {"years": {"skills": {"sql": 3, "excel": 2}}, "experience": {"items": {"sql": 0, "cipd": True}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "SQL, Excel, CIPD."}, bank, "UK")
+        self.assertEqual(r["skills_matched"], ["cipd", "excel"])
+
 
 if __name__ == "__main__":
     unittest.main()

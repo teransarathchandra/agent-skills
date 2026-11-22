@@ -76,9 +76,15 @@ def experience_keys(bank: dict) -> list[str]:
 
 
 def key_in_text(key: str, text: str) -> bool:
-    """Whole-word match. Keys of 1-2 characters are case-sensitive; longer keys are not."""
-    flags = 0 if len(key) <= 2 else re.IGNORECASE
-    return re.search(r"(?<![A-Za-z0-9])" + re.escape(key) + r"(?![A-Za-z0-9])", text, flags) is not None
+    """Whole-word match. Keys of 1-2 characters are case-sensitive; longer keys are not.
+    A short key with no capital (an older bank's "c#", "go") also tries upper and capitalised forms."""
+    if len(key) > 2:
+        variants, flags = [key], re.IGNORECASE
+    else:
+        variants, flags = [key], 0
+        if key == key.lower():
+            variants += [key.upper(), key.capitalize()]
+    return any(re.search(r"(?<![A-Za-z0-9])" + re.escape(v) + r"(?![A-Za-z0-9])", text, flags) for v in variants)
 
 
 def triage(job: dict, bank: dict, country: str) -> dict:
