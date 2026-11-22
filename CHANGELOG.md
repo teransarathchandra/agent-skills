@@ -6,8 +6,8 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ### Added
 - `job-application-assistant` 0.5.0: any role, not only engineering. Role profiles for 16 role families plus an any-role fallback (`references/roles/`) cover evidence, ATS keywords, CV shape, portfolio and interview material per family. A QA example bank is included.
-- Layoff guidance (`references/layoff.md`): first-week steps, severance and notice questions, and visa grace periods for 10 countries from official sources.
-- Adaptive intake: the assistant reads the CV first, asks role family first, branches on the answers, offers personalised recommendations and handles urgent cases first. Work rights are asked before triage. Questions before work starts dropped from 6 to 3-5 on the new eval scenarios.
+- Layoff guidance (`references/layoff.md`): explaining the layoff, references from the old employer, notice and garden-leave answers for forms (severance is never asked), a weekly pace plan, and visa grace periods for 10 countries from official sources.
+- Adaptive intake: the assistant reads the CV first, asks role family first, branches on the answers, offers personalised recommendations and handles urgent cases first. Work rights are asked before triage. Questions before work starts dropped from 5-6 to 3-5 on the new eval scenarios.
 - Home-country and mixed searches: no sponsorship questions when searching at home. Sri Lanka added to the CV and job-site tables.
 - Role-neutral answer bank: `role_family` and `experience` keys, with per-key fallback to the 0.4.0 `years` block, used by `answers.mjs` and `triage.py`.
 - Six new eval scenarios (roles, layoff, home-country search, urgent intake).
@@ -17,6 +17,8 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - Tests: `tests/apply_answers.test.js` (answer rules from real form wording) and `tests/test_apply_triage.py`.
 
 ### Changed
+- `job-application-assistant` 0.5.0: `triage.py`'s JSON field `stack_matched` is renamed `skills_matched`; update any script that reads it.
+- `job-application-assistant` 0.5.0: the answer rules ask rather than over-claim. A credential answers only at the level held (store `istqb foundation level`, not `istqb`), clearance only through `policy.has_clearance` with any named level asked, total years only for the candidate's own field, and notice dropdowns from the bank's notice.
 - The validator now checks `Contents` lists in reference subfolders.
 - `job-application-assistant`: batch approval replaces "the candidate presses Submit". Forms are filled to their review page and submitted only after the candidate names the jobs. Required privacy-notice boxes are ticked only with the intake choice; marketing and "follow company" boxes stay off. Salary is a per-country figure from intake, never converted or invented; current salary is a decision and is never stored. Six new eval scenarios cover the opt-in, batch approval, number-only salary fields, pre-filled wrong files, setup on Codex and unknown questions.
 - README restructured for readability: a short pitch, "What's inside", a quick start first, one-sentence skill rows, the agentic workflow explained as spec, check and rules, collapsible details, and an FAQ.
