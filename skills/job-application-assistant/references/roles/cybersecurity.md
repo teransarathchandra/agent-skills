@@ -30,9 +30,7 @@ Load this when the person works in security: engineering, SOC, GRC (governance, 
    c) Public CTFs, labs or blog posts
    d) Other: type it
 4. Which certifications do you hold? (answer as it is: name and issuer, or none)
-5. Do you hold or can you obtain a security clearance?
-   a) Answer as it is: none, held, can apply (citizenship may matter)
-   b) Other: type it
+5. Do you hold or can you obtain a security clearance? (answer as it is: none, held, or can apply; citizenship may matter. No recommendation.)
 
 ## CV shape
 
@@ -47,8 +45,8 @@ Load this when the person works in security: engineering, SOC, GRC (governance, 
 ## Keywords and credentials
 
 - Keywords from the ad: SIEM, EDR, incident response, threat hunting, vulnerability management, NIST, ISO 27001, SOC 2, MITRE ATT&CK, OWASP, IAM, cloud security, risk assessment.
-- Credentials seen, with issuer: CompTIA Security+ (CompTIA, common at entry level); CISSP (ISC2, usually senior roles, with five years of experience asked by the issuer); CISM and CISA (ISACA, management and audit); OSCP (OffSec, penetration testing); GIAC certifications such as GSEC (SANS, GIAC); CEH (EC-Council).
-- Entry-level ads often name Security+; I found no certification consistently required for SOC analyst. Never state a credential as required unless the ad does. Government and defence roles may add clearance rules.
+- Credentials seen, with issuer: CompTIA Security+ (CompTIA, common at entry level); CISSP (ISC2, usually senior roles, with five years of experience asked by the issuer); CISM and CISA (ISACA, management and audit); OSCP (OffSec, penetration testing); GIAC certifications such as GSEC (GIAC; SANS training is separate); CEH (EC-Council).
+- Entry-level ads often name Security+; No certification was consistently required for SOC analyst in sampled ads. Never state a credential as required unless the ad does. Government and defence roles may add clearance rules.
 
 ## Portfolio and work samples
 
@@ -77,4 +75,5 @@ Collect lowercase keys with years or true/false: `splunk`, `sentinel`, `crowdstr
 
 Checked 2026-11:
 - Dice, Coursera, Splunk and Monitor career guides for cybersecurity credentials; ISC2, CompTIA, ISACA and OffSec pages for issuers and prerequisites.
-- Unverified: no consistent certification requirement for SOC analyst found; confirm in target ads. Unverified: confirm current exam prerequisites with each issuer.
+- GIAC GSEC: giac.org/certification/security-essentials-gsec (issuer GIAC).
+- Unverified: EC-Council CEH (cert.eccouncil.org): current version and eligibility not confirmed on the issuer's page. Unverified: no consistent certification requirement for SOC analyst found; confirm in target ads. Unverified: confirm current exam prerequisites with each issuer.

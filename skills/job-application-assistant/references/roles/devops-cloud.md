@@ -47,7 +47,7 @@ Load this when the person runs infrastructure and delivery: DevOps, cloud, SRE, 
 ## Keywords and credentials
 
 - Keywords from the ad: Kubernetes, Docker, Terraform, Ansible, CI/CD, AWS, Azure, GCP, monitoring, observability, incident response, SLO, Linux, scripting, IaC.
-- Credentials seen in ads, with issuer: AWS Certified Solutions Architect (Associate, Professional) and AWS Certified DevOps Engineer Professional (Amazon Web Services); Microsoft Azure Administrator AZ-104 and DevOps Engineer Expert (Microsoft); Google Cloud Associate Cloud Engineer and Professional Cloud DevOps Engineer (Google Cloud); CKA, CKAD and CKS (CNCF, with the Linux Foundation); HashiCorp Terraform Associate (HashiCorp).
+- Credentials seen in ads, with issuer: AWS Certified Solutions Architect (Associate, Professional) and AWS Certified DevOps Engineer Professional (Amazon Web Services); Microsoft Azure Administrator AZ-104 and DevOps Engineer Expert (Microsoft); Google Cloud Associate Cloud Engineer and Professional Cloud DevOps Engineer (Google Cloud); CKA, CKAD and CKS (CNCF, with the Linux Foundation); Terraform Associate (HashiCorp).
 - Many ads list one as preferred and some ask for a cloud certification; many ask for none. Never present a credential as required unless the target ads show it. Hiring teams still test hands-on skill.
 
 ## Portfolio and work samples
@@ -78,4 +78,5 @@ Collect lowercase keys with years or true/false: `aws`, `azure`, `gcp`, `kuberne
 Checked 2026-11:
 - Indeed career advice, Linux Foundation certification roadmap and AWS, Microsoft and Google Cloud certification pages: certification names and issuers; sources are career guides, not postings.
 - Sampled public DevOps and cloud ads that list CKA, CKAD or AWS certifications as preferred.
-- Unverified: confirm which certification the target ads ask for; one aggregator's "most in-demand" claim was not confirmed.
+- HashiCorp Terraform Associate (004): developer.hashicorp.com/certifications/terraform-associate (issuer HashiCorp).
+- Unverified: confirm which certification the target ads ask for; one aggregator's "most in-demand" claim was not confirmed. Unverified: confirm HashiCorp's current corporate branding (HashiCorp is now part of IBM) on the issuer's page before naming it on a CV.

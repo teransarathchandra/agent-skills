@@ -48,7 +48,7 @@ Load this when the person writes documentation: product docs, API docs, develope
 ## Keywords and credentials
 
 - Keywords from the ad: API documentation, OpenAPI, Swagger, REST, Markdown, Git, docs-as-code, static site generator, CI/CD, DITA, Confluence, style guide, Agile, SME interviews.
-- Many ads for developer docs ask for Git, Markdown and OpenAPI familiarity and a sample portfolio. No certification is widely required; credentials such as a Society for Technical Communication (STC) certification or courses appear occasionally. Unverified: confirm any named credential in the target ads.
+- Many ads for developer docs ask for Git, Markdown and OpenAPI familiarity and a sample portfolio. No certification is widely required. The Certified Professional Technical Communicator (CPTC) from the Society for Technical Communication (STC) exists in tiers (Foundation, Practitioner, Expert) but is rarely asked for in the ads sampled. Confirm any named credential in the target ads.
 
 ## Portfolio and work samples
 
@@ -78,4 +78,4 @@ Collect lowercase keys with years or true/false: `markdown`, `git`, `openapi`, `
 Checked 2026-11:
 - Sampled public technical writer ads (GitLab handbook job family, Dice and Upwork listings): docs-as-code, OpenAPI and portfolio asked.
 - freeCodeCamp article on technical writer portfolios.
-- Unverified: confirm any named credential (for example STC) in the target ads.
+- STC CPTC: stc.org/certification/cptc-foundation-level/ (scheme developed by APMG for STC). Unverified: confirm current CPTC fees and eligibility on stc.org; the pages were partly members-only.
