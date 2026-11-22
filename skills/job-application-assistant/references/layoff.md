@@ -66,7 +66,7 @@ Ask about this only when intake shows the candidate lives and works outside thei
 When it applies, give the official rule from the table with its source and the month it was checked, and always add: "Confirm the exact dates for your case with a registered migration adviser or lawyer." The table is a starting point, not a ruling on the candidate's case:
 
 - Open the source page again before quoting it; rules change. If the page now says something different, use the page and tell the candidate the table was out of date.
-- Never state a deadline as certain. The candidate confirms their own date from their official letters or their adviser.
+- Never state a deadline as certain. The candidate confirms their own date from their official letters or their adviser. Where no letter comes (the clock starts when the job ends, as for the US H-1B), ask for the last day of employment.
 - Never suggest staying after a period ends, working without permission, or ways around a rule.
 - For a country not in the table, find its official immigration page. If no official page confirms the rule, write "Unverified: confirm with an adviser" rather than a figure.
 

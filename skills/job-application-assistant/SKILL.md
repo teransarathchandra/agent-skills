@@ -70,7 +70,7 @@ When a batch is ready, list each job with the files attached, every screening an
 
 - Asking an open question ("Where are your documents?") when the options can be named, or guessing a path instead of asking.
 - Waiting on a work tracker that is not connected, or offering only "paste your tickets". Offer the pick-any sources in [references/intake.md](references/intake.md#group-3-tool-access-and-evidence-of-current-work), the role profile's evidence sources first, and carry on with what is available.
-- Asking a non-engineer engineering questions: GitHub repos, pull requests, years of TypeScript. Ask the role profile's questions instead.
+- Asking a non-engineer engineering questions: GitHub repos, pull requests, years of TypeScript. Ask the role profile's questions instead; ask for repos or pull requests only when the role profile lists them as evidence.
 - Asking about sponsorship or work rights for the candidate's own country, warning about work-rights clauses there, or steering them abroad. A home country gets local salary, local sites and no visa questions.
 - Asking a question the CV already answers, more than six questions in a message, or more questions before starting than needed. Confirm what the CV shows in one line.
 - Apologising for the layoff or blaming anyone for it, or writing anything negative about the old employer. Never ask why it happened or what severance was paid, and never write either down.
