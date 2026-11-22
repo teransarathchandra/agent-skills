@@ -93,7 +93,7 @@ def check_links(path: Path, body: str, errors: list[str]) -> None:
 
 def check_references(skill_dir: Path, errors: list[str]) -> None:
     """Long reference files open with a contents list, so a partial read still shows their scope."""
-    for ref in sorted((skill_dir / "references").glob("*.md")):
+    for ref in sorted((skill_dir / "references").rglob("*.md")):
         lines = ref.read_text(encoding="utf-8").splitlines()
         if len(lines) > MAX_REFERENCE_LINES_WITHOUT_TOC and not any(l.strip() == "## Contents" for l in lines):
             errors.append(f"{ref.relative_to(ROOT)}: over {MAX_REFERENCE_LINES_WITHOUT_TOC} lines; "

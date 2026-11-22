@@ -30,6 +30,62 @@ def table_rows(body, first_header):
     return rows
 
 
+ROLES = REFERENCES / "roles"
+
+PROFILE_SECTIONS = (
+    "## Titles and adjacent roles",
+    "## Evidence sources",
+    "## Intake questions",
+    "## CV shape",
+    "## Keywords and credentials",
+    "## Portfolio and work samples",
+    "## Screening questions",
+    "## Answer-bank experience keys",
+    "## Mistakes to avoid",
+    "## Sources",
+)
+
+TECH_STEMS = (
+    "software-engineering",
+    "qa-testing",
+    "devops-cloud",
+    "data-analytics",
+    "cybersecurity",
+    "technical-writing",
+)
+
+
+def assert_profile(case, stem):
+    """Check one role profile has every PROFILE_SECTIONS heading in order and a checked Sources section."""
+    path = ROLES / f"{stem}.md"
+    case.assertTrue(path.is_file(), f"{path} is missing")
+    text = path.read_text(encoding="utf-8")
+    lines = text.splitlines()
+    positions = []
+    for heading in PROFILE_SECTIONS:
+        case.assertIn(heading, lines, f"{stem}: missing heading {heading!r}")
+        positions.append(lines.index(heading))
+    case.assertEqual(positions, sorted(positions), f"{stem}: sections are out of order")
+    sources = section(text, "## Sources")
+    case.assertTrue(
+        any("Checked 2026-11" in line for line in sources.splitlines()),
+        f"{stem}: ## Sources has no 'Checked 2026-11' line",
+    )
+
+
+class TechProfileTests(unittest.TestCase):
+    def test_tech_profiles_have_every_section(self):
+        for stem in TECH_STEMS:
+            with self.subTest(stem=stem):
+                assert_profile(self, stem)
+
+    def test_profiles_cite_checked_sources(self):
+        for stem in TECH_STEMS:
+            with self.subTest(stem=stem):
+                text = (ROLES / f"{stem}.md").read_text(encoding="utf-8")
+                self.assertIn("Checked 2026-11", section(text, "## Sources") or "")
+
+
 class LayoffReferenceTests(unittest.TestCase):
     HEADINGS = (
         "## Contents",
