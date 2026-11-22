@@ -96,7 +96,7 @@ No period extends a visa beyond its expiry date; check the visa's end date too.
 
 ## Pace and wellbeing
 
-A steady week beats a burst followed by burnout. Start with about five tailored applications a week and adjust to what the candidate can keep up; with a visa deadline, raise the number only as far as quality holds.
+A steady week beats a burst followed by burnout. Start with the weekly target agreed at intake ([intake.md](intake.md#group-1-targets), question 4) and adjust to what the candidate can keep up; with a visa deadline, raise the number only as far as quality holds.
 
 | Day | Focus |
 |---|---|

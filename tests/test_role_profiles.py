@@ -169,5 +169,17 @@ class LayoffReferenceTests(unittest.TestCase):
             self.assertTrue(cells[-1], f"visa row {cells[0]!r} has an empty Source cell")
 
 
+class SkillLinkTests(unittest.TestCase):
+    def test_every_role_reference_is_linked_from_skill(self):
+        skill = (REFERENCES.parent / "SKILL.md").read_text(encoding="utf-8")
+        targets = {target.split("#", 1)[0] for target in re.findall(r"\]\(([^)\s]+)\)", skill)}
+        expected = [f"references/roles/{path.name}" for path in sorted(ROLES.glob("*.md"))]
+        self.assertEqual(len(expected), 17, "expected 16 role profiles plus any-role.md")
+        expected.append("references/layoff.md")
+        for target in expected:
+            with self.subTest(target=target):
+                self.assertIn(target, targets, f"SKILL.md does not link {target}")
+
+
 if __name__ == "__main__":
     unittest.main()
