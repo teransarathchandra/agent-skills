@@ -76,7 +76,7 @@ Private organisation repos appear only when the account can see them. Group resu
 
 ## Answer-bank experience keys
 
-Collect lowercase keys with years: `python`, `java`, `javascript`, `typescript`, `c#`, `go`, `react`, `node`, `sql`, `aws`, `azure`, `docker`, `kubernetes`, `git`, `ci/cd`, `rest apis`, `microservices`. Credentials as true or false (for example `aws solutions architect`). Add the person's own stack.
+Collect lowercase keys with years: `python`, `java`, `javascript`, `typescript`, `c#`, `go`, `react`, `node`, `sql`, `aws`, `azure`, `docker`, `kubernetes`, `git`, `ci/cd`, `rest apis`, `microservices`. Credentials as true or false at the level held, as named on the certificate (for example `aws certified solutions architect associate`). Add the person's own stack.
 
 ## Mistakes to avoid
 

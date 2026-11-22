@@ -61,7 +61,7 @@ Load this when the person works in HR generalist, talent acquisition, recruiting
 
 ## Answer-bank experience keys
 
-Set `"role_family": "hr-recruiting"`. Collect lowercase keys with years or true/false: `full-cycle recruiting`, `sourcing`, `greenhouse`, `lever`, `workday`, `bamboohr`, `hris`, `employee relations`, `onboarding`, `payroll admin`, `employment law`, `cipd`, `shrm-cp`, `shrm-scp`, `aphr`, `phr`.
+Set `"role_family": "hr-recruiting"`. Collect lowercase keys with years or true/false: `full-cycle recruiting`, `sourcing`, `greenhouse`, `lever`, `workday`, `bamboohr`, `hris`, `employee relations`, `onboarding`, `payroll admin`, `employment law`, `cipd level 5`, `shrm-cp`, `shrm-scp`, `aphr`, `phr`. Store a credential at the level held, as named on the certificate (`cipd level 3`, `cipd level 7`); a question naming another level is then asked.
 
 ## Mistakes to avoid
 

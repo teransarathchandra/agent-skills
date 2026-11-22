@@ -62,7 +62,7 @@ Load this when the person works in security: engineering, SOC, GRC (governance, 
 
 ## Answer-bank experience keys
 
-Collect lowercase keys with years or true/false: `splunk`, `sentinel`, `crowdstrike`, `siem`, `edr`, `nessus`, `burp suite`, `metasploit`, `wireshark`, `nist`, `iso 27001`, `soc 2`, `incident response`, `threat hunting`, `python`, `security+`, `cissp`, `cism`, `oscp`, `clearance`.
+Collect lowercase keys with years or true/false: `splunk`, `sentinel`, `crowdstrike`, `siem`, `edr`, `nessus`, `burp suite`, `metasploit`, `wireshark`, `nist`, `iso 27001`, `soc 2`, `incident response`, `threat hunting`, `python`, `security+`, `cissp`, `cism`, `oscp`. Clearance is not a key: set `policy.has_clearance`, and record the level held as the candidate's own answer in `questions` (for example `"sc clearance": "Yes"`); a form naming another level is asked.
 
 ## Mistakes to avoid
 

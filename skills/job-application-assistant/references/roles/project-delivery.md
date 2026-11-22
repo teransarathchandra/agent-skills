@@ -58,7 +58,7 @@ Load this when the person manages projects or delivery: project and programme ma
 
 ## Answer-bank experience keys
 
-Collect lowercase keys with years or true/false: `project management`, `scrum`, `kanban`, `agile`, `waterfall`, `risk management`, `budget management`, `stakeholder management`, `jira`, `ms project`, `azure devops`, `smartsheet`, `pmo`, `pmp`, `capm`, `prince2`, `psm`, `csm`.
+Collect lowercase keys with years or true/false: `project management`, `scrum`, `kanban`, `agile`, `waterfall`, `risk management`, `budget management`, `stakeholder management`, `jira`, `ms project`, `azure devops`, `smartsheet`, `pmo`, `pmp`, `capm`, `prince2 foundation`, `psm i`, `csm`. Store a credential at the level held, as named on the certificate (`prince2 practitioner`, `psm ii`); a question naming a higher level is then asked, not answered.
 
 ## Mistakes to avoid
 

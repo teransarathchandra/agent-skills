@@ -65,7 +65,7 @@ Load this when the person tests software: manual and automation testing, SDET, p
 
 ## Answer-bank experience keys
 
-Collect lowercase keys with years or true/false: `selenium`, `playwright`, `cypress`, `postman`, `jmeter`, `appium`, `cucumber`, `testrail`, `jira`, `xray`, `api testing`, `performance testing`, `sql`, `python`, `java`, `javascript`, `ci/cd`, `istqb`.
+Collect lowercase keys with years or true/false: `selenium`, `playwright`, `cypress`, `postman`, `jmeter`, `appium`, `cucumber`, `testrail`, `jira`, `xray`, `api testing`, `performance testing`, `sql`, `python`, `java`, `javascript`, `ci/cd`, `istqb foundation level`. Store a credential at the level held, as named on the certificate (`istqb advanced level test analyst`); a question naming another level is then asked.
 
 ## Mistakes to avoid
 

@@ -64,7 +64,7 @@ Load this when the person runs infrastructure and delivery: DevOps, cloud, SRE, 
 
 ## Answer-bank experience keys
 
-Collect lowercase keys with years or true/false: `aws`, `azure`, `gcp`, `kubernetes`, `docker`, `terraform`, `ansible`, `helm`, `jenkins`, `github actions`, `gitlab ci`, `prometheus`, `grafana`, `datadog`, `linux`, `bash`, `python`, `on-call`, `aws solutions architect`, `cka`, `az-104`.
+Collect lowercase keys with years or true/false: `aws`, `azure`, `gcp`, `kubernetes`, `docker`, `terraform`, `ansible`, `helm`, `jenkins`, `github actions`, `gitlab ci`, `prometheus`, `grafana`, `datadog`, `linux`, `bash`, `python`, `on-call`, `aws certified solutions architect associate`, `cka`, `az-104`. Store a credential at the level held, as named on the certificate.
 
 ## Mistakes to avoid
 

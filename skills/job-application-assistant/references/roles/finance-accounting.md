@@ -60,7 +60,7 @@ Load this when the person works in accounting, bookkeeping, finance, payroll, au
 
 ## Answer-bank experience keys
 
-Set `"role_family": "finance-accounting"`. Collect lowercase keys with years or true/false: `accounts payable`, `accounts receivable`, `general ledger`, `month-end close`, `reconciliation`, `payroll`, `fp&a`, `budgeting`, `ifrs`, `us gaap`, `sap`, `xero`, `quickbooks`, `excel`, `audit`, `acca`, `cpa`, `cima`.
+Set `"role_family": "finance-accounting"`. Collect lowercase keys with years or true/false: `accounts payable`, `accounts receivable`, `general ledger`, `month-end close`, `reconciliation`, `payroll`, `fp&a`, `budgeting`, `ifrs`, `us gaap`, `sap`, `xero`, `quickbooks`, `excel`, `audit`, `acca`, `cpa`, `cima`, each only when fully qualified; a part-qualified stage goes in `questions` as the candidate's own answer.
 
 ## Mistakes to avoid
 

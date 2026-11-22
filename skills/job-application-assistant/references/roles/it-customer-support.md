@@ -63,7 +63,7 @@ Load this when the person works in help desk, IT support, technical or customer 
 
 ## Answer-bank experience keys
 
-Set `"role_family": "it-customer-support"`. Collect lowercase keys with years or true/false: `service desk`, `ticketing`, `servicenow`, `zendesk`, `jira service management`, `freshdesk`, `active directory`, `microsoft 365`, `remote support`, `knowledge base`, `customer success`, `salesforce`, `itil`, `comptia a+`.
+Set `"role_family": "it-customer-support"`. Collect lowercase keys with years or true/false: `service desk`, `ticketing`, `servicenow`, `zendesk`, `jira service management`, `freshdesk`, `active directory`, `microsoft 365`, `remote support`, `knowledge base`, `customer success`, `salesforce`, `itil 4 foundation`, `comptia a+`. Store a credential at the level held, as named on the certificate; a question naming a higher ITIL level is then asked.
 
 ## Mistakes to avoid
 
