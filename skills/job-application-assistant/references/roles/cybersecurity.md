@@ -46,7 +46,7 @@ Load this when the person works in security: engineering, SOC, GRC (governance, 
 
 - Keywords from the ad: SIEM, EDR, incident response, threat hunting, vulnerability management, NIST, ISO 27001, SOC 2, MITRE ATT&CK, OWASP, IAM, cloud security, risk assessment.
 - Credentials seen, with issuer: CompTIA Security+ (CompTIA, common at entry level); CISSP (ISC2, usually senior roles, with five years of experience asked by the issuer); CISM and CISA (ISACA, management and audit); OSCP (OffSec, penetration testing); GIAC certifications such as GSEC (GIAC; SANS training is separate); CEH (EC-Council).
-- Entry-level ads often name Security+; No certification was consistently required for SOC analyst in sampled ads. Never state a credential as required unless the ad does. Government and defence roles may add clearance rules.
+- Entry-level ads often name Security+; no certification was consistently required for SOC analyst in sampled ads. Never state a credential as required unless the ad does. Government and defence roles may add clearance rules.
 
 ## Portfolio and work samples
 

@@ -78,5 +78,5 @@ Collect lowercase keys with years or true/false: `sql`, `python`, `r`, `excel`, 
 Checked 2026-11:
 - Google Cloud Professional Data Engineer page (cloud.google.com/certification/data-engineer) and AWS Certified Data Engineer Associate description: exam names and issuers.
 - Coursera, Indeed and CIO.com certification guides for data roles.
-- Databricks Certified Data Engineer Associate: databricks.com/learn/certification/data-engineer-associate. Snowflake SnowPro Core: learn.snowflake.com/en/certifications/snowpro-core. Salesforce Certified Tableau Data Analyst: trailhead.salesforce.com/credentials/tableaudataanalyst.
+- Databricks Certified Data Engineer Associate: databricks.com/learn/certification/data-engineer-associate. Snowflake SnowPro Core: learn.snowflake.com/en/certifications/snowpro-core-c03. Salesforce Certified Tableau Data Analyst: trailhead.salesforce.com/credentials/tableaudataanalyst.
 - Unverified: PL-300 details were not confirmed in this search; confirm on Microsoft Learn. Unverified: confirm which credential the target ads name.
