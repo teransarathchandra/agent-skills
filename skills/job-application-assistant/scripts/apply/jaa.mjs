@@ -96,7 +96,12 @@ async function main() {
 
   const { browser, page } = await connect(opt);
   try {
-    if (cmd === 'goto') { await page.goto(pos[1]); print({ status: 'ok', url: page.url() }); return; }
+    if (cmd === 'goto') {
+      let host = '';
+      try { host = new URL(pos[1]).hostname; } catch { fail(`Not a URL: ${pos[1]}`); }
+      if (/(^|\.)linkedin\.com$/i.test(host)) requireOptIn('linkedin');
+      await page.goto(pos[1]); print({ status: 'ok', url: page.url() }); return;
+    }
     requireOptIn('linkedin');
     if (cmd === 'search') {
       if (!opt.keywords) fail('--keywords is required');

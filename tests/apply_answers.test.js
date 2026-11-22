@@ -94,7 +94,10 @@ test('options: work status, salary bands, English, demographics', async () => {
   assert.match(pickOption('What is your current work status in New Zealand?', nz, { ...bank, countries: { NZ: { needs_sponsorship: true } } }, 'NZ'), /require employer visa sponsorship/);
   const bands = ['Select an option', '£40,001 to £45,000', '£45,001 to £50,000', '£50,001 to £55,000'];
   assert.equal(pickOption('Salary expectation band', bands, bank, 'UK'), '£45,001 to £50,000');
-  assert.equal(pickOption('What is your proficiency level in English?', ['Select an option', 'Native or bilingual proficiency', 'Fluent/Professional working proficiency', 'Limited working proficiency'], bank, 'UK'), 'Native or bilingual proficiency');
+  const english = ['Select an option', 'Native or bilingual proficiency', 'Fluent/Professional working proficiency', 'Limited working proficiency'];
+  assert.equal(pickOption('What is your proficiency level in English?', english, bank, 'UK'), null, 'no recorded level: ask');
+  const withLevel = { ...bank, candidate: { ...bank.candidate, english_level: 'professional' } };
+  assert.equal(pickOption('What is your proficiency level in English?', english, withLevel, 'UK'), 'Fluent/Professional working proficiency');
   assert.equal(pickOption('What is your gender?', ['Select an option', 'Male', 'Female', 'Prefer Not to Say'], bank, 'UK'), 'Prefer Not to Say');
   assert.equal(pickOption('How many years of experience do you have?', ['Select an option', '0-12 months', '1-3 years', '3-5 years', '5+ years'], bank, 'UK'), '5+ years');
 });

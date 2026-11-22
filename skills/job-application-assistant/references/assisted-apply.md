@@ -49,7 +49,7 @@ Every LinkedIn command refuses to run without this record. Use a cap of 10 to 15
 
 The engine answers form questions only from the candidate's answer bank, `answers.json` in their private folder. Build it from the intake answers ([intake.md](intake.md)), starting from [assets/answers.example.json](../assets/answers.example.json):
 
-- `candidate`: location, the city to pick in location typeaheads, nationality, languages, profile links.
+- `candidate`: location, the city to pick in location typeaheads, nationality, languages, `english_level` (a word from the form's options, such as `native`, `fluent` or `professional`, as the candidate states it; without it English questions are asked), profile links.
 - `countries`: per country code, `needs_sponsorship`, `has_work_rights`, `lives_there` and `salary` (a number in that country's currency). A country without an entry gets no answers at all.
 - `notice`: text ("One month"), weeks, earliest start.
 - `years`: total professional years, a per-technology map taken from the CV's evidence, and `none` for technologies the candidate has not used (answered `0`). Technologies in neither list are asked.

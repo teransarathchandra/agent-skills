@@ -136,7 +136,11 @@ export function pickOption(question, options, bank, country) {
     const target = Number(c.salary);
     return opts.find((o) => { const n = o.replace(/,/g, '').match(/(\d+)\D+(\d+)/); return n && target > Number(n[1]) && target <= Number(n[2]); }) || null;
   }
-  if (/english/.test(q)) return find(/advanced|fluent|professional|native/);
+  if (/english/.test(q)) {
+    // Only the level the candidate recorded; never assume native or fluent.
+    const level = low((bank.candidate || {}).english_level);
+    return level ? opts.find((o) => low(o).includes(level)) || null : null;
+  }
   if (/hear about|source|find (out )?about/.test(q)) return find(/^linkedin$/) || find(/linkedin/);
   if (/sponsor|right to work|work (status|authori)|immigration|visa|eligib/.test(q)) {
     if (c.needs_sponsorship === true) return find(/require.{0,30}sponsor|need.{0,30}sponsor|not .{0,20}(authori|entitled)|do not (currently )?have (legal|the right)|will require/);
