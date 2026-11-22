@@ -102,6 +102,7 @@ async function main() {
       if (!/^https?:$/.test(target.protocol)) fail('goto opens http and https pages only.');
       if (li.isLinkedInHost(target.hostname)) requireOptIn('linkedin');
       let blocked = false;
+      let watch = null;
       if (!state.isOptedIn('linkedin')) {
         // Server redirects are followed inside the browser where routes cannot see them, so walk the
         // chain first, reading each Location header without ever requesting a LinkedIn hop.
@@ -117,9 +118,17 @@ async function main() {
           if (li.isLinkedInHost(next.hostname)) requireOptIn('linkedin');
           cur = next.href;
         }
-        // Client-side redirects (script or meta refresh) are new navigations, which the route sees.
-        // Redirects and short links must not reach LinkedIn either: abort any such navigation.
-        await page.route('**/*', (route) => {
+        // Client-side redirects (script or meta refresh) and popups are new navigations, which a
+        // context-wide route sees and aborts. Hops the browser follows by itself never reach a route,
+        // so a request listener flags them too (a server may answer the pre-flight differently).
+        const ctx = page.context();
+        watch = (req) => {
+          let h = '';
+          try { h = new URL(req.url()).hostname; } catch {}
+          if (req.isNavigationRequest() && li.isLinkedInHost(h)) blocked = true;
+        };
+        ctx.on('request', watch);
+        await ctx.route('**/*', (route) => {
           const r = route.request();
           let h = '';
           try { h = new URL(r.url()).hostname; } catch {}
@@ -128,8 +137,17 @@ async function main() {
         });
       }
       await page.goto(target.href).catch((e) => { if (!blocked) throw e; });
-      await page.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => {});
-      if (blocked || (li.isLinkedInHost(new URL(page.url()).hostname) && !state.isOptedIn('linkedin'))) requireOptIn('linkedin');
+      if (watch) {
+        await page.waitForTimeout(1500); // let script redirects and popups fire while the guard is on
+        const ctx = page.context();
+        await ctx.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => {});
+        ctx.off('request', watch);
+        const onLinkedIn = (p) => { try { return li.isLinkedInHost(new URL(p.url()).hostname); } catch { return false; } };
+        if (blocked || ctx.pages().some(onLinkedIn)) {
+          for (const p of ctx.pages()) if (onLinkedIn(p)) await p.goto('about:blank').catch(() => {});
+          requireOptIn('linkedin');
+        }
+      }
       print({ status: 'ok', url: page.url() }); return;
     }
     requireOptIn('linkedin');
