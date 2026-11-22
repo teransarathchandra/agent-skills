@@ -89,7 +89,7 @@ Every command prints JSON, so any agent can read the result. `node scripts/apply
 
 ## Signing in
 
-1. Start the browser in the background: `node scripts/apply/jaa.mjs serve` (add `--channel chrome` to use the installed Chrome). It listens on a random local port recorded in `~/.jaa/port` (readable only by the candidate's account); other commands find it there. Stop it when the session ends, because anything running as the candidate's user can drive the signed-in browser while it runs. With the Playwright MCP, open the site's sign-in page instead.
+1. Start the browser in the background: `node scripts/apply/jaa.mjs serve` (add `--channel chrome` to use the installed Chrome). It listens on a random local port recorded in `~/.jaa/port` (readable only by the candidate's account); other commands find it there. LinkedIn stays blocked in this browser, in every tab, until the candidate opts in. Stop it when the session ends, because anything running as the candidate's user can drive the signed-in browser while it runs. With the Playwright MCP, open the site's sign-in page instead.
 2. Tell the candidate to sign in to each site in that window, including email or phone codes, and to reply when done.
 3. The browser keeps the session in its own profile (`~/.jaa/browser`), so sign-in is needed once per site.
 

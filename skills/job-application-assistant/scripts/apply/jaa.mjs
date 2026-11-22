@@ -80,8 +80,20 @@ async function main() {
     const profile = path.resolve(opt.profile || path.join(state.HOME, 'browser'));
     fs.mkdirSync(profile, { recursive: true, mode: 0o700 });
     const ctx = await chromium.launchPersistentContext(profile, { headless: false, viewport: null, channel: opt.channel || undefined, args: [`--remote-debugging-port=${port}`] });
+    // For as long as the browser runs, no tab reaches LinkedIn until the candidate has opted in,
+    // whoever starts the navigation (a command, a script on a page, a popup, a redirect).
+    const onLinkedIn = (url) => { try { return li.isLinkedInHost(new URL(url).hostname); } catch { return false; } };
+    await ctx.route('**/*', (route) => {
+      const r = route.request();
+      if (r.isNavigationRequest() && onLinkedIn(r.url()) && !state.isOptedIn('linkedin')) return route.abort('blockedbyclient');
+      return route.continue();
+    });
+    // Redirect hops the browser follows by itself never reach a route: blank any frame they land on.
+    ctx.on('framenavigated', (frame) => {
+      if (onLinkedIn(frame.url()) && !state.isOptedIn('linkedin')) frame.page().goto('about:blank').catch(() => {});
+    });
     state.savePort(port);
-    print({ status: 'serving', port, profile, note: 'Leave this running. The candidate signs in to sites in this window.' });
+    print({ status: 'serving', port, profile, note: 'Leave this running. The candidate signs in to sites in this window. LinkedIn stays blocked in it until the candidate opts in.' });
     ctx.on('close', () => process.exit(0));
     await new Promise(() => {});
   }
@@ -101,50 +113,29 @@ async function main() {
       try { target = new URL(pos[1]); } catch { fail(`Not a URL: ${pos[1]}`); }
       if (!/^https?:$/.test(target.protocol)) fail('goto opens http and https pages only.');
       if (li.isLinkedInHost(target.hostname)) requireOptIn('linkedin');
-      let blocked = false;
-      let watch = null;
       if (!state.isOptedIn('linkedin')) {
-        // Server redirects are followed inside the browser where routes cannot see them, so walk the
-        // chain first, reading each Location header without ever requesting a LinkedIn hop.
+        // Defence in depth on top of the serve-level guard: walk the server redirect chain first,
+        // reading each Location header without requesting a LinkedIn hop, and refuse what cannot be checked.
         let cur = target.href;
+        let verified = false;
         for (let hop = 0; hop < 10; hop++) {
           const r = await page.request.get(cur, { maxRedirects: 0, failOnStatusCode: false, timeout: 15000 }).catch(() => null);
-          if (!r) break;
+          if (!r) fail(`Could not check where ${cur} leads, so it was not opened.`);
           const loc = r.headers().location;
           const status = r.status();
           await r.dispose();
-          if (status < 300 || status >= 400 || !loc) break;
+          if (status < 300 || status >= 400 || !loc) { verified = true; break; }
           const next = new URL(loc, cur);
           if (li.isLinkedInHost(next.hostname)) requireOptIn('linkedin');
           cur = next.href;
         }
-        // Client-side redirects (script or meta refresh) and popups are new navigations, which a
-        // context-wide route sees and aborts. Hops the browser follows by itself never reach a route,
-        // so a request listener flags them too (a server may answer the pre-flight differently).
-        const ctx = page.context();
-        watch = (req) => {
-          let h = '';
-          try { h = new URL(req.url()).hostname; } catch {}
-          if (req.isNavigationRequest() && li.isLinkedInHost(h)) blocked = true;
-        };
-        ctx.on('request', watch);
-        await ctx.route('**/*', (route) => {
-          const r = route.request();
-          let h = '';
-          try { h = new URL(r.url()).hostname; } catch {}
-          if (r.isNavigationRequest() && li.isLinkedInHost(h)) { blocked = true; return route.abort('blockedbyclient'); }
-          return route.continue();
-        });
+        if (!verified) fail('The page redirects more than 10 times, so it was not opened.');
       }
-      await page.goto(target.href).catch((e) => { if (!blocked) throw e; });
-      if (watch) {
-        await page.waitForTimeout(1500); // let script redirects and popups fire while the guard is on
-        const ctx = page.context();
-        await ctx.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => {});
-        ctx.off('request', watch);
+      await page.goto(target.href).catch((e) => { if (/ERR_BLOCKED_BY_CLIENT/.test(String(e.message))) requireOptIn('linkedin'); throw e; });
+      if (!state.isOptedIn('linkedin')) {
         const onLinkedIn = (p) => { try { return li.isLinkedInHost(new URL(p.url()).hostname); } catch { return false; } };
-        if (blocked || ctx.pages().some(onLinkedIn)) {
-          for (const p of ctx.pages()) if (onLinkedIn(p)) await p.goto('about:blank').catch(() => {});
+        if (page.context().pages().some(onLinkedIn)) {
+          for (const p of page.context().pages()) if (onLinkedIn(p)) await p.goto('about:blank').catch(() => {});
           requireOptIn('linkedin');
         }
       }
