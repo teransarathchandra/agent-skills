@@ -139,3 +139,20 @@ test('credentials answer from items', async () => {
   assert.equal(years('How many years of experience do you have in this role?', qa), '4');
   assert.equal(years('How many years of QA experience do you have?', qa), '4');
 });
+
+test('credential and fallback matching stays tight', async () => {
+  const { years, yesNo } = await import(MODULE);
+  const da = { role_family: 'data-analytics', experience: { total_years: 5, items: {} } };
+  assert.equal(years('How many years of data entry experience do you have?', da), null);
+  assert.equal(years('How many years of data analytics experience do you have?', da), '5');
+  const qa = { role_family: 'qa-testing', experience: { total_years: 4, items: { istqb: false, ci: true } }, policy: {} };
+  assert.equal(years('How many years of testing experience with Cypress do you have?', qa), null);
+  const ux = { role_family: 'ux-ui-design', experience: { total_years: 7, items: {} } };
+  assert.equal(years('How many years of experience do you have with design systems?', ux), null);
+  assert.equal(years('How many years of relevant experience do you have with Terraform?', qa), null);
+  assert.equal(yesNo('Do you hold an ISTQB certification?', qa, 'UK'), 'No');
+  assert.equal(yesNo('Are you willing to obtain an ISTQB certification?', qa, 'UK'), null);
+  assert.equal(yesNo('Do you have a Cisco certification?', qa, 'UK'), null);
+  const sh = { experience: { total_years: 4, items: { ci: 2 } } };
+  assert.equal(years('How many years of experience do you have with Cisco networking?', sh), null);
+});

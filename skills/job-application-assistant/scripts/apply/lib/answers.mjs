@@ -4,6 +4,7 @@
 // The rule of the whole module: answer only what the bank covers. Anything else comes back
 // as `null`, and the caller reports it to the agent, which asks the candidate.
 
+const hasKey = (q, k) => new RegExp('(?<![a-z0-9])' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![a-z0-9])').test(q);
 const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
 const low = (s) => norm(s).toLowerCase();
 
@@ -36,9 +37,9 @@ export function yesNo(question, bank, country) {
   if (custom && /^(yes|no)$/i.test(custom)) return custom[0].toUpperCase() + custom.slice(1).toLowerCase();
   if (custom) return null;
   // "Do you hold / have / are you certified in X?" answers from a boolean experience item.
-  if (/hold|have|possess|certif|licen[cs]e|accredit/.test(q)) {
+  if (/hold|have|possess|certif|licen[cs]e|accredit/.test(q) && !/willing|plan|obtain|pursue|working toward|intend/.test(q)) {
     for (const [k, v] of Object.entries(experienceOf(bank).items)) {
-      if (typeof v === 'boolean' && q.includes(k)) return v ? 'Yes' : 'No';
+      if (typeof v === 'boolean' && hasKey(q, k)) return v ? 'Yes' : 'No';
     }
   }
   for (const rule of YES_NO_RULES) {
@@ -85,13 +86,13 @@ const FAMILY_WORDS = {
   'software-engineering': /software|engineering|development|programming|full.?stack|web|object.?oriented/,
   'qa-testing': /\bqa\b|quality assurance|testing/,
   'devops-cloud': /devops|\bsre\b|infrastructure|site reliability/,
-  'data-analytics': /\bdata\b|analytics|analysis/,
+  'data-analytics': /data analytics|data analysis|analytics|business intelligence/,
   'cybersecurity': /security|cyber/,
   'technical-writing': /technical writing|documentation/,
   'product-management': /product management|product manager/,
   'project-delivery': /project (management|delivery)|scrum|agile/,
   'business-analysis': /business analy/,
-  'ux-ui-design': /\bux\b|\bui\b|design/,
+  'ux-ui-design': /\bux\b|\bui\b|ux\/ui|product design/,
   'it-customer-support': /support|service desk|help ?desk/,
   'hr-recruiting': /recruit|talent acquisition|\bhr\b|human resources/,
   'sales-account-management': /sales|account management/,
@@ -126,13 +127,16 @@ export function years(question, bank) {
     }
   }
   // Exact key match for technologies outside the alias list ("Data Pipelines", "Selenium").
-  for (const [k, v] of Object.entries(skills)) if (q.includes(k)) return String(v);
-  if (none.some((n) => q.includes(n))) return '0';
+  for (const [k, v] of Object.entries(skills)) if (hasKey(q, k)) return String(v);
+  if (none.some((n) => hasKey(q, n))) return '0';
+  // Role wording ("in this role", "QA experience") counts only when nothing more specific is
+  // asked: a "with / using / on / in <thing>" qualifier means a skill the bank does not cover.
+  const unqualified = !/\b(with|using|on|in)\b/.test(q.replace(/\bin (this|a similar|similar|the same) (role|roles|position)\b/g, ''));
   const family = FAMILY_WORDS[bank && bank.role_family];
   const generic = /years of (work |professional |relevant )?experience( do you have)?\??$/.test(q)
-    || /in this role|relevant experience|similar role/.test(q)
     || /software|engineering|development|programming|professional|full.?stack|web|object.?oriented/.test(q)
-    || Boolean(family && family.test(q));
+    || (unqualified && (/in this role|relevant experience|similar role/.test(q)
+      || Boolean(family && new RegExp('(' + family.source + ')\\s+experience').test(q))));
   if (generic && total !== undefined) return String(total);
   return null;
 }
