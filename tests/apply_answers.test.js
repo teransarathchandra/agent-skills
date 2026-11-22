@@ -108,3 +108,9 @@ test('consent: required privacy notice only with the intake answer; marketing ne
   assert.equal(consentAllowed('I agree to receive WhatsApp messages for future career opportunities', bank), false);
   assert.equal(consentAllowed('By applying for this job, I confirm I have read the Privacy Notice', { ...bank, policy: { ...bank.policy, privacy_consent: false } }), false);
 });
+
+test('LinkedIn hosts are recognised however they are written', async () => {
+  const { isLinkedInHost } = await import(MODULE.replace('answers.mjs', 'linkedin.mjs'));
+  for (const h of ['linkedin.com', 'www.linkedin.com', 'WWW.LinkedIn.com', 'www.linkedin.com.', 'au.linkedin.com..', 'lnkd.in']) assert.equal(isLinkedInHost(h), true, h);
+  for (const h of ['example.com', 'notlinkedin.com', 'linkedin.com.example.com', '']) assert.equal(isLinkedInHost(h), false, h);
+});

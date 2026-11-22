@@ -5,6 +5,12 @@ import { yesNo, text, pickOption, consentAllowed } from './answers.mjs';
 
 export const GEO = { AU: '101452733', NZ: '105490917', CA: '101174742', US: '103644278', UK: '101165590', IE: '104738515', DE: '101282230', NL: '102890719', EU: '91000000' };
 
+/** True for LinkedIn hosts and its short-link domain, after normalising case and trailing dots. */
+export function isLinkedInHost(host) {
+  const h = String(host || '').toLowerCase().replace(/\.+$/, '');
+  return /(^|\.)linkedin\.com$/.test(h) || /(^|\.)lnkd\.in$/.test(h);
+}
+
 const pause = (page, min = 1200, max = 3000) => page.waitForTimeout(min + Math.floor(Math.random() * (max - min)));
 
 const BLOCK_RE = /captcha|unusual activity|security verification|quick security check|account (has been )?restricted|temporarily restricted|verify you.?re (a )?human/i;

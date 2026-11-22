@@ -97,10 +97,40 @@ async function main() {
   const { browser, page } = await connect(opt);
   try {
     if (cmd === 'goto') {
-      let host = '';
-      try { host = new URL(pos[1]).hostname; } catch { fail(`Not a URL: ${pos[1]}`); }
-      if (/(^|\.)linkedin\.com$/i.test(host)) requireOptIn('linkedin');
-      await page.goto(pos[1]); print({ status: 'ok', url: page.url() }); return;
+      let target;
+      try { target = new URL(pos[1]); } catch { fail(`Not a URL: ${pos[1]}`); }
+      if (!/^https?:$/.test(target.protocol)) fail('goto opens http and https pages only.');
+      if (li.isLinkedInHost(target.hostname)) requireOptIn('linkedin');
+      let blocked = false;
+      if (!state.isOptedIn('linkedin')) {
+        // Server redirects are followed inside the browser where routes cannot see them, so walk the
+        // chain first, reading each Location header without ever requesting a LinkedIn hop.
+        let cur = target.href;
+        for (let hop = 0; hop < 10; hop++) {
+          const r = await page.request.get(cur, { maxRedirects: 0, failOnStatusCode: false, timeout: 15000 }).catch(() => null);
+          if (!r) break;
+          const loc = r.headers().location;
+          const status = r.status();
+          await r.dispose();
+          if (status < 300 || status >= 400 || !loc) break;
+          const next = new URL(loc, cur);
+          if (li.isLinkedInHost(next.hostname)) requireOptIn('linkedin');
+          cur = next.href;
+        }
+        // Client-side redirects (script or meta refresh) are new navigations, which the route sees.
+        // Redirects and short links must not reach LinkedIn either: abort any such navigation.
+        await page.route('**/*', (route) => {
+          const r = route.request();
+          let h = '';
+          try { h = new URL(r.url()).hostname; } catch {}
+          if (r.isNavigationRequest() && li.isLinkedInHost(h)) { blocked = true; return route.abort('blockedbyclient'); }
+          return route.continue();
+        });
+      }
+      await page.goto(target.href).catch((e) => { if (!blocked) throw e; });
+      await page.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => {});
+      if (blocked || (li.isLinkedInHost(new URL(page.url()).hostname) && !state.isOptedIn('linkedin'))) requireOptIn('linkedin');
+      print({ status: 'ok', url: page.url() }); return;
     }
     requireOptIn('linkedin');
     if (cmd === 'search') {
