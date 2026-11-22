@@ -50,11 +50,41 @@ class TriageTests(unittest.TestCase):
     def test_strong_stack_match_is_apply(self):
         r = job("We use TypeScript, Node, React and Azure. 5+ years of experience.")
         self.assertEqual(r["verdict"], "apply")
-        self.assertEqual(r["stack_matched"], ["azure", "node", "react", "typescript"])
+        self.assertEqual(r["skills_matched"], ["azure", "node", "react", "typescript"])
 
     def test_weak_match_is_check(self):
         r = job("Ruby on Rails and Hotwire. Several years of experience.")
         self.assertEqual(r["verdict"], "check")
+
+    def test_home_country_is_not_filtered_on_work_rights(self):
+        bank = {**BANK, "countries": {"AU": {"needs_sponsorship": False, "has_work_rights": True, "lives_there": True}}}
+        r = triage.triage({"id": "1", "text": "Candidates must have full Australian working rights. TypeScript, React, Node."}, bank, "AU")
+        self.assertNotEqual(r["verdict"], "skip")
+
+    def test_short_and_common_keys_match_whole_words(self):
+        bank = {"experience": {"items": {"R": 2, "excel": 5, "sql": 3}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "React for excellent dashboards. SQL."}, bank, "UK")
+        self.assertEqual(r["skills_matched"], ["sql"])
+
+    def test_non_engineering_bank_scores_its_own_skills(self):
+        bank = {"experience": {"items": {"workday": 3, "greenhouse": 2, "cipd": True}}, "countries": {"UK": {"needs_sponsorship": False, "lives_there": True}}}
+        r = triage.triage({"id": "1", "text": "Recruiter using Workday and Greenhouse. CIPD preferred."}, bank, "UK")
+        self.assertEqual(r["verdict"], "apply")
+
+    def test_lowercase_short_keys_from_old_banks_still_match(self):
+        bank = {"years": {"skills": {"c#": 3, "go": 2, "r": 1}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "We use C# and Go"}, bank, "UK")
+        self.assertEqual(r["skills_matched"], ["c#", "go"])
+
+    def test_punctuation_keys_match(self):
+        bank = {"experience": {"items": {".net": 3, "ci/cd": 2, "c#": 1}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "Build .NET services with C# and CI/CD."}, bank, "UK")
+        self.assertEqual(r["skills_matched"], [".net", "c#", "ci/cd"])
+
+    def test_experience_overrides_years_and_credential_counts(self):
+        bank = {"years": {"skills": {"sql": 3, "excel": 2}}, "experience": {"items": {"sql": 0, "cipd": True}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "SQL, Excel, CIPD."}, bank, "UK")
+        self.assertEqual(r["skills_matched"], ["cipd", "excel"])
 
 
 if __name__ == "__main__":

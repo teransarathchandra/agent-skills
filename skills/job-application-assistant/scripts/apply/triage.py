@@ -59,8 +59,37 @@ def max_years(text: str) -> int | None:
     return max(vals) if vals else None
 
 
+def experience_keys(bank: dict) -> list[str]:
+    """Skills and credentials the candidate has, any role. `experience.items` wins over
+    `years.skills` per key; values 0 and False are excluded, True (a credential) is kept.
+    Keys of 1-2 characters keep their case (they match case-sensitively); longer keys are lowercased."""
+    merged: dict[str, tuple[str, object]] = {}
+    for src in ((bank.get("years") or {}).get("skills"), (bank.get("experience") or {}).get("items")):
+        for k, v in (src or {}).items():
+            merged[str(k).lower()] = (str(k), v)
+    keys = []
+    for low, (orig, v) in merged.items():
+        if v is False or v == 0 or v is None:
+            continue
+        keys.append(orig if len(low) <= 2 else low)
+    return sorted(keys)
+
+
+def key_in_text(key: str, text: str) -> bool:
+    """Whole-word match. Keys of 1-2 characters are case-sensitive; longer keys are not.
+    A short key with no capital (an older bank's "c#", "go") also tries upper and capitalised forms."""
+    if len(key) > 2:
+        variants, flags = [key], re.IGNORECASE
+    else:
+        variants, flags = [key], 0
+        if key == key.lower():
+            variants += [key.upper(), key.capitalize()]
+    return any(re.search(r"(?<![A-Za-z0-9])" + re.escape(v) + r"(?![A-Za-z0-9])", text, flags) for v in variants)
+
+
 def triage(job: dict, bank: dict, country: str) -> dict:
-    text = (job.get("text") or "").lower()
+    original = job.get("text") or ""
+    text = original.lower()
     c = (bank.get("countries") or {}).get(country, {})
     reasons, flags = [], []
     if c.get("needs_sponsorship", True):
@@ -79,12 +108,13 @@ def triage(job: dict, bank: dict, country: str) -> dict:
         if lang not in spoken and re.search(rf"(fluent|fluency|native|proficien\w*|business[- ]level)\W+(in\W+)?{lang}|{lang}\W+(is\W+)?(required|essential|fluent|c1|c2|b2)", text):
             reasons.append(f"needs {lang}")
             break
-    total = (bank.get("years") or {}).get("total")
+    total = (bank.get("experience") or {}).get("total_years")
+    if total is None:
+        total = (bank.get("years") or {}).get("total")
     need = max_years(text)
     if total is not None and need is not None and need > total + 1:
         reasons.append(f"asks {need}+ years (you have {total})")
-    skills = [s.lower() for s in ((bank.get("years") or {}).get("skills") or {})]
-    matched = sorted({s for s in skills if re.search(r"(?<![a-z])" + re.escape(s) + r"(?![a-z])", text)})
+    matched = sorted(k for k in experience_keys(bank) if key_in_text(k, original))
     if find(SPONSOR_POSITIVE, text):
         flags.append("offers sponsorship or relocation")
     if find(WORLDWIDE_REMOTE, text):
@@ -96,7 +126,7 @@ def triage(job: dict, bank: dict, country: str) -> dict:
     else:
         verdict = "check"
     return {"id": job.get("id"), "title": job.get("title"), "company": job.get("company"), "location": job.get("location"),
-            "verdict": verdict, "reasons": reasons, "flags": flags, "stack_matched": matched, "url": job.get("url")}
+            "verdict": verdict, "reasons": reasons, "flags": flags, "skills_matched": matched, "url": job.get("url")}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -110,15 +140,15 @@ def main(argv: list[str] | None = None) -> int:
     bank = json.loads(Path(args.answers).read_text(encoding="utf-8"))
     rows = [triage(j, bank, args.country) for j in jobs if j.get("id")]
     order = {"apply": 0, "check": 1, "skip": 2}
-    rows.sort(key=lambda r: (order[r["verdict"]], -len(r["stack_matched"])))
+    rows.sort(key=lambda r: (order[r["verdict"]], -len(r["skills_matched"])))
     if args.json:
         print(json.dumps(rows, indent=1))
         return 0
-    print("| Verdict | Job | Company | Location | Stack | Notes |")
+    print("| Verdict | Job | Company | Location | Skills | Notes |")
     print("|---|---|---|---|---|---|")
     for r in rows:
         notes = "; ".join(r["reasons"] or r["flags"]) or "-"
-        print(f"| {r['verdict']} | {r['title']} ({r['id']}) | {r['company']} | {r['location']} | {', '.join(r['stack_matched']) or '-'} | {notes[:140]} |")
+        print(f"| {r['verdict']} | {r['title']} ({r['id']}) | {r['company']} | {r['location']} | {', '.join(r['skills_matched']) or '-'} | {notes[:140]} |")
     return 0
 
 

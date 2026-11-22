@@ -1,0 +1,76 @@
+{
+  "candidate": {
+    "location": "Colombo, Sri Lanka",
+    "location_search": "Colombo",
+    "nationality": "Sri Lankan",
+    "languages": [
+      "English"
+    ],
+    "english_level": "professional",
+    "linkedin": "https://www.linkedin.com/in/example-qa-candidate"
+  },
+  "role_family": "qa-testing",
+  "countries": {
+    "LK": {
+      "needs_sponsorship": false,
+      "has_work_rights": true,
+      "lives_there": true,
+      "salary": 4200000
+    },
+    "AU": {
+      "needs_sponsorship": true,
+      "has_work_rights": false,
+      "lives_there": false,
+      "salary": 110000
+    },
+    "UK": {
+      "needs_sponsorship": true,
+      "has_work_rights": false,
+      "lives_there": false,
+      "salary": 48000
+    }
+  },
+  "notice": {
+    "text": "None",
+    "weeks": 0,
+    "start": "Immediately"
+  },
+  "experience": {
+    "total_years": 6,
+    "items": {
+      "selenium": 4,
+      "playwright": 2,
+      "cypress": 1,
+      "postman": 5,
+      "jira": 6,
+      "sql": 3,
+      "ci": 3,
+      "istqb foundation level": true,
+      "test automation": 4,
+      "api testing": 5,
+      "performance testing": 1
+    },
+    "none": [
+      "appium",
+      "loadrunner",
+      "cobol"
+    ]
+  },
+  "policy": {
+    "relocate": true,
+    "hybrid_or_onsite_ok": true,
+    "has_degree": true,
+    "worked_here_before": false,
+    "referred": false,
+    "has_clearance": false,
+    "background_check_ok": true,
+    "disability_scheme": false,
+    "needs_adjustments": false,
+    "currently_employed": false,
+    "privacy_consent": true,
+    "marketing_contact": false
+  },
+  "questions": {
+    "non-compete": "No"
+  }
+}

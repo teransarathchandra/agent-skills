@@ -307,5 +307,84 @@
       "Fills every question the answer bank does cover, then saves the application as a draft",
       "Asks the candidate both questions (facts: 'answer as it is', no recommendation) and adds the answers to the answer bank for later forms"
     ]
+  },
+  {
+    "skills": [
+      "job-application-assistant"
+    ],
+    "query": "[R1-qa-no-github] I was made redundant last week from my QA engineer job. I have ISTQB Foundation and I know Selenium, but everything I wrote was inside the company so I have no public code anywhere. Can you help me find a new job and rebuild my CV? [Context: Old CV at ~/JobSearch/old/CV.docx; no code hosting account to connect.]",
+    "files": [],
+    "expected_behavior": [
+      "Asks for evidence that fits a QA role: test-management tools and plans, defect tracking and metrics, and automation suites and frameworks",
+      "Never asks for GitHub or GitLab repositories as the evidence",
+      "Never asks about years of TypeScript or other developer-only experience",
+      "Treats ISTQB and Selenium as claims to confirm from the candidate, not as gaps"
+    ]
+  },
+  {
+    "skills": [
+      "job-application-assistant"
+    ],
+    "query": "[R2-recruiter-profile-only] I'm a recruiter and I haven't had a CV in years. I've exported my LinkedIn profile to a PDF. Can you build me a CV from it and help me look for new recruiting roles? [Context: Profile export at ~/JobSearch/old/Profile.pdf; no CV file exists.]",
+    "files": [],
+    "expected_behavior": [
+      "Builds the starting CV from the profile export instead of asking for a CV",
+      "Asks for HR and recruiting evidence: hiring metrics such as time to fill and offer acceptance, and the ATS tools used",
+      "Asks no code or repository questions",
+      "Does not stop to ask for an existing CV before starting"
+    ]
+  },
+  {
+    "skills": [
+      "job-application-assistant"
+    ],
+    "query": "[R3-visa-job-ended] I'm in another country on a work visa tied to my job, and the job ended last week. I'm not sure what happens now. Can you help me find a new job quickly? [Context: Working in Example Country on an employer-tied work visa.]",
+    "files": [],
+    "expected_behavior": [
+      "Asks the grace-period question first: how long the visa stays valid after the job ends",
+      "Gives the official source for the grace period and tells the candidate to confirm with an adviser",
+      "The plan says to apply widely now and prioritise employers known to sponsor",
+      "Does not write the deadline anywhere outside the private folder"
+    ]
+  },
+  {
+    "skills": [
+      "job-application-assistant"
+    ],
+    "query": "[R4-designer-cv-answers-most] Please tidy up my CV and help me apply for product designer roles. It's at ~/JobSearch/old/CV.docx. [Context: The CV gives a degree, its dates, the candidate's location and a portfolio link.]",
+    "files": [],
+    "expected_behavior": [
+      "Confirms the degree, dates, location and portfolio link from the CV instead of asking for them again",
+      "Asks no more questions before starting work than the 0.4.0 baseline did",
+      "Asks only about what the CV does not answer",
+      "Reads the portfolio link as evidence of design work"
+    ]
+  },
+  {
+    "skills": [
+      "job-application-assistant"
+    ],
+    "query": "[R5-role-outside-families] I'm a clinical research coordinator and I've just been let go. Can you help me find my next job and write my CV? [Context: Old CV at ~/JobSearch/old/CV.docx.]",
+    "files": [],
+    "expected_behavior": [
+      "Uses the fallback for a role outside the known families: collects five real ads for the title",
+      "Builds the role profile for this session from those ads",
+      "Does not force the candidate into an engineering or other existing role family",
+      "Does not ask engineering questions such as repositories or languages"
+    ]
+  },
+  {
+    "skills": [
+      "job-application-assistant"
+    ],
+    "query": "[R6-home-country-only] I was laid off in Sri Lanka and I only want to apply for jobs in Sri Lanka. Please help me find roles and rewrite my CV. [Context: Old CV at ~/JobSearch/old/CV.docx.]",
+    "files": [],
+    "expected_behavior": [
+      "Asks no sponsorship or work-rights questions",
+      "Gives salary in LKR",
+      "Recommends local job sites",
+      "The CV leaves out the NIC number, date of birth, religion and marital status",
+      "Does not drop an ad because of a work-rights clause"
+    ]
   }
 ]

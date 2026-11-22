@@ -21,8 +21,8 @@ An applicant tracking system (ATS) turns the CV into plain text and matches it a
 
 - One column. No tables, text boxes, icons, skill bars or photo. Word's own column feature parses better than columns built from tables or text boxes, but some systems still read across them line by line, so one column is the safe choice.
 - Real text. Never an image or a scanned PDF. Test: open the PDF and select the text.
-- Built-in heading styles, with standard names, in this order: **Summary, Skills, Experience, Projects, Publications, Education, Certifications.** Skills sit near the top so a recruiter sees the keywords first.
-- Contact block at the top of the body as plain text: name, title, city and country (with time zone if applying abroad), phone, email, profile and repo links, and one line on work preference ("Open to remote, hybrid and on-site roles; willing to relocate"). **Never in the page header or footer**: many parsers skip those parts and the CV arrives without a name.
+- Built-in heading styles, with the standard names `ats_check.py` accepts (Summary, Skills, Experience, Projects, Publications, Education, Certifications). The order comes from the role profile's "CV shape"; without one, use **Summary, Skills, Experience, Projects, Publications, Education, Certifications.** Skills sit near the top so a recruiter sees the keywords first. A portfolio or samples link is a line in the contact block or under Projects, not a section of its own.
+- Contact block at the top of the body as plain text: name, title, city and country (with time zone if applying abroad), phone, email, profile and repo links, and one line on work preference ("Open to remote, hybrid and on-site roles; willing to relocate"). In a home-country version, leave out the relocation or sponsorship line: the work preference alone ("Open to hybrid and on-site roles in Colombo") is enough. **Never in the page header or footer**: many parsers skip those parts and the CV arrives without a name.
 - A common font (Calibri, Arial, Aptos, Garamond, Georgia or Times New Roman), 10–12 pt for body text and 14–16 pt for headings. Uncommon fonts are swapped on the reader's machine and move the layout.
 - One date style throughout, `Mon YYYY – Mon YYYY` (or `Mon YYYY – Present`). Parsers work out years of experience from these dates.
 - Each role: `Title, Employer`, then `City, Country | Mon YYYY – Mon YYYY`, then bullets. One project heading per client product, each with a one-line context sentence.
@@ -32,7 +32,7 @@ An applicant tracking system (ATS) turns the CV into plain text and matches it a
 
 ## Summary
 
-Two or three lines under the contact block: the target title (the ad's own title when it honestly fits), years of experience, the core stack, and one standout fact with evidence. No "I", and none of the words in [cover-letters.md](cover-letters.md#words-to-avoid).
+Two or three lines under the contact block: the target title (the ad's own title when it honestly fits), years of experience, the core skills for the role (see the role profile in [roles/](roles/)), and one standout fact with evidence. No "I", and none of the words in [cover-letters.md](cover-letters.md#words-to-avoid).
 
 ## Keywords from the ad
 
@@ -63,6 +63,7 @@ Tailor per job by reordering Skills and bullets and adjusting the summary. Do no
 | Germany, Austria, Switzerland | A4 | Local language if the ad is in it | A photo and date of birth are still common but optional; leave them out unless the candidate wants them |
 | Rest of the EU | A4 | UK, or the ad's language | Follow the ad; Europass is optional |
 | India | A4 | UK | Leave out personal details (father's name, religion, date of birth) that older templates include |
+| Sri Lanka | A4 | UK | Leave out the NIC number always, and the date of birth, religion and marital status that older local templates include; a photo is optional and best left out |
 | Gulf states | A4 | UK | Nationality, visa status and a photo are often expected; ask the candidate what to include |
 | Japan, Korea | A4 | The ad's language | Local employers may want a local-format form (in Japan, the rirekisho); ask before building one. International firms accept an English CV |
 

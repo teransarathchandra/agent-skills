@@ -2,9 +2,9 @@
 
 ## Contents
 
-- Triage, and remote work from another country
+- Triage, home-country searches, and remote work from another country
 - Scams and ghost jobs
-- Site rules on automation (LinkedIn, Seek, Indeed, employer sites; assisted mode by opt-in)
+- Site rules on automation (LinkedIn, Seek, Indeed, Sri Lankan sites, employer sites; assisted mode by opt-in)
 - Job sites by region
 - Profile sync
 - Filling in an application (screening questions, AI use, diversity questions)
@@ -14,7 +14,7 @@
 
 ## Triage
 
-1. **Search by stack and recency**, not by "visa sponsorship". Run several searches (the main language, the cloud, the framework, "full stack" plus the stack) limited to the last seven days, and merge the results.
+1. **Search by role title, core skills and recency**, not by "visa sponsorship". Run several searches (the role title and its common variants, each core skill from the role profile in [roles/](roles/)) limited to the last seven days, and merge the results. For an engineer these are the main language, the cloud and the framework; for a QA engineer, "QA engineer", "test automation" and the test tool; for an accountant, the title, the ledger or ERP system and the credential asked for.
 2. **Read every shortlisted ad in full.** Summaries hide the clauses that matter. Scripted reads are fine, but read the final paragraph of each ad yourself.
 3. **Exclude** ads that require any of: citizenship, permanent residency, "full" or "unrestricted" working rights, an existing security clearance, or residence in a named state or region. Treat government-agency contracts and short contracts through agencies as excluded unless the ad says otherwise; they almost never sponsor.
 4. **Signals worth flagging:**
@@ -22,8 +22,12 @@
    - An ad that asks the applicant to state their current location and start date.
    - "Relocation support" or "visa sponsorship available" in the body.
 5. **Check the ad is real** (see [Scams and ghost jobs](#scams-and-ghost-jobs)).
-6. **Score fit** against the ad's essential list: the share of essentials the candidate can show evidence for, and the years asked versus the years the candidate has in that technology. Skip ads where the core stack is one the candidate has not used commercially. Aim for a few well-matched applications, not many weak ones; tailored applications get far more replies.
+6. **Score fit** against the ad's essential list: the share of essentials the candidate can show evidence for, and the years asked versus the years the candidate has in that technology. Skip ads where the core skills for the role are ones the candidate has not used professionally. Aim for a few well-matched applications, not many weak ones; tailored applications get far more replies.
 7. **Prefer the employer's own site.** When a job-board ad links to the employer's careers page, apply there unless the ad says to apply on the board.
+
+### Home-country searches
+
+For a country where the candidate lives and has full work rights, the work-rights and residence clauses in step 3 do not drop ads. Judge on-site and hybrid ads by the commute from the candidate's city, not by relocation; remote ads need no extra check beyond the employer's location rules.
 
 ### Remote work from another country
 
@@ -55,6 +59,7 @@ Some job sites forbid bots and automated tools in their terms of use. Before ste
 | LinkedIn | User Agreement 8.2 bars bots and other automated methods | Prepares; the candidate edits the profile and applies. With the candidate's opt-in: assisted mode, capped at 10 to 15 a day |
 | Seek (also JobStreet and Jobsdb) | Website Terms 9(b): no automated process, script, tool or bot to access, search or collect information, except through an API Seek provides | Prepares; the candidate creates the account and applies |
 | Indeed | Terms of Service A.3: no automation, scripting or bots to automate Indeed Apply, except Indeed's own tools; the candidate must review and adopt all content before submitting | Prepares; the candidate applies, or switches on Indeed's own Apply For Me in their account if it is offered |
+| TopJobs, Xpress.jobs and ikman.lk jobs (Sri Lanka) | Terms not checked: read them before any automation | Prepares; the candidate applies until the terms are read |
 | An employer's own careers site | Varies; read the site's terms | Fills the form in the candidate's logged-in session where allowed; submits only after batch approval |
 
 Creating an account counts too: on these sites the candidate signs up. The agent supplies a setup sheet (headline, summary, skills, the CV to upload, the visibility settings to pick) so it takes minutes. Passwords and email or phone verification are always the candidate's.
@@ -71,6 +76,7 @@ Offer these in intake question 26, plus the employers' own careers pages, which 
 | Germany, Austria, Switzerland | StepStone, LinkedIn, XING |
 | India | Naukri, LinkedIn |
 | Gulf states | Bayt, LinkedIn, GulfTalent |
+| Sri Lanka | TopJobs (topjobs.lk), Xpress.jobs, ikman.lk jobs, LinkedIn |
 | Singapore, Malaysia, Hong Kong | JobStreet or Jobsdb, LinkedIn |
 
 Read each site's terms before steps 6 and 7; the table above covers only the sites checked so far.
@@ -139,3 +145,4 @@ Checked 2026-11; re-check before relying on them.
 - GDPR Article 22, automated individual decision-making: <https://gdpr-info.eu/art-22-gdpr/>.
 - Seek Website Terms and Conditions, clause 9(b), last updated 20 July 2026: <https://au.seek.com/terms>.
 - Indeed Terms of Service, section A.3 (Applying to Jobs), last updated 29 September 2026: <https://www.indeed.com/legal>.
+- Sri Lanka job sites (TopJobs, Xpress.jobs, ikman.lk jobs): search results and site pages only; their terms were not readable (checked 2026-11), so each is marked "terms not checked". LinkedIn terms as above.

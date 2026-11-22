@@ -116,6 +116,11 @@ class SkillTests(unittest.TestCase):
         ok = "# Ref\n\n## Contents\n\n- a\n\n" + "line\n" * 101
         self.assertEqual(self.run_skill(GOOD, extra={"references/long.md": ok}), [])
 
+    def test_long_nested_reference_needs_contents(self):
+        long_text = "# Role\n\n" + "line\n" * 101
+        errors = self.run_skill(GOOD, extra={"references/roles/long.md": long_text})
+        self.assertTrue(any("Contents" in e and "roles/long.md" in e for e in errors))
+
     def test_script_files_are_scanned(self):
         for name in ("scripts/tool.js", "scripts/tool.mjs", "scripts/tool.cjs", "scripts/tool.ts"):
             errors = self.run_skill(GOOD, extra={name: "// mail jane.doe@corp.com\n"})

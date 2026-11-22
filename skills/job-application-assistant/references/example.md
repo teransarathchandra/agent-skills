@@ -2,6 +2,15 @@
 
 Everything below is fictional: the candidate, the employers, the ads and the files. It shows the shape of each message, not real advice for a real person.
 
+## Contents
+
+- 1. Intake
+- 2. CV check
+- 3. Job sites and accounts
+- 4. Tracker
+- 5. Batch report
+- A second example: a QA engineer in Sri Lanka
+
 ## 1. Intake
 
 **Candidate:** "Help me apply for .NET jobs in Australia. My CV is old."
@@ -86,3 +95,24 @@ The agent writes a setup sheet per site (headline, summary, skills, which CV to 
 **Candidate:** `submit 1`
 
 The agent re-opens the form, checks the review page still matches, submits, and records the site's confirmation message in the tracker.
+
+## A second example: a QA engineer in Sri Lanka
+
+The same shape for a non-engineering-style role, using the [QA and testing profile](roles/qa-testing.md). The candidate, employer and numbers are fictional.
+
+**Candidate:** "I'm a QA engineer in Colombo, made redundant last month. Help me find QA jobs here."
+
+The role is clear and the home country is the first target, so the agent does not ask about visas, sponsorship or relocation. A redundancy last month opens the layoff branch, so the first message asks question 29 with the profile's evidence question, and leaves salary for later ([intake.md](intake.md)):
+
+> 29. Where are you in your notice? (answer as it is) a) Still working it, until a date b) Garden leave until a date c) Employment has ended d) Other: type it
+> 12. Where is the proof of your testing? (pick any) a) **Test-management tool or an export (Recommended: shows scale)** b) Defect reports and release notes c) Performance reviews or praise messages d) Other: type it
+
+**Candidate:** `ok, 29c, 12a,b ~/JobSearch/docs/testrail-export.csv`
+
+The agent records `role_family: "qa-testing"`, a home-country entry with `has_work_rights: true` and `needs_sponsorship: false`, notice "None" and start "Immediately" (question 29: employment has ended), and builds the answer bank from the evidence ([../assets/answers.example-qa.json](../assets/answers.example-qa.json)). Before the first form it asks question 16; the candidate gives an annual figure in LKR, 4200000. The first CV bullets, from the export and the defect reports:
+
+> - Ran 18 regression cycles for a retail web app; cut cycle time from 3 days to 1 by automating 140 checks in Selenium and running them in CI.
+> - Raised 210 defects over one year, 9 of them critical, all found before release.
+> - Wrote API tests in Postman for 35 endpoints and moved them into the pipeline.
+
+The CV is A4 with UK spelling and no NIC number, date of birth, religion or marital status, and the contact block has no relocation line.
