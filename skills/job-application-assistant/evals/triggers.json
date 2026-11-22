@@ -10,7 +10,11 @@
     "Use my degree certificate and transcript to fix the education section of my CV.",
     "I just got laid off. Set this up on Codex so it can apply for jobs on LinkedIn for me.",
     "Fill these Easy Apply forms and show me the answers before you submit them.",
-    "The application form wants a salary number for New Zealand, what should I put?"
+    "The application form wants a salary number for New Zealand, what should I put?",
+    "I'm a QA engineer who was made redundant, help me find a new job",
+    "Rewrite my CV, I'm a business analyst",
+    "My work visa depends on the job I just lost, what do I do?",
+    "Help me apply for jobs in my own country"
   ],
   "should_not_trigger": [
     "Write a job description for the backend engineer we are hiring.",
