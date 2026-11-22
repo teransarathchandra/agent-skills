@@ -44,7 +44,7 @@ Load this when the person works in accounting, bookkeeping, finance, payroll, au
 ## Keywords and credentials
 
 - Keywords from the ad: month-end close, reconciliation, accounts payable, general ledger, financial reporting, IFRS, GAAP, variance analysis, budgeting, forecasting, payroll, VAT or sales tax, audit, ERP, SAP, Xero, QuickBooks, advanced Excel.
-- Qualifications depend on country. CPA is licensed by national or state bodies: AICPA and state boards for the US (aicpa-cima.com), CPA Australia (cpaaustralia.com.au), CPA Canada for Canada. ACCA (accaglobal.com) is named in many UK, Irish, Gulf, African and Asian ads. CIMA is offered through the CIMA and AICPA site (aicpa-cima.com). Many ads name one of these as required or preferred; others accept part-qualified candidates. Check the ad and the country; a credential from one country may not be recognised in another.
+- Qualifications depend on country. CPA is licensed by national or state bodies: AICPA and state boards for the US (aicpa-cima.com), CPA Australia (cpaaustralia.com.au), CPA Canada for Canada. ACCA (accaglobal.com) is often named in UK, Irish, Gulf, African and Asian ads; check the target ads. CIMA is offered through the CIMA and AICPA site (aicpa-cima.com). An ad may name one of these as required or preferred, or accept part-qualified candidates. Check the ad and the country; a credential from one country may not be recognised in another.
 
 ## Portfolio and work samples
 

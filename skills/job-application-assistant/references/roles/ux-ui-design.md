@@ -6,7 +6,7 @@ Load this when the person designs or researches products: UX, UI, product and in
 
 - Common titles: UX Designer, UI Designer, Product Designer, Interaction Designer, UX Researcher, Visual Designer, Design Systems Designer, Content Designer.
 - Realistic moves after a layoff: UI to product designer; UX designer to UX researcher (or back); designer to product owner or product manager; visual designer to design systems or front-end design roles; agency to in-house design.
-- Search the person's title plus "product designer", "UX" and "interaction designer". Many ads use the titles loosely.
+- Search the person's title plus "product designer", "UX" and "interaction designer". Ads often use the titles loosely.
 
 ## Evidence sources
 
@@ -44,7 +44,7 @@ Load this when the person designs or researches products: UX, UI, product and in
 ## Keywords and credentials
 
 - Keywords from the ad: user research, wireframes, prototyping, usability testing, design systems, interaction design, accessibility, WCAG, Figma, information architecture, design thinking, user flows.
-- Many design ads weigh the portfolio over any certificate. The NN/g UX Certification (nngroup.com) is a vendor certificate earned by passing courses with exams; ads rarely require it. Do not present a certificate as a substitute for case studies.
+- Design hiring usually weighs the portfolio over any certificate. The NN/g UX Certification (nngroup.com) is a vendor certificate earned by passing courses with exams; check the target ads before leading with it. Do not present a certificate as a substitute for case studies.
 
 ## Portfolio and work samples
 

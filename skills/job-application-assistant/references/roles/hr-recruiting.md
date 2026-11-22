@@ -44,7 +44,7 @@ Load this when the person works in HR generalist, talent acquisition, recruiting
 ## Keywords and credentials
 
 - Keywords from the ad: full-cycle recruiting, sourcing, stakeholder management, ATS, employee relations, onboarding, HRIS, employment law, compensation and benefits, DEI, workforce planning, Greenhouse, Workday.
-- CIPD (cipd.org) qualifications are named in many UK, Irish and some Gulf and Asian HR ads. SHRM (shrm.org) offers SHRM-CP and SHRM-SCP, and many US HR ads mention them. HRCI (hrci.org) offers aPHR, PHR and SPHR, also seen in US ads. A pattern, not a rule; check the target ads and country.
+- CIPD (cipd.org) qualifications are often named in UK, Irish, Gulf and Asian HR ads. SHRM (shrm.org) offers SHRM-CP and SHRM-SCP, often named in US HR ads. HRCI (hrci.org) offers aPHR, PHR and SPHR, also named in US ads. Often named, not always; check the target ads and country.
 - Employment law knowledge is country-specific; name the countries the person has worked in.
 
 ## Portfolio and work samples

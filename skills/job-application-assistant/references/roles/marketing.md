@@ -24,7 +24,7 @@ Load this when the person works in digital, content, product or growth marketing
    c) Marketing generalist to marketing operations or growth
    d) Other: type it
 3. Which results can you share? (pick any)
-   a) **Percent change in leads, traffic or conversion (Recommended: most asked for)**
+   a) **Percent change in leads, traffic or conversion (Recommended: often asked for)**
    b) Return on ad spend or cost per lead
    c) Launches and published work
    d) Other: type it
@@ -33,7 +33,7 @@ Load this when the person works in digital, content, product or growth marketing
 
 ## CV shape
 
-- Order: header, summary, skills, experience, selected work, certifications, education.
+- Order: header, summary, skills, experience, projects (selected campaigns, each with a link), certifications, education.
 - Summary leads with years, the channels, the sector and one result.
 - Bullets, action then result then how:
   - "Grew organic sessions 65% in 12 months for a fictional travel site through topic clusters and refreshed pages."
@@ -44,7 +44,7 @@ Load this when the person works in digital, content, product or growth marketing
 ## Keywords and credentials
 
 - Keywords from the ad: SEO, SEM, PPC, content strategy, Google Analytics, GA4, A/B testing, conversion rate optimisation, email marketing, marketing automation, HubSpot, CRM, lead generation, copywriting, KPIs.
-- Google Skillshop (skillshop.withgoogle.com) hosts Google Ads and Google Analytics certifications; HubSpot Academy (academy.hubspot.com) offers HubSpot certifications; CIM (cim.co.uk) offers qualifications named in some UK ads. Many marketing ads value results and samples more than certificates. Check the target ads.
+- Google Skillshop (skillshop.withgoogle.com) hosts Google Ads and Google Analytics certifications; HubSpot Academy (academy.hubspot.com) offers HubSpot certifications; CIM (cim.co.uk) offers qualifications often named in UK ads. Results and samples usually count for more than certificates; check the target ads.
 
 ## Portfolio and work samples
 

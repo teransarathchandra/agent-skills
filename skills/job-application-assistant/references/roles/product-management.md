@@ -48,7 +48,7 @@ Load this when the person is a product manager or product owner. Follow it for i
 ## Keywords and credentials
 
 - Keywords from the ad: roadmap, backlog, user stories, discovery, stakeholder management, KPIs, OKRs, A/B testing, SQL, Agile, Scrum, go-to-market, prioritisation, Jira.
-- Many product ads name a certificate as a plus, and some name none. Product Owner certificates seen: PSPO (Scrum.org), CSPO (Scrum Alliance). IIBA's Certificate in Product Ownership Analysis (CPOA) is listed by IIBA. These are patterns, not rules; check the target ads before leading with one.
+- A certificate is often named as a plus, not always; check the target ads. Product Owner certificates: PSPO (Scrum.org), CSPO (Scrum Alliance). IIBA's Certificate in Product Ownership Analysis (CPOA) is listed by IIBA. These are patterns, not rules; check the target ads before leading with one.
 - Product experience and shipped outcomes usually weigh more than a certificate.
 
 ## Portfolio and work samples

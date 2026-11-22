@@ -31,9 +31,9 @@
     }
   },
   "notice": {
-    "text": "One month",
-    "weeks": 4,
-    "start": "One month after an offer"
+    "text": "None",
+    "weeks": 0,
+    "start": "Immediately"
   },
   "experience": {
     "total_years": 6,

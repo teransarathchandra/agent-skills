@@ -45,7 +45,7 @@ Load this when the person is a business analyst or systems analyst. Follow it fo
 ## Keywords and credentials
 
 - Keywords from the ad: requirements gathering, user stories, acceptance criteria, BPMN, UML, stakeholder management, UAT, gap analysis, SQL, Jira, Confluence, Agile, process improvement.
-- IIBA (iiba.org) lists ECBA (entry), CCBA (experienced) and CBAP (advanced), plus Agile Analysis Certification and CPOA. Many BA ads name CBAP or a similar certificate as a plus; some name none. A pattern, not a rule; check the target ads.
+- IIBA (iiba.org) lists ECBA (entry), CCBA (experienced) and CBAP (advanced), plus Agile Analysis Certification and CPOA. CBAP or a similar certificate is often named as a plus, not always; check the target ads.
 - Domain knowledge and delivered requirements often count for more than a certificate.
 
 ## Portfolio and work samples
@@ -68,7 +68,7 @@ Collect lowercase keys with years or true/false: `business analysis`, `requireme
 
 - Listing "gathered requirements" with no delivered result.
 - Calling a project coordinator or tester role analysis.
-- Leaving out the domain, which many BA ads rank highly.
+- Leaving out the domain, which BA ads often rank highly.
 - Pasting real requirement text or process names under an NDA.
 
 ## Sources

@@ -48,7 +48,7 @@ Load this when the person runs infrastructure and delivery: DevOps, cloud, SRE, 
 
 - Keywords from the ad: Kubernetes, Docker, Terraform, Ansible, CI/CD, AWS, Azure, GCP, monitoring, observability, incident response, SLO, Linux, scripting, IaC.
 - Credentials seen in ads, with issuer: AWS Certified Solutions Architect (Associate, Professional) and AWS Certified DevOps Engineer Professional (Amazon Web Services); Microsoft Azure Administrator AZ-104 and DevOps Engineer Expert (Microsoft); Google Cloud Associate Cloud Engineer and Professional Cloud DevOps Engineer (Google Cloud); CKA, CKAD and CKS (CNCF, with the Linux Foundation); Terraform Associate (HashiCorp).
-- Many ads list one as preferred and some ask for a cloud certification; many ask for none. Never present a credential as required unless the target ads show it. Hiring teams still test hands-on skill.
+- The sampled ads listed CKA, CKAD or an AWS certification as preferred; a cloud certification is often named, not always, so check the target ads. Never present a credential as required unless the target ads show it. Hiring teams still test hands-on skill.
 
 ## Portfolio and work samples
 

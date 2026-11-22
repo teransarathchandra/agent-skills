@@ -44,7 +44,7 @@ Load this when the person works in sales, business development, account manageme
 ## Keywords and credentials
 
 - Keywords from the ad: quota, pipeline, prospecting, lead generation, closing, negotiation, CRM, Salesforce, forecasting, account planning, upsell, renewal, solution selling, MEDDIC, discovery.
-- Salesforce credentials are on Trailhead (trailhead.salesforce.com); HubSpot Academy (academy.hubspot.com) offers sales training and certificates. Some ads mention them; most sales ads care more about attainment and track record. Check the target ads; no credential is needed unless ads show it.
+- Salesforce credentials are on Trailhead (trailhead.salesforce.com); HubSpot Academy (academy.hubspot.com) offers sales training and certificates. They are often named as a plus; attainment and track record usually count for more. Check the target ads; no credential is needed unless ads show it.
 
 ## Portfolio and work samples
 

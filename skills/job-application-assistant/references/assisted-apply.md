@@ -104,7 +104,7 @@ One block per job, numbered, then one question:
 
 2. QA Engineer, Example Retail Ltd (Colombo, hybrid): job 4000000002
    CV: Name_CV.pdf    Letter: written for Example Retail Ltd ("Dear Hiring Team, ...")
-   Answers: years with Selenium = 4; ISTQB certified = Yes; salary = 420000 LKR
+   Answers: years with Selenium = 4; ISTQB Foundation Level = Yes; notice = None; salary = 4200000 LKR (annual)
    Kept from your LinkedIn: email, phone (+94)
 
 3. ...

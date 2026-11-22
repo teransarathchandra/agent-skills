@@ -45,7 +45,7 @@ Load this when the person works in help desk, IT support, technical or customer 
 ## Keywords and credentials
 
 - Keywords from the ad: troubleshooting, ticketing, SLA, incident management, Active Directory, Microsoft 365, remote support, knowledge base, escalation, onboarding, churn, renewals, Zendesk, ServiceNow.
-- ITIL 4 Foundation is offered through PeopleCert (peoplecert.org); many service desk ads mention ITIL as a plus or a requirement for service management roles. CompTIA A+ (comptia.org) appears in many entry-level IT support ads. Check the target ads; many name none.
+- ITIL 4 Foundation is offered through PeopleCert (peoplecert.org); ITIL is often named as a plus or a requirement for service management roles. CompTIA A+ (comptia.org) is often named for entry-level IT support. Often named, not always; check the target ads.
 - Salesforce credentials from Trailhead (trailhead.salesforce.com) are named in some customer success ads that use Salesforce.
 - Tool experience and measured results often count for more than a certificate.
 

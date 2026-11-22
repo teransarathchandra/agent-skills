@@ -44,7 +44,7 @@ Load this when the person works in operations, office or executive administratio
 ## Keywords and credentials
 
 - Keywords from the ad: calendar management, travel coordination, minute-taking, stakeholder communication, vendor management, purchase orders, procurement, inventory, process improvement, Microsoft 365, ERP, SAP, budgeting, confidentiality, project coordination.
-- CIPS (cips.org) offers procurement qualifications and MCIPS membership, named in some UK and international procurement ads. Many admin and operations ads name no certificate and value tools and references. Check the target ads.
+- CIPS (cips.org) offers procurement qualifications and MCIPS membership, often named in UK and international procurement ads. Admin and operations ads may name no certificate and value tools and references; check the target ads.
 
 ## Portfolio and work samples
 

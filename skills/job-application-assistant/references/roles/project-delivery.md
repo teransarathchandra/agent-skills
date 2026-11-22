@@ -43,7 +43,7 @@ Load this when the person manages projects or delivery: project and programme ma
 ## Keywords and credentials
 
 - Keywords from the ad: stakeholder management, risk management, budget, scope, schedule, Agile, Scrum, Kanban, Jira, MS Project, RAID, PMO, change management, sprint planning, retrospectives.
-- Many delivery ads mention a certificate. Names seen: PMP and CAPM (PMI), PRINCE2 (axelos.com and PeopleCert), PSM (Scrum.org), CSM (Scrum Alliance). Some ads require one, others prefer it, many name none; check the target ads.
+- A delivery certificate is often named: PMP and CAPM (PMI), PRINCE2 (axelos.com and PeopleCert), PSM (Scrum.org), CSM (Scrum Alliance). An ad may require one, prefer one or name none; check the target ads.
 
 ## Portfolio and work samples
 

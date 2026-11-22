@@ -48,7 +48,7 @@ Load this when the person works with data: analysis, BI, data engineering, data 
 ## Keywords and credentials
 
 - Keywords from the ad: SQL, Python, R, Power BI, Tableau, Excel, ETL, data warehouse, dbt, Airflow, Spark, statistics, A/B testing, machine learning, data modelling, storytelling.
-- Credentials seen, with issuer: Microsoft Certified Power BI Data Analyst Associate PL-300 (Microsoft); Google Cloud Professional Data Engineer (Google Cloud); AWS Certified Data Engineer Associate (Amazon Web Services); Databricks and Snowflake certifications (Databricks, Snowflake); Tableau certifications (Salesforce). Many analyst ads ask for none; do not present any as required unless the ad does.
+- Credentials seen, with issuer: Microsoft Certified Power BI Data Analyst Associate PL-300 (Microsoft); Google Cloud Professional Data Engineer (Google Cloud); AWS Certified Data Engineer Associate (Amazon Web Services); Databricks and Snowflake certifications (Databricks, Snowflake); Tableau certifications (Salesforce). Often named, not always; check the target ads and do not present any as required unless the ad does.
 
 ## Portfolio and work samples
 

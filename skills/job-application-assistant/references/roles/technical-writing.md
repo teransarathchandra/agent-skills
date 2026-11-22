@@ -37,7 +37,7 @@ Load this when the person writes documentation: product docs, API docs, develope
 
 ## CV shape
 
-- Order: header, summary, skills (authoring, docs-as-code, API, tools), experience, portfolio link, education.
+- Order: header with portfolio link, summary, skills (authoring, docs-as-code, API, tools), experience, projects (writing samples, each with a link), education.
 - Summary leads with years, the content type (API, developer, user), the audience and the publishing method.
 - Bullets, action then result then how:
   - "Cut support tickets on setup by about a quarter by rewriting the onboarding guide and adding runnable examples at Example Logistics."
