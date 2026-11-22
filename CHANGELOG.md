@@ -15,6 +15,7 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - README restructured for readability: a short pitch, "What's inside", a quick start first, one-sentence skill rows, the agentic workflow explained as spec, check and rules, collapsible details, and an FAQ.
 
 ### Fixed
+- `job-application-assistant`: the apply engine's `goto` refuses LinkedIn without the opt-in however it is reached: mixed case or a trailing dot in the host, `lnkd.in` short links, server redirect chains (checked hop by hop before navigating; a chain it cannot fully check is refused), client-side redirects, delayed refreshes and popups. The guard lives in the `serve` process, so it covers every tab for as long as the browser runs. It also opens only http and https URLs.
 - The validator's privacy scan skips `node_modules` inside skills, as it already did for plugins, so an installed apply engine does not fail it.
 - `setup/install.sh --check` now exits 1 when plugins are expected but cannot be verified because the `claude` CLI is missing, instead of reporting success.
 
