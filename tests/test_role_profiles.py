@@ -61,6 +61,15 @@ PRODUCT_DELIVERY_STEMS = (
     "ux-ui-design",
 )
 
+SUPPORT_BUSINESS_STEMS = (
+    "it-customer-support",
+    "hr-recruiting",
+    "sales-account-management",
+    "marketing",
+    "finance-accounting",
+    "operations-admin",
+)
+
 
 def assert_profile(case, stem):
     """Check one role profile has every PROFILE_SECTIONS heading in order and a checked Sources section."""
@@ -98,6 +107,32 @@ class ProductDeliveryProfileTests(unittest.TestCase):
         for stem in PRODUCT_DELIVERY_STEMS:
             with self.subTest(stem=stem):
                 assert_profile(self, stem)
+
+
+class SupportBusinessProfileTests(unittest.TestCase):
+    def test_support_business_profiles_have_every_section(self):
+        for stem in SUPPORT_BUSINESS_STEMS:
+            with self.subTest(stem=stem):
+                assert_profile(self, stem)
+
+    def test_fallback_profile_sections(self):
+        path = ROLES / "any-role.md"
+        self.assertTrue(path.is_file(), f"{path} is missing")
+        text = path.read_text(encoding="utf-8")
+        lines = text.splitlines()
+        headings = (
+            "## When to use this",
+            "## Build the profile for this session",
+            "## Where it is kept",
+            "## Sources",
+        )
+        positions = []
+        for heading in headings:
+            self.assertIn(heading, lines, f"any-role: missing heading {heading!r}")
+            positions.append(lines.index(heading))
+        self.assertEqual(positions, sorted(positions), "any-role: sections are out of order")
+        sources = section(text, "## Sources")
+        self.assertTrue(any("Checked 2026-11" in line for line in sources.splitlines()))
 
 
 class LayoffReferenceTests(unittest.TestCase):
