@@ -5,12 +5,19 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 ## [Unreleased]
 
 ### Added
+- `job-application-assistant` 0.5.0: any role, not only engineering. Role profiles for 16 role families plus an any-role fallback (`references/roles/`) cover evidence, ATS keywords, CV shape, portfolio and interview material per family. A QA example bank is included.
+- Layoff guidance (`references/layoff.md`): first-week steps, severance and notice questions, and visa grace periods for 10 countries from official sources.
+- Adaptive intake: the assistant reads the CV first, asks role family first, branches on the answers, offers personalised recommendations and handles urgent cases first. Work rights are asked before triage. Questions before work starts dropped from 6 to 3-5 on the new eval scenarios.
+- Home-country and mixed searches: no sponsorship questions when searching at home. Sri Lanka added to the CV and job-site tables.
+- Role-neutral answer bank: `role_family` and `experience` keys, with per-key fallback to the 0.4.0 `years` block, used by `answers.mjs` and `triage.py`.
+- Six new eval scenarios (roles, layoff, home-country search, urgent intake).
 - `job-application-assistant` 0.4.0: assisted applying. A bundled apply engine (`scripts/apply/jaa.mjs`, Node and Playwright) drives one signed-in browser and prints JSON for any agent: LinkedIn search, scan, Easy Apply filling from an answer bank, drafts, approved-only submits, and profile reads and edits. The served browser listens on a random local port recorded in a 0600 file, and scanned ad text is marked untrusted. LinkedIn commands refuse to run until the candidate opts in after a risk warning, with a daily cap (default 15) and human-pace waits; `submit` refuses jobs missing from the candidate's approvals file.
 - `scripts/apply/triage.py` sorts scanned ads into apply, check and skip (work-rights, clearance, residence, language and years clauses; sponsorship and relocation signals).
 - New references: `setup.md` (check, ask, then install Node, Python, Playwright and LibreOffice; connect the Playwright MCP in Claude Code, Codex and other agents; team rollout) and `assisted-apply.md` (modes, opt-in text, answer bank, apply loop, result codes, batch report, salary fields, form pitfalls, employer ATS pages). `assets/answers.example.json` is a fictional answer bank.
 - Tests: `tests/apply_answers.test.js` (answer rules from real form wording) and `tests/test_apply_triage.py`.
 
 ### Changed
+- The validator now checks `Contents` lists in reference subfolders.
 - `job-application-assistant`: batch approval replaces "the candidate presses Submit". Forms are filled to their review page and submitted only after the candidate names the jobs. Required privacy-notice boxes are ticked only with the intake choice; marketing and "follow company" boxes stay off. Salary is a per-country figure from intake, never converted or invented; current salary is a decision and is never stored. Six new eval scenarios cover the opt-in, batch approval, number-only salary fields, pre-filled wrong files, setup on Codex and unknown questions.
 - README restructured for readability: a short pitch, "What's inside", a quick start first, one-sentence skill rows, the agentic workflow explained as spec, check and rules, collapsible details, and an FAQ.
 
