@@ -50,11 +50,26 @@ class TriageTests(unittest.TestCase):
     def test_strong_stack_match_is_apply(self):
         r = job("We use TypeScript, Node, React and Azure. 5+ years of experience.")
         self.assertEqual(r["verdict"], "apply")
-        self.assertEqual(r["stack_matched"], ["azure", "node", "react", "typescript"])
+        self.assertEqual(r["skills_matched"], ["azure", "node", "react", "typescript"])
 
     def test_weak_match_is_check(self):
         r = job("Ruby on Rails and Hotwire. Several years of experience.")
         self.assertEqual(r["verdict"], "check")
+
+    def test_home_country_is_not_filtered_on_work_rights(self):
+        bank = {**BANK, "countries": {"AU": {"needs_sponsorship": False, "has_work_rights": True, "lives_there": True}}}
+        r = triage.triage({"id": "1", "text": "Candidates must have full Australian working rights. TypeScript, React, Node."}, bank, "AU")
+        self.assertNotEqual(r["verdict"], "skip")
+
+    def test_short_and_common_keys_match_whole_words(self):
+        bank = {"experience": {"items": {"R": 2, "excel": 5, "sql": 3}}, "countries": {}}
+        r = triage.triage({"id": "1", "text": "React for excellent dashboards. SQL."}, bank, "UK")
+        self.assertEqual(r["skills_matched"], ["sql"])
+
+    def test_non_engineering_bank_scores_its_own_skills(self):
+        bank = {"experience": {"items": {"workday": 3, "greenhouse": 2, "cipd": True}}, "countries": {"UK": {"needs_sponsorship": False, "lives_there": True}}}
+        r = triage.triage({"id": "1", "text": "Recruiter using Workday and Greenhouse. CIPD preferred."}, bank, "UK")
+        self.assertEqual(r["verdict"], "apply")
 
 
 if __name__ == "__main__":
