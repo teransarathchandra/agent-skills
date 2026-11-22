@@ -1,0 +1,13 @@
+{
+  "name": "job-application-assistant-apply",
+  "private": true,
+  "description": "Browser engine for applying (jaa.mjs). Run `npm install` here once, then `npx playwright install chromium`.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "playwright": "1.64.1"
+  }
+}

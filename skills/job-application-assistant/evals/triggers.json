@@ -7,7 +7,10 @@
     "Fill in this job application form for me but don't submit it.",
     "Is this recruiter message a scam? They want me to pay for training.",
     "I have an interview on Friday for the backend role, help me prepare stories from my CV.",
-    "Use my degree certificate and transcript to fix the education section of my CV."
+    "Use my degree certificate and transcript to fix the education section of my CV.",
+    "I just got laid off. Set this up on Codex so it can apply for jobs on LinkedIn for me.",
+    "Fill these Easy Apply forms and show me the answers before you submit them.",
+    "The application form wants a salary number for New Zealand, what should I put?"
   ],
   "should_not_trigger": [
     "Write a job description for the backend engineer we are hiring.",

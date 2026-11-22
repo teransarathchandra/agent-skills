@@ -73,7 +73,7 @@ An agent with no guidance reviews a PR by skimming the diff, rewrites a CV with 
 |---|---|---|
 | [`pr-review-with-ticket-context`](skills/pr-review-with-ticket-context/SKILL.md) | Reviews a pull request against its Jira ticket, finds the real root cause, and reports issues in the changed files and gaps outside the PR. | "Review PR 123 for ABC-456." |
 | [`sanitize-skill-for-public`](skills/sanitize-skill-for-public/SKILL.md) | Turns a skill, prompt or notes written for private or work use into a fictional, public-safe copy, and proves it is clean with a scan. Never publishes. | "Make this skill safe to publish." |
-| [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | Builds an ATS-safe CV from your real evidence, tailors it and a cover letter to each ad, flags scam ads, and preps interview stories. Always stops before Submit. | "Rebuild my CV for ATS and write a cover letter for this ad." |
+| [`job-application-assistant`](skills/job-application-assistant/SKILL.md) | Builds an ATS-safe CV from your real evidence, tailors it and a cover letter to each ad, flags scam ads, fills applications to their review page and submits only the batches you approve. LinkedIn automation is opt-in only. | "Rebuild my CV for ATS and write a cover letter for this ad." |
 
 Ask in plain words: the agent loads a skill from its description, so no command is needed. In Claude Code you can also run one by name, for example `/teran-skills:pr-review-with-ticket-context`.
 
@@ -84,9 +84,9 @@ Ask in plain words: the agent loads a skill from its description, so no command 
 |---|---|
 | `pr-review-with-ticket-context` | `git` and `gh`; works best with the [Jira delivery MCP](https://github.com/teransarathchandra/jira-mcp-server) |
 | `sanitize-skill-for-public` | Python 3.9+ for the bundled scanner |
-| `job-application-assistant` | Python 3.9+ for the ATS checker; Node.js 18+ and the `docx` package for the cover-letter script; a browser tool such as the Playwright MCP to fill in application forms |
+| `job-application-assistant` | Python 3.9+ for the ATS checker and job triage; Node.js 18+ for the cover-letter script and the apply engine (Playwright); a browser tool such as the Playwright MCP to fill in application forms. It checks and asks before installing any of them, in Claude Code, Codex or another agent |
 
-The job application assistant asks what it needs as quick choices (reply `ok` to accept the recommended answers), can use your GitHub pull requests and reviews as evidence when you have no Jira, and helps you choose job sites and set up accounts. Each skill folder holds a `SKILL.md`, plus `references/`, `scripts/`, `assets/` and `evals/` where it needs them. Every example in this repository is fictional.
+The job application assistant asks what it needs as quick choices (reply `ok` to accept the recommended answers), can use your GitHub pull requests and reviews as evidence when you have no Jira, helps you choose job sites and set up accounts, and suits a team rollout after a layoff: each person installs it and applies with their own accounts ([setup guide](skills/job-application-assistant/references/setup.md#rolling-the-skill-out-to-a-team)). Each skill folder holds a `SKILL.md`, plus `references/`, `scripts/`, `assets/` and `evals/` where it needs them. Every example in this repository is fictional.
 
 </details>
 

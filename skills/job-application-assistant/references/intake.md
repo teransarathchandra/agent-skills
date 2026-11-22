@@ -91,7 +91,8 @@ How to use each one:
 | 13 | For each target country, what is your right to work? | Citizen or permanent resident; a visa that allows work (type only); need sponsorship | A fact: "answer as it is". Never ask for document numbers |
 | 14 | Notice period? | **The period in your contract (Recommended)**; immediate; two weeks; one month; three months | Goes in letters and screening answers |
 | 15 | Relocation? | **Yes, for the right role, with sponsorship where needed (Recommended if targets are abroad)**; within my country only; no, remote only | |
-| 16 | How should salary questions be answered? | **Market rate for the role and city, inside the ad's range when it gives one (Recommended)**; a figure you give me now; leave optional salary fields blank | Never current pay; never written to a file |
+| 16 | Expected salary for each target country, in its currency? | **A market figure I research for the role and city, shown to you per country (Recommended: many forms require a number)**; figures you give me now; leave optional salary fields blank | One figure per country, in the answer bank. Never convert one country's figure into another's |
+| 16a | Forms that require your current salary? | **Skip those forms, or ask me each time (Recommended)**; give it, typed per run and never stored | A decision, not a value: never write current pay to a file, memory or a subagent prompt |
 | 17 | Earliest start date? | **Notice period from the offer date (Recommended)**; a fixed date | |
 
 ## Group 5: preferences
@@ -111,6 +112,9 @@ How to use each one:
 |---|---|---|
 | 24 | Where should working files go? | **A private folder outside any git repository, such as `~/JobSearch/` (Recommended)**; a folder you name |
 | 25 | What may I remember between sessions? | **Job-search preferences only, no personal data (Recommended)**; nothing |
+| 25a | Required privacy-notice checkboxes on application forms? | **Tick them for you once you have read one example notice (Recommended: forms cannot be sent without them)**; leave them for you | Marketing, texts, WhatsApp, talent pools and "follow company" stay off unless you say otherwise |
+
+Groups 4 to 6 fill the answer bank (`answers.json` in the private folder) that forms are answered from: [assisted-apply.md](assisted-apply.md#the-answer-bank).
 
 ## Group 7: job sites, accounts and applying
 
@@ -131,11 +135,14 @@ Ask this once the first CV and letter pass their checks, before step 6. Offer th
 >     c) Other: type it
 >
 > 28. How should we apply?
->     a) **I prepare each application (link, tailored CV, letter, every screening answer); on employers' own sites that allow it I fill the form in your logged-in session; you press Submit everywhere (Recommended)**
->     b) Answer sheets only; you do all the clicking
->     c) Other: type it
+>     a) **I fill each form on employers' own sites in your signed-in browser and stop at the review page; LinkedIn, Seek and Indeed get answer sheets you click through yourself; you approve each batch before I submit anything (Recommended: no account risk)**
+>     b) As (a), and on LinkedIn I also fill Easy Apply forms for you at a human pace, at most 15 a day, after you read the account-risk warning and opt in
+>     c) Answer sheets only; you do all the clicking and submitting
+>     d) Other: type it
 
-Say plainly why the agent does not create accounts or click Apply on Seek, Indeed or LinkedIn: their terms forbid bots and automated tools, and accounts that use them can be suspended (sources in [job-search-and-applications.md](job-search-and-applications.md#site-rules-on-automation)). Passwords, email or phone verification and the final Submit always stay with the candidate. On an employer's own site whose terms allow it, the agent may fill a sign-up form except the password, then the candidate verifies and continues.
+Say plainly why (a) is recommended: LinkedIn, Seek and Indeed forbid bots and automated tools in their terms, and accounts that use them can be restricted (sources in [job-search-and-applications.md](job-search-and-applications.md#site-rules-on-automation)). If the candidate picks (b), show the full opt-in warning from [assisted-apply.md](assisted-apply.md#the-linkedin-opt-in) and record the opt-in only after they confirm it. Passwords, email or phone verification and identity checks always stay with the candidate. On an employer's own site whose terms allow it, the agent may fill a sign-up form except the password, then the candidate verifies and continues.
+
+Before installing anything these choices need, check what is there and ask: [setup.md](setup.md).
 
 ## Example: the first message
 

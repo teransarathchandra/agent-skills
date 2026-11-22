@@ -1,0 +1,38 @@
+{
+  "candidate": {
+    "location": "Colombo, Sri Lanka",
+    "location_search": "Colombo",
+    "nationality": "Sri Lankan",
+    "languages": ["English"],
+    "linkedin": "https://www.linkedin.com/in/example-candidate",
+    "github": "https://github.com/example-candidate"
+  },
+  "countries": {
+    "AU": { "needs_sponsorship": true, "has_work_rights": false, "lives_there": false, "salary": 110000 },
+    "NZ": { "needs_sponsorship": true, "has_work_rights": false, "lives_there": false, "salary": 100000 },
+    "UK": { "needs_sponsorship": true, "has_work_rights": false, "lives_there": false, "salary": 48000 }
+  },
+  "notice": { "text": "One month", "weeks": 4, "start": "One month after an offer" },
+  "years": {
+    "total": 4,
+    "skills": { "typescript": 3, "javascript": 4, "react": 2, "node.js": 2, "c#": 2, ".net": 2, "azure": 1, "sql": 4 },
+    "none": ["aws", "kotlin", "go", "ruby", "php"]
+  },
+  "policy": {
+    "relocate": true,
+    "hybrid_or_onsite_ok": true,
+    "has_degree": true,
+    "worked_here_before": false,
+    "referred": false,
+    "has_clearance": false,
+    "background_check_ok": true,
+    "disability_scheme": false,
+    "needs_adjustments": false,
+    "currently_employed": false,
+    "privacy_consent": true,
+    "marketing_contact": false
+  },
+  "questions": {
+    "non-compete": "No"
+  }
+}
