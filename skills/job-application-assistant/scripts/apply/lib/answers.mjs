@@ -4,7 +4,8 @@
 // The rule of the whole module: answer only what the bank covers. Anything else comes back
 // as `null`, and the caller reports it to the agent, which asks the candidate.
 
-const hasKey = (q, k) => new RegExp('(?<![a-z0-9])' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![a-z0-9])').test(q);
+// '#' and '+' belong to names such as C# and C++, so they never end a word here.
+const hasKey = (q, k) => new RegExp('(?<![a-z0-9#+])' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![a-z0-9#+])').test(q);
 const norm = (s) => String(s || '').replace(/\s+/g, ' ').trim();
 const low = (s) => norm(s).toLowerCase();
 
@@ -149,9 +150,9 @@ const FAMILY_WORDS = {
   'cybersecurity': /security|cyber|infosec/,
   'technical-writing': /technical writ|documentation|technical communication/,
   'product-management': /product (management|manager|owner)/,
-  'project-delivery': /project (management|delivery|manager|coordinat)|program(me)? management|delivery management|scrum|agile/,
+  'project-delivery': /project (management|delivery|manager|coordinat)|program(me)? management|delivery management|scrum master|scrum|agile/,
   'business-analysis': /business analy/,
-  'ux-ui-design': /\bux\b|\bui\b|ux\/ui|ui\/ux|user experience|product design|interaction design/,
+  'ux-ui-design': /(?:ux|ui|ux\/ui|ui\/ux) design|\bux\b|\bui\b|ux\/ui|ui\/ux|user experience|product design|interaction design/,
   'it-customer-support': /support|service desk|help ?desk|it support|technical support|desktop support|customer (service|support|success)/,
   'hr-recruiting': /recruit|talent acquisition|\bhr\b|human resources|people operations/,
   'sales-account-management': /sales|account management|business development/,
@@ -160,10 +161,10 @@ const FAMILY_WORDS = {
   'operations-admin': /operations|administrat|office (management|administration)/,
 };
 
-// "years of <family word> ... experience": the family word opens the phrase, at most two more
-// words follow, and none of them is a connector ("learning and development", "infrastructure as code").
+// "years of <family wording> experience": the family wording sits directly before "experience".
+// Another word in between names a specific skill ("financial modeling"), which the bank must cover.
 const familyPhrase = (family) => new RegExp('\\bof\\s+(?:(?:relevant|professional|work|hands-on|industry|commercial|direct|paid|full-time)\\s+)?(?:'
-  + family.source + ')[\\w/+-]*(?:\\s+(?!(?:with|using|on|in|as|and|or|for|at)\\b)[\\w/+-]+){0,2}\\s+experience\\b');
+  + family.source + ')[\\w/+-]*\\s+experience\\b');
 
 const isNum = (v) => (typeof v === 'number' && Number.isFinite(v)) || (typeof v === 'string' && /^\d+(\.\d+)?$/.test(v.trim()));
 const plain = (o) => (o && typeof o === 'object' && !Array.isArray(o) ? o : {});
@@ -305,8 +306,13 @@ function noticeWeeks(s) {
 /** The notice option for the bank's notice, or null when no option matches it closely. */
 function noticeOption(opts, notice) {
   if (!notice) return null;
-  const weeks = typeof notice.weeks === 'number' ? notice.weeks : (noticeWeeks(notice.text || '') || [])[0];
-  if (weeks === undefined) return null;
+  const given = isNum(notice.weeks) ? [Number(notice.weeks), Number(notice.weeks)] : noticeWeeks(notice.text || '');
+  if (!given) return null;
+  // A range ("less than 2 weeks") is not a fixed notice: only the same range on the form matches it.
+  if (given[0] !== given[1]) {
+    return opts.find((o) => { const r = noticeWeeks(o); return r && r[0] === given[0] && r[1] === given[1]; }) || null;
+  }
+  const weeks = given[0];
   if (weeks === 0) return opts.find((o) => IMMEDIATE.test(low(o))) || null;
   const parsed = opts.map((o) => [o, noticeWeeks(o)]).filter(([, r]) => r && !(r[0] === 0 && r[1] === 0));
   const within = parsed.filter(([, [a, b]]) => a !== b && weeks >= a && weeks <= b);

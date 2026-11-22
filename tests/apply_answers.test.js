@@ -281,3 +281,34 @@ test('experience type guards: null total and a non-array none', async () => {
   assert.equal(experienceOf({ experience: { total_years: 5, items: {}, none: 'AWS' } }).none.length, 0);
   assert.equal(years('How many years of experience do you have with a CRM?', { experience: { total_years: 5, items: {}, none: 'AWS' } }), null);
 });
+
+test('PR review: notice ranges are kept, not read as no notice', async () => {
+  const { pickOption } = await import(MODULE);
+  const opts = ['Select an option', 'Immediately', 'Less than 2 weeks', '1 month', '2 months'];
+  const ranged = { ...bank, notice: { text: 'Less than 2 weeks' } };
+  assert.equal(pickOption('What is your notice period?', opts, ranged, 'UK'), 'Less than 2 weeks');
+  assert.equal(pickOption('What is your notice period?', ['Select an option', 'Immediately', '1 month'], ranged, 'UK'), null);
+  const textWeeks = { ...bank, notice: { weeks: '4' } };
+  assert.equal(pickOption('What is your notice period?', opts, textWeeks, 'UK'), '1 month');
+});
+
+test('PR review: a family word followed by a specific skill is asked, not answered with the total', async () => {
+  const { years } = await import(MODULE);
+  const fin = { role_family: 'finance-accounting', experience: { total_years: 8, items: {} } };
+  assert.equal(years('How many years of financial modeling experience do you have?', fin), null);
+  assert.equal(years('How many years of accounting experience do you have?', fin), '8');
+  const ux = { role_family: 'ux-ui-design', experience: { total_years: 5, items: {} } };
+  assert.equal(years('How many years of UX design experience do you have?', ux), '5');
+  const pd = { role_family: 'project-delivery', experience: { total_years: 6, items: {} } };
+  assert.equal(years('How many years of Scrum Master experience do you have?', pd), '6');
+});
+
+test('PR review: a one-letter key does not match C# or C++', async () => {
+  const { years } = await import(MODULE);
+  const c = { experience: { total_years: 6, items: { c: 3 } } };
+  assert.equal(years('How many years of work experience do you have with C#?', c), null);
+  assert.equal(years('How many years of work experience do you have with C++?', c), null);
+  assert.equal(years('How many years of work experience do you have with C?', c), '3');
+  const none = { experience: { total_years: 6, items: {}, none: ['c'] } };
+  assert.equal(years('How many years of work experience do you have with C#?', none), null);
+});
