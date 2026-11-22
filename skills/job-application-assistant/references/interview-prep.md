@@ -1,6 +1,6 @@
 # Interview preparation
 
-Interviewers ask about every line on the CV. Prepare from the same evidence the CV was built from, so the candidate tells the same true story in the room.
+Interviewers ask about every line on the CV. Prepare from the same evidence the CV was built from, so the candidate tells the same true story in the room. The role profile in [roles/](roles/) lists the questions and exercises common for that role. A candidate who was laid off also prepares the short answer in [layoff.md](layoff.md#explaining-the-layoff).
 
 ## STAR stories
 
@@ -21,7 +21,7 @@ For every gap the cover letter named, prepare one honest answer: what the candid
 
 ## Questions to ask the employer
 
-Prepare three or four that the ad does not answer, for example how the team ships and reviews code, what the first three months look like, how on-call works, and, for candidates abroad, how the visa or contractor arrangement would work in practice.
+Prepare three or four that the ad does not answer, for example how the team ships and reviews its work (code for an engineer, test plans for QA, month-end close for finance), what the first three months look like, how the role is measured, and, for candidates abroad, how the visa or contractor arrangement would work in practice.
 
 ## Logistics
 

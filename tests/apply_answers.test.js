@@ -6,6 +6,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 
@@ -155,4 +156,12 @@ test('credential and fallback matching stays tight', async () => {
   assert.equal(yesNo('Do you have a Cisco certification?', qa, 'UK'), null);
   const sh = { experience: { total_years: 4, items: { ci: 2 } } };
   assert.equal(years('How many years of experience do you have with Cisco networking?', sh), null);
+});
+
+test('example QA bank answers its own questions', async () => {
+  const { years, yesNo } = await import(MODULE);
+  const file = path.join(__dirname, '..', 'skills', 'job-application-assistant', 'assets', 'answers.example-qa.json');
+  const qa = JSON.parse(fs.readFileSync(file, 'utf8'));
+  assert.notEqual(years('How many years of work experience do you have with Selenium?', qa), null);
+  assert.notEqual(yesNo('Do you hold an ISTQB certification?', qa, 'UK'), null);
 });

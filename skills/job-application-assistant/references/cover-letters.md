@@ -25,13 +25,15 @@ Read the full text, not the summary card. Note:
 ## Structure (one page, about 250–400 words)
 
 1. **Why this job.** One or two sentences tied to something specific in the ad: the product, the customers, the way the team works.
-2. **Evidence.** Map the candidate's real work to the top two or three requirements. Name the technology the ad names. Use the CV's facts; add no new claims.
+2. **Evidence.** Map the candidate's real work to the top two or three requirements. Name the skill, tool or method the ad names (for an engineer a technology; for a finance or HR role, the system or process). The role profile in [roles/](roles/) lists what readers of that role look for. Use the CV's facts; add no new claims.
 3. **Something extra.** A publication, an open-source project, a certification, or a domain match ("much of my work has been for the same kinds of customers you serve").
 4. **Gaps, stated plainly.** "I have not yet worked with [TECHNOLOGY]; I would approach it by ..." Honest gaps read better than a bluff an interviewer will find.
 5. **Logistics.** Current location, work rights, relocation, the remote-contractor option while a visa is processed, notice period, time-zone overlap with the employer's city.
 6. **Close.** One sentence asking for a conversation.
 
 ## Logistics sentence patterns
+
+For a job in the country where the candidate lives and has full work rights, leave out the visa and relocation sentence; give notice period and start date only. If the candidate was laid off and the letter touches on it, follow [layoff.md](layoff.md#explaining-the-layoff).
 
 - Needs sponsorship, will relocate: "I am based in [CITY, COUNTRY] and would need visa sponsorship to join you in [EMPLOYER CITY]; I am ready to relocate."
 - Remote start: "If it helps while a visa is processed, I can start remotely as a contractor, since a [CANDIDATE CITY] working day overlaps the [EMPLOYER CITY] afternoon."

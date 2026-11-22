@@ -1,3 +1,4 @@
+import json
 import re
 import unittest
 from pathlib import Path
@@ -179,6 +180,17 @@ class SkillLinkTests(unittest.TestCase):
         for target in expected:
             with self.subTest(target=target):
                 self.assertIn(target, targets, f"SKILL.md does not link {target}")
+
+
+class ExampleBankTests(unittest.TestCase):
+    def test_example_banks_are_valid(self):
+        assets = REFERENCES.parent / "assets"
+        stems = {path.stem for path in ROLES.glob("*.md")}
+        for name in ("answers.example.json", "answers.example-qa.json"):
+            with self.subTest(bank=name):
+                bank = json.loads((assets / name).read_text(encoding="utf-8"))
+                self.assertIn(bank.get("role_family"), stems)
+                self.assertTrue(bank.get("experience", {}).get("items"), "experience.items is missing or empty")
 
 
 if __name__ == "__main__":
