@@ -54,6 +54,13 @@ TECH_STEMS = (
     "technical-writing",
 )
 
+PRODUCT_DELIVERY_STEMS = (
+    "product-management",
+    "project-delivery",
+    "business-analysis",
+    "ux-ui-design",
+)
+
 
 def assert_profile(case, stem):
     """Check one role profile has every PROFILE_SECTIONS heading in order and a checked Sources section."""
@@ -84,6 +91,13 @@ class TechProfileTests(unittest.TestCase):
             with self.subTest(stem=stem):
                 text = (ROLES / f"{stem}.md").read_text(encoding="utf-8")
                 self.assertIn("Checked 2026-11", section(text, "## Sources") or "")
+
+
+class ProductDeliveryProfileTests(unittest.TestCase):
+    def test_product_delivery_profiles_have_every_section(self):
+        for stem in PRODUCT_DELIVERY_STEMS:
+            with self.subTest(stem=stem):
+                assert_profile(self, stem)
 
 
 class LayoffReferenceTests(unittest.TestCase):
