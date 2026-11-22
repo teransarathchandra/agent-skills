@@ -4,7 +4,7 @@
 
 - Triage, and remote work from another country
 - Scams and ghost jobs
-- Site rules on automation (LinkedIn, Seek, Indeed, employer sites)
+- Site rules on automation (LinkedIn, Seek, Indeed, employer sites; assisted mode by opt-in)
 - Job sites by region
 - Profile sync
 - Filling in an application (screening questions, AI use, diversity questions)
@@ -48,14 +48,14 @@ Signs of a ghost job (an ad with no real vacancy behind it): reposted unchanged 
 
 ## Site rules on automation
 
-Some job sites forbid bots and automated tools in their terms of use. Before steps 6 and 7 on a site, check its terms. Where automation is not allowed, prepare an answer sheet (every screening answer, the files to attach, the letter text) and the candidate fills the form; for a profile, an edit sheet instead (see below). Where it is allowed, the agent works in the candidate's own logged-in session, at human pace, one application at a time, and never scrapes search results in bulk.
+Some job sites forbid bots and automated tools in their terms of use. Before steps 6 and 7 on a site, check its terms. Where automation is not allowed, the default is an answer sheet (every screening answer, the files to attach, the letter text) and the candidate fills the form; for a profile, an edit sheet instead (see below). The candidate may opt in to assisted mode on such a site after a plain warning about the account risk ([assisted-apply.md](assisted-apply.md#the-linkedin-opt-in)). Wherever the agent works, it uses the candidate's own signed-in session, at human pace, one application at a time.
 
 | Site | What its terms say | So the agent |
 |---|---|---|
-| LinkedIn | User Agreement 8.2 bars bots and other automated methods | Prepares; the candidate edits the profile and applies |
+| LinkedIn | User Agreement 8.2 bars bots and other automated methods | Prepares; the candidate edits the profile and applies. With the candidate's opt-in: assisted mode, capped at 10 to 15 a day |
 | Seek (also JobStreet and Jobsdb) | Website Terms 9(b): no automated process, script, tool or bot to access, search or collect information, except through an API Seek provides | Prepares; the candidate creates the account and applies |
 | Indeed | Terms of Service A.3: no automation, scripting or bots to automate Indeed Apply, except Indeed's own tools; the candidate must review and adopt all content before submitting | Prepares; the candidate applies, or switches on Indeed's own Apply For Me in their account if it is offered |
-| An employer's own careers site | Varies; read the site's terms | Fills the form in the candidate's logged-in session where allowed; stops before Submit |
+| An employer's own careers site | Varies; read the site's terms | Fills the form in the candidate's logged-in session where allowed; submits only after batch approval |
 
 Creating an account counts too: on these sites the candidate signs up. The agent supplies a setup sheet (headline, summary, skills, the CV to upload, the visibility settings to pick) so it takes minutes. Passwords and email or phone verification are always the candidate's.
 
@@ -79,7 +79,7 @@ Read each site's terms before steps 6 and 7; the table above covers only the sit
 
 Job sites send the profile with the application, so it must agree with the CV.
 
-1. Read the whole profile: roles, dates, descriptions, education, certifications, skills, location, phone. Where the site forbids automated tools (LinkedIn does), do not open the profile with the browser tool: ask the candidate for the text or the site's own PDF export, and in step 4 give them an edit sheet (each field, its current text, the new text) to make the changes themselves.
+1. Read the whole profile: roles, dates, descriptions, education, certifications, skills, location, phone. Where the site forbids automated tools (LinkedIn does) and the candidate has not opted in, do not open the profile with the browser tool: ask the candidate for the text or the site's own PDF export, and in step 4 give them an edit sheet (each field, its current text, the new text) to make the changes themselves. With the opt-in, read and edit it with the engine's `profile` commands ([assisted-apply.md](assisted-apply.md#profile-edits-in-assisted-mode)).
 2. List what is wrong or missing, for example:
    - a past role still marked "Present";
    - a completed degree shown as "in progress" or "expected";
@@ -98,15 +98,15 @@ Job sites send the profile with the application, so it must agree with the CV.
 3. **Screening questions.**
    - Work rights: pick the option that matches the truth ("I require sponsorship to work for a new employer").
    - Years of experience: count from the first professional role, and stay inside the evidence.
-   - Salary: give the market rate for that role and city in the local currency, inside the ad's range if it gives one. Never use the candidate's current pay from their home country, and never write it down.
+   - Salary: the candidate's figure for that country from the answer bank. With no figure for the country, ask with a recommended market level for that role and city; never convert another country's figure. Many forms accept only a number. Current pay only if the candidate chose to give it, typed for that form and never written down.
    - Use of AI: before drafting, look for the employer's AI policy (in the ad, the careers pages or the application's terms); most candidates never check, and some employers reject applications that break it. When a form asks whether AI helped, answer truthfully as the candidate chose at intake (recommended: "AI helped draft; I reviewed and confirmed every line"). If the employer forbids AI help, stop and ask the candidate how to proceed.
    - Voluntary diversity questions (gender, ethnicity, disability, veteran status): use the candidate's intake choice; the default is "Prefer not to say". Never infer an answer from a name, photo or anything else.
    - References: give names only with the candidate's say-so; usually "available on request".
    - Anything you cannot answer from evidence: stop and ask, with options and a recommendation (see [intake.md](intake.md)).
 4. **External forms.** Some ads redirect to the employer's or recruiter's own system. Fill it in the same way. Choose "overseas" or "other" for state or region when the candidate is abroad.
 5. **Identity or work-rights checks.** If the site requires identity verification before applying, stop. The candidate does it, because it involves their ID documents.
-6. **Stop before Submit.** Leave consent checkboxes and the Submit button to the candidate. Report what is filled in.
-7. **After submit**, confirm the job appears in the applied list.
+6. **Stop at the review page.** Check the attached CV's file name and the letter's opening, then add the job to the batch report ([assisted-apply.md](assisted-apply.md#the-batch-report)). Tick a required privacy-notice box only if the candidate agreed at intake; leave marketing and "follow company" boxes off.
+7. **Submit only what the candidate approved**, after re-checking the review page, then confirm the site's own confirmation message and that the job appears in the applied list.
 
 ## After applying
 

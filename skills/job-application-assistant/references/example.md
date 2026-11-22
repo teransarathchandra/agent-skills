@@ -57,9 +57,9 @@ With the CV and the first letter passing their checks, the agent asks:
 >
 > 26. Where should we apply? (pick any) a) **Employers' own careers pages (Recommended: no middleman, fewest scams)** b) **Seek (Recommended for Australia)** c) **LinkedIn (Recommended)** d) Indeed e) Other: type a site
 > 27. Accounts? a) **You create any you don't have, with my setup sheet (Recommended: about ten minutes per site)** b) You have them all c) Other: type it
-> 28. How should we apply? a) **I prepare each application and fill employers' own forms where allowed; you press Submit everywhere (Recommended)** b) Answer sheets only c) Other: type it
+> 28. How should we apply? a) **I fill employers' own forms to the review page, give you answer sheets for Seek, LinkedIn and Indeed, and submit only the batches you approve (Recommended: no account risk)** b) As (a), plus LinkedIn Easy Apply filled for you after you read the account-risk warning and opt in c) Answer sheets only d) Other: type it
 >
-> I can't create the Seek, LinkedIn or Indeed accounts or click Apply there for you: their terms forbid bots and automated tools, and accounts that use them can be suspended. The setup sheet makes it quick.
+> Seek, LinkedIn and Indeed forbid bots and automated tools in their terms, and accounts that use them can be restricted, so (a) keeps me off those sites. The setup sheet makes the accounts quick.
 
 **Candidate:** `ok, 26a,b,c,d`
 
@@ -69,15 +69,20 @@ The agent writes a setup sheet per site (headline, summary, skills, which CV to 
 
 | Job | Employer | Fit | Work-rights clause | CV and letter | Applied | Follow up | Status |
 |---|---|---|---|---|---|---|---|
-| Senior .NET Developer | Example Logistics | Strong: C#, Azure, SQL Server (keywords 7/8) | None stated | `CV_A4.docx`, `Letter_Example_Logistics.docx` | – | – | Ready for your Submit |
+| Senior .NET Developer | Example Logistics | Strong: C#, Azure, SQL Server (keywords 7/8) | None stated | `CV_A4.pdf`, `Letter_Example_Logistics.pdf` | – | – | Awaiting approval |
 | .NET Engineer | Example Health | Good: C#, .NET (keywords 5/8) | "Full Australian working rights" | – | – | – | Skipped: needs full working rights |
-| Software Engineer (remote) | Example Software | Strong: C#, React | Remote, contractor accepted | `CV_A4.docx`, `Letter_Example_Software.docx` | 17 Nov 2026 | 28 Nov 2026 | Submitted by you |
+| Software Engineer (remote) | Example Software | Strong: C#, React | Remote, contractor accepted | `CV_A4.pdf`, `Letter_Example_Software.pdf` | 17 Nov 2026 | 28 Nov 2026 | Submitted |
 | Backend Developer | "Example Careers" | – | – | – | – | – | Skipped: recruiter asked for a fee to "process the visa" (scam pattern) |
 
-## 5. Stop before Submit
+## 5. Batch report
 
-> **Senior .NET Developer, Example Logistics: ready for your Submit.**
+> **1. Senior .NET Developer, Example Logistics (Sydney): on its review page.**
 > Filled in: name, email, phone, location (Overseas), profile URL.
-> Attached: `CV_A4.docx` (uploaded today 10:42; the old 2023 CV the site pre-selected is not selected) and `Letter_Example_Logistics.docx`.
-> Screening answers: right to work, "I require sponsorship"; years with C#, 6; salary expectation, the market rate for Sydney inside the ad's range; "Did you use AI?", "AI helped draft; I reviewed and confirmed every line" (your intake choice).
-> Left for you: the privacy-consent box and Submit.
+> Attached: `CV_A4.pdf` (the old 2023 CV the site pre-selected is no longer selected) and `Letter_Example_Logistics.pdf`.
+> Screening answers: right to work, "I require sponsorship"; years with C#, 6; expected salary, 120000 (your Australia figure); "Did you use AI?", "AI helped draft; I reviewed and confirmed every line" (your intake choice). Privacy notice ticked (your intake choice); job alerts left off.
+>
+> Reply `submit all`, `submit 1`, or change an answer (`1: notice = 2 weeks`).
+
+**Candidate:** `submit 1`
+
+The agent re-opens the form, checks the review page still matches, submits, and records the site's confirmation message in the tracker.

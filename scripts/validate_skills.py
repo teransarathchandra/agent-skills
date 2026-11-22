@@ -192,7 +192,7 @@ def validate_skill(skill_dir: Path, errors: list[str]) -> None:
     check_references(skill_dir, errors)
     check_evals(skill_dir, name or skill_dir.name, errors)
     for file in sorted(skill_dir.rglob("*")):
-        if file.is_file() and file.suffix in SCANNED_SUFFIXES:
+        if file.is_file() and file.suffix in SCANNED_SUFFIXES and "node_modules" not in file.parts:
             check_privacy(file, file.read_text(encoding="utf-8"), errors)
 
 
