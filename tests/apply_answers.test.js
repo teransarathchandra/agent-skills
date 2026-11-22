@@ -133,7 +133,7 @@ test('experience wins per key', async () => {
 });
 test('credentials answer from items', async () => {
   const { years, yesNo } = await import(MODULE);
-  const qa = { role_family: 'qa-testing', experience: { total_years: 4, items: { selenium: 3, istqb: true, jmeter: 1 } }, policy: {} };
+  const qa = { role_family: 'qa-testing', experience: { total_years: 4, items: { selenium: 3, 'istqb foundation level': true, jmeter: 1 } }, policy: {} };
   assert.equal(years('How many years of work experience do you have with Selenium?', qa), '3');
   assert.equal(yesNo('Do you hold an ISTQB certification?', qa, 'UK'), 'Yes');
   assert.equal(yesNo('Are you a Certified ScrumMaster (CSM)?', qa, 'UK'), null);
@@ -164,4 +164,120 @@ test('example QA bank answers its own questions', async () => {
   const qa = JSON.parse(fs.readFileSync(file, 'utf8'));
   assert.notEqual(years('How many years of work experience do you have with Selenium?', qa), null);
   assert.notEqual(yesNo('Do you hold an ISTQB certification?', qa, 'UK'), null);
+});
+
+test('a credential answers only at the level held', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = (items, policy = {}) => ({ experience: { total_years: 9, items }, policy });
+  const qa = b({ 'istqb foundation level': true });
+  assert.equal(yesNo('Do you hold an ISTQB certification?', qa, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold the ISTQB Foundation Level certificate?', qa, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold ISTQB Advanced Test Analyst?', qa, 'UK'), null);
+  assert.equal(yesNo('Do you hold ISTQB Advanced Test Analyst?', b({ istqb: true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold PRINCE2 Practitioner?', b({ prince2: true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold PRINCE2 Practitioner?', b({ 'prince2 foundation': true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold PRINCE2 Practitioner?', b({ 'prince2 practitioner': true }), 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold PSM II?', b({ psm: true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold PSM II?', b({ 'psm i': true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold PSM I?', b({ 'psm i': true }), 'UK'), 'Yes');
+  assert.equal(yesNo('Do you have ITIL 4 Managing Professional?', b({ itil: true }), 'UK'), null);
+  assert.equal(yesNo('Do you have ITIL 4 Managing Professional?', b({ 'itil 4 foundation': true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold CIPD Level 7 (Chartered)?', b({ cipd: true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold CIPD Level 7 (Chartered)?', b({ 'cipd level 5': true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold CIPD Level 5?', b({ 'cipd level 5': true }), 'UK'), 'Yes');
+  // The longest key decides: a specific "No" beats a generic "Yes".
+  const two = b({ 'istqb foundation level': true, 'istqb advanced level': false });
+  assert.equal(yesNo('Do you hold ISTQB Advanced Level?', two, 'UK'), 'No');
+  // "No ISTQB at all" answers No to every level.
+  assert.equal(yesNo('Do you hold ISTQB Advanced Test Analyst?', b({ istqb: false }), 'UK'), 'No');
+});
+
+test('clearance goes through policy.has_clearance, never a credential key, and never a level not held', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = (items, policy = {}) => ({ experience: { total_years: 9, items }, policy });
+  assert.equal(yesNo('Do you hold active DV (Developed Vetting) clearance?', b({ clearance: true }), 'UK'), null);
+  assert.equal(yesNo('Do you currently hold Top Secret clearance?', b({ clearance: true }), 'US'), null);
+  assert.equal(yesNo('Do you hold active DV (Developed Vetting) clearance?', b({}, { has_clearance: true }), 'UK'), null);
+  assert.equal(yesNo('Do you hold active DV (Developed Vetting) clearance?', b({}, { has_clearance: false }), 'UK'), 'No');
+  assert.equal(yesNo('Do you hold a current security clearance?', b({}, { has_clearance: true }), 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold SC clearance?', { ...b({}, { has_clearance: true }), questions: { 'sc clearance': 'Yes' } }, 'UK'), 'Yes');
+});
+
+test('total years answer only the candidate\'s own field', async () => {
+  const { years } = await import(MODULE);
+  const hr = { role_family: 'hr-recruiting', experience: { total_years: 8, items: { workday: 4, greenhouse: 3 }, none: [] } };
+  assert.equal(years('How many years of software development experience do you have?', hr), null);
+  assert.equal(years('How many years of professional experience with SAP SuccessFactors do you have?', hr), null);
+  assert.equal(years('How many years of learning and development experience do you have?', hr), null);
+  const mk = { role_family: 'marketing', experience: { total_years: 6, items: { hubspot: 3 } } };
+  assert.equal(years('How many years of web analytics experience do you have?', mk), null);
+  const eng = { role_family: 'software-engineering', experience: { total_years: 4, items: { typescript: 3 } } };
+  assert.equal(years('How many years of professional experience with Rust do you have?', eng), null);
+  assert.equal(years('How many years of software development experience do you have?', eng), '4');
+  assert.equal(years('How many years of professional experience do you have?', eng), '4');
+  const old = { years: { total: 5, skills: { typescript: 4 } } };
+  assert.equal(years('How many years of professional experience with Rust do you have?', old), null);
+  assert.equal(years('How many years of web development experience do you have?', old), '5');
+});
+
+test('the bank\'s own keys answer before aliases; family wording counts for every role', async () => {
+  const { years } = await import(MODULE);
+  const b = (f, items) => ({ role_family: f, experience: { total_years: 9, items } });
+  assert.equal(years('How many years of experience do you have with Node.js?', b('software-engineering', { node: 3 })), '3');
+  assert.equal(years('How many years of experience do you have with REST APIs?', b('software-engineering', { 'rest apis': 4 })), '4');
+  assert.equal(years('How many years of stakeholder management experience do you have?', b('project-delivery', { 'stakeholder management': 6, 'project management': 5 })), '6');
+  assert.equal(years('How many years of experience in account management do you have?', b('sales-account-management', { 'account management': 4 })), '4');
+  assert.equal(years('How many years of experience with vendor management?', b('operations-admin', { 'vendor management': 3 })), '3');
+  assert.equal(years('How many years of experience with Salesforce Marketing Cloud?', b('marketing', { 'salesforce marketing cloud': 2 })), '2');
+  assert.equal(years('How many years of experience with PostgreSQL?', b('software-engineering', { postgres: 2 })), '2');
+  assert.equal(years('How many years of experience with database design?', b('data-analytics', { sql: 4 })), null);
+  assert.equal(years('How many years of people management experience do you have?', b('hr-recruiting', { workday: 4 })), null);
+  const fam = (f) => ({ role_family: f, experience: { total_years: 5, items: {}, none: [] } });
+  for (const [f, q] of [
+    ['hr-recruiting', 'How many years of recruiting experience do you have?'],
+    ['hr-recruiting', 'How many years of recruitment experience do you have?'],
+    ['business-analysis', 'How many years of business analysis experience do you have?'],
+    ['business-analysis', 'How many years of business analyst experience do you have?'],
+    ['operations-admin', 'How many years of administration experience do you have?'],
+    ['ux-ui-design', 'How many years of UX design experience do you have?'],
+    ['it-customer-support', 'How many years of customer service experience do you have?'],
+    ['it-customer-support', 'How many years of IT support experience do you have?'],
+    ['project-delivery', 'How many years of Scrum Master experience do you have?'],
+    ['project-delivery', 'How many years of project management experience do you have?'],
+    ['devops-cloud', 'How many years of cloud engineering experience do you have?'],
+    ['qa-testing', 'How many years of software testing experience do you have?'],
+  ]) assert.equal(years(q, fam(f)), '5', `${f}: ${q}`);
+  assert.equal(years('How many years of clinical research experience do you have?', fam('any-role')), null);
+  assert.equal(years('How many years of recruiting experience with Workday do you have?', fam('hr-recruiting')), null);
+  assert.equal(years('How many years of Python development experience do you have?', fam('software-engineering')), null);
+});
+
+test('marketing-contact consent is not read into skill questions', async () => {
+  const { yesNo } = await import(MODULE);
+  const mk = { role_family: 'marketing', experience: { total_years: 6, items: { hubspot: 3 } }, policy: { marketing_contact: false } };
+  assert.equal(yesNo('Do you have experience in digital marketing?', mk, 'UK'), null);
+  const sales = { role_family: 'sales-account-management', experience: { total_years: 6, items: { salesforce: 4 } }, policy: {} };
+  assert.equal(yesNo('Are you comfortable making outbound phone calls?', sales, 'UK'), null);
+  assert.equal(yesNo('May we contact you about future opportunities by SMS?', sales, 'UK'), 'No');
+  assert.equal(yesNo('Would you like to join our talent community?', sales, 'UK'), 'No');
+});
+
+test('notice options come from the bank\'s notice, not a fixed month', async () => {
+  const { pickOption } = await import(MODULE);
+  const opts = ['Select an option', 'Immediately', '2 weeks', '1 month', '3 months'];
+  const b = (notice) => ({ notice, policy: {}, countries: {} });
+  assert.equal(pickOption('What is your notice period?', ['Available immediately', '2 weeks', '1 month'], b({ text: 'None', weeks: 0 }), 'UK'), 'Available immediately');
+  assert.equal(pickOption('What is your notice period?', opts, b({ text: 'None', weeks: 0 }), 'UK'), 'Immediately');
+  assert.equal(pickOption('What is your notice period?', opts, b({ text: 'Two weeks', weeks: 2 }), 'UK'), '2 weeks');
+  assert.equal(pickOption('What is your notice period?', opts, b({ text: 'One month', weeks: 4 }), 'UK'), '1 month');
+  assert.equal(pickOption('What is your notice period?', opts, b({ text: 'Six weeks', weeks: 6 }), 'UK'), null);
+  assert.equal(pickOption('What is your notice period?', opts, b(undefined), 'UK'), null);
+  assert.equal(pickOption('What is your notice period?', ['Less than 1 month', '1-3 months'], b({ text: 'Two months', weeks: 8 }), 'UK'), '1-3 months');
+});
+
+test('experience type guards: null total and a non-array none', async () => {
+  const { years, experienceOf } = await import(MODULE);
+  assert.equal(years('How many years of work experience do you have?', { experience: { total_years: null, items: {} } }), null);
+  assert.equal(experienceOf({ experience: { total_years: 5, items: {}, none: 'AWS' } }).none.length, 0);
+  assert.equal(years('How many years of experience do you have with a CRM?', { experience: { total_years: 5, items: {}, none: 'AWS' } }), null);
 });
