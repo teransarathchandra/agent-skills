@@ -7,6 +7,17 @@ import path from 'node:path';
 export const HOME = process.env.JAA_HOME || path.join(os.homedir(), '.jaa');
 const FILE = path.join(HOME, 'state.json');
 export const DEFAULT_DAILY_CAP = 15;
+const PORT_FILE = path.join(HOME, 'port');
+
+/** The served browser's debugging port, kept in a 0600 file so only this user can find it. */
+export function savePort(port) {
+  fs.mkdirSync(HOME, { recursive: true, mode: 0o700 });
+  fs.writeFileSync(PORT_FILE, String(port), { mode: 0o600 });
+}
+
+export function readPort() {
+  try { return fs.readFileSync(PORT_FILE, 'utf8').trim() || null; } catch { return null; }
+}
 
 export function load() {
   try { return JSON.parse(fs.readFileSync(FILE, 'utf8')); } catch { return {}; }
