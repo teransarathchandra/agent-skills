@@ -4,6 +4,17 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Fixed
+- `job-application-assistant` 0.5.1, answer rules:
+  - A level word inside a credential's spelled-out name no longer blocks the answer ("PMP (Project Management Professional)", "CISSP (Certified Information Systems Security Professional)"). Bracketed text is judged on its own, so "Professional Scrum Master I (PSM I)" still matches only PSM I.
+  - A versioned credential ("itil 4 foundation") answers level-free and version-free questions ("ITIL Foundation?", "ITIL certification?"), but never a different version ("ITIL v3").
+  - Any key of a credential family answers a plain family question ("Do you hold an ISTQB certification?"), unless the question names another module ("ISTQB Test Manager").
+  - No notice matches an "under 2 weeks" option when the form has no "immediately".
+  - "Experience in object-oriented software development" counts as total years again on 0.4.0 answer banks.
+
+### Added
+- `docs/superpowers/specs/2026-11-23-jaa-roadmap-1.0-design.md`: the roadmap from 0.5.1 to 1.0 (tracker, job sources and sponsor lookup, referrals, interviews and offers).
+
 ### Added
 - `job-application-assistant` 0.5.0: any role, not only engineering. Role profiles for 16 role families plus an any-role fallback (`references/roles/`) cover evidence, ATS keywords, CV shape, portfolio and interview material per family. A QA example bank is included.
 - Layoff guidance (`references/layoff.md`): explaining the layoff, references from the old employer, notice and garden-leave answers for forms (severance is never asked), a weekly pace plan, and visa grace periods for 10 countries from official sources.

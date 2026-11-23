@@ -312,3 +312,35 @@ test('PR review: a one-letter key does not match C# or C++', async () => {
   const none = { experience: { total_years: 6, items: {}, none: ['c'] } };
   assert.equal(years('How many years of work experience do you have with C#?', none), null);
 });
+
+test('0.5.1: a level word inside a credential\'s own name does not block the answer', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = { experience: { items: { pmp: true, cissp: true, 'psm i': true } }, policy: {} };
+  assert.equal(yesNo('Do you hold a PMP (Project Management Professional) certification?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Are you CISSP (Certified Information Systems Security Professional) certified?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold the Professional Scrum Master I (PSM I) certification?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold the Professional Scrum Master II (PSM II) certification?', b, 'UK'), null);
+});
+
+test('0.5.1: versioned credential keys answer general questions but never another version', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = { experience: { items: { 'itil 4 foundation': true, 'istqb advanced level test analyst': true } }, policy: {} };
+  assert.equal(yesNo('Do you have an ITIL Foundation certification?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you have an ITIL certification?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold ITIL v3 Foundation?', b, 'UK'), null);
+  assert.equal(yesNo('Do you hold an ISTQB certification?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold the ISTQB Test Manager certification?', b, 'UK'), null);
+});
+
+test('0.5.1: no notice matches an under-2-weeks option when there is no "immediately"', async () => {
+  const { pickOption } = await import(MODULE);
+  const b = { ...bank, notice: { weeks: 0 } };
+  assert.equal(pickOption('Notice period', ['Select an option', 'Less than 2 weeks', '1 month', '3 months'], b, 'UK'), 'Less than 2 weeks');
+});
+
+test('0.5.1: general software wording after "in" still counts as total years on a 0.4.0 bank', async () => {
+  const { years } = await import(MODULE);
+  assert.equal(years('How many years of experience do you have in object-oriented software development?', bank), '5');
+  assert.equal(years('How many years of experience do you have in software development?', bank), '5');
+  assert.equal(years('How many years of experience do you have in Kubernetes?', bank), null);
+});

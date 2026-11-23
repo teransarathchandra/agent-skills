@@ -5,7 +5,7 @@ license: MIT
 compatibility: Python 3.9+ for scripts/ats_check.py and scripts/apply/triage.py. Node.js 18+ for scripts/build_letter.js (npm install in scripts/) and the apply engine scripts/apply/jaa.mjs (npm install and npx playwright install chromium there), or a docx skill. A browser tool such as the Playwright MCP for employer forms. LibreOffice or Word for PDFs and page counts. A work tracker (Jira MCP) is optional.
 metadata:
   author: teransarathchandra
-  version: "0.5.0"
+  version: "0.5.1"
 ---
 
 # Job application assistant

@@ -75,31 +75,57 @@ const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const levelWords = (s) => (s.match(LEVEL_WORDS) || []).map((w) => w.replace(/ship$/, '').replace(/\s+/g, ' '));
 const stripLevels = (s) => norm(s.replace(LEVEL_WORDS, ' ').replace(/\blevel\b/g, ' '));
 
-/** A boolean credential split into its name and the levels it was recorded at. */
+const VERSION = /^v?\d+(\.\d+)?$/;
+// Words a level-free family question may contain after the credential name ("ISTQB certification?").
+const FAMILY_FILLER = /^(certif\w*|qualif\w*|credential\w*|exam|any|current|valid|active|accredit\w*|licen[cs]e\w*)$/;
+
+/** A boolean credential split into its name, its version ("itil 4") and the levels it was recorded at. */
 function credentialKey(key) {
   const levels = levelWords(key);
   const words = stripLevels(key).split(' ');
   if (words.length > 1 && ROMAN.test(words[words.length - 1])) levels.push('r:' + words.pop());
-  return { base: words.join(' '), levels };
+  const ver = words.find((w) => VERSION.test(w));
+  const bare = words.filter((w) => !VERSION.test(w));
+  return { base: words.join(' '), bare: bare.join(' '), family: bare[0] || '', ver: ver ? ver.replace(/^v/, '') : undefined, levels };
 }
 
 /**
  * 'Yes' or 'No' from the boolean items for a credential question, null when the question names
  * a level the matching key lacks, undefined when no key names the credential. The longest
- * matching key decides.
+ * matching key decides. Bracketed text is judged on its own: "PMP (Project Management
+ * Professional)" expands a name, so "Professional" there is not a level.
  */
 function credential(q, items) {
+  const outside = norm(q.replace(/\([^)]*\)/g, ' '));
+  for (const text of [outside, ...[...q.matchAll(/\(([^)]*)\)/g)].map((m) => m[1])]) {
+    const r = credentialIn(text, items);
+    if (r !== undefined) return r;
+  }
+  return undefined;
+}
+
+function credentialIn(q, items) {
   const qBase = stripLevels(q);
   const qWords = levelWords(q);
-  const keys = Object.entries(items)
-    .filter(([, v]) => typeof v === 'boolean')
-    .map(([k, v]) => ({ ...credentialKey(k), v }))
-    .filter((c) => c.base && hasKey(qBase, c.base))
-    .sort((a, b) => b.base.length - a.base.length || b.levels.length - a.levels.length);
+  const all = Object.entries(items).filter(([, v]) => typeof v === 'boolean').map(([k, v]) => ({ ...credentialKey(k), v }));
+  // By name, then by the name without its version ("itil 4 foundation" answers "ITIL Foundation?").
+  let keys = all.filter((c) => c.base && (hasKey(qBase, c.base) || (c.ver && c.bare && hasKey(qBase, c.bare))));
+  // A level-free question about the whole family ("Do you hold an ISTQB certification?") is
+  // answered by any key of that family, as long as it names nothing else after the family name.
+  if (!keys.length && !qWords.length) {
+    keys = all.filter((c) => {
+      if (c.family.length < 3 || !hasKey(qBase, c.family)) return false;
+      const after = qBase.slice(qBase.search(new RegExp('(?<![a-z0-9])' + escapeRe(c.family))) + c.family.length);
+      return after.split(/[^a-z0-9+#]+/).filter((w) => w && !FAMILY_FILLER.test(w)).length === 0;
+    });
+  }
+  keys.sort((a, b) => b.base.length - a.base.length || b.levels.length - a.levels.length);
   if (!keys.length) return undefined;
   for (const c of keys) {
     const roman = qBase.match(new RegExp('(?<![a-z0-9])' + escapeRe(c.base) + '\\s*-?\\s*(i{1,3}|iv|v)(?![a-z0-9])'));
-    const asked = [...qWords, ...(roman ? ['r:' + roman[1]] : [])];
+    // A version named in the question must be the key's own ("ITIL v3" is not "ITIL 4").
+    const v = c.bare && qBase.match(new RegExp('(?<![a-z0-9])' + escapeRe(c.bare) + '\\s*v?(\\d+(?:\\.\\d+)?)(?![a-z0-9])'));
+    const asked = [...qWords, ...(roman ? ['r:' + roman[1]] : []), ...(v && v[1] !== c.ver ? ['ver:' + v[1]] : [])];
     const covered = asked.every((w) => c.levels.includes(w));
     // Held at this level (or a level-free question): Yes. "No" only for the same levels, or a
     // level-free key that says the candidate holds none of this credential.
@@ -198,7 +224,11 @@ export function years(question, bank) {
   for (const [k, v] of own) if (hasKey(q, k)) return v;
   // Role wording ("in this role", "QA experience") counts only when nothing more specific is
   // asked: a "with / using / on / in <thing>" qualifier means a skill the bank does not cover.
-  const unqualified = !/\b(with|using|on|in)\b/.test(q.replace(/\bin (this|a similar|similar|the same) (role|roles|position)\b/g, ''));
+  // General software wording after "in" ("in object-oriented software development") names the
+  // field, not a specific skill, so it does not count as a qualifier.
+  const unqualified = !/\b(with|using|on|in)\b/.test(q
+    .replace(/\bin (this|a similar|similar|the same) (role|roles|position)\b/g, '')
+    .replace(/\bin (?:object.?oriented |full.?stack |web )?(?:software )?(?:development|engineering|programming)\b/g, ' software development '));
   const fam = bank && bank.role_family;
   const family = FAMILY_WORDS[fam];
   // 2. The candidate's own field ("recruiting experience" for an hr-recruiting bank).
@@ -313,7 +343,10 @@ function noticeOption(opts, notice) {
     return opts.find((o) => { const r = noticeWeeks(o); return r && r[0] === given[0] && r[1] === given[1]; }) || null;
   }
   const weeks = given[0];
-  if (weeks === 0) return opts.find((o) => IMMEDIATE.test(low(o))) || null;
+  if (weeks === 0) {
+    const now = opts.find((o) => IMMEDIATE.test(low(o)));
+    if (now) return now;
+  }
   const parsed = opts.map((o) => [o, noticeWeeks(o)]).filter(([, r]) => r && !(r[0] === 0 && r[1] === 0));
   const within = parsed.filter(([, [a, b]]) => a !== b && weeks >= a && weeks <= b);
   if (within.length) return within[0][0];
