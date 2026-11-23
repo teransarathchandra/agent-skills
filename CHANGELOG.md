@@ -9,8 +9,10 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
   - A level word inside a credential's spelled-out name no longer blocks the answer ("PMP (Project Management Professional)", "CISSP (Certified Information Systems Security Professional)"). Bracketed text is judged on its own, so "Professional Scrum Master I (PSM I)" still matches only PSM I.
   - A versioned credential ("itil 4 foundation") answers level-free and version-free questions ("ITIL Foundation?", "ITIL certification?"), but never a different version ("ITIL v3").
   - Any key of a credential family answers a plain family question ("Do you hold an ISTQB certification?"), unless the question names another module ("ISTQB Test Manager").
-  - No notice matches an "under 2 weeks" option when the form has no "immediately".
-  - "Experience in object-oriented software development" counts as total years again on 0.4.0 answer banks.
+  - Only spelled-out acronyms in brackets are treated as names; any other bracket keeps its level or version words ("ITIL (Managing Professional)", "(v3)"). A version written out ("version 3", "2011 edition") is never taken for the key's version. The family fallback only ever answers Yes, never for generic words, and never when the question excludes something ("other than ISTQB").
+  - A credential named after "not", "other than" or similar is not claimed ("PRINCE2 (not PMP)"); any held alternative is ("PRINCE2 (or PMP)"). "ITIL4" matches "itil 4".
+  - No notice matches an "under 2 weeks" option when the form has no "immediately", and never a fixed length such as "1 week".
+  - "Experience in object-oriented software development" counts as total years again on software and 0.4.0 answer banks, only when it ends the question; other role families are not affected.
 
 ### Added
 - `docs/superpowers/specs/2026-11-23-jaa-roadmap-1.0-design.md`: the roadmap from 0.5.1 to 1.0 (tracker, job sources and sponsor lookup, referrals, interviews and offers).
