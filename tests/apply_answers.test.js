@@ -312,3 +312,61 @@ test('PR review: a one-letter key does not match C# or C++', async () => {
   const none = { experience: { total_years: 6, items: {}, none: ['c'] } };
   assert.equal(years('How many years of work experience do you have with C#?', none), null);
 });
+
+test('0.5.1: an excluded credential is never claimed', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = { experience: { items: { pmp: true } }, policy: {} };
+  for (const q of ['Do you hold PRINCE2 (not PMP)?', 'Do you hold a non-PMP certification?', 'Do you hold a project certification other than PMP?']) {
+    assert.equal(yesNo(q, b, 'UK'), null, q);
+  }
+  assert.equal(yesNo('Do you hold PMP? (Not required)', b, 'UK'), 'Yes');
+});
+
+test('0.5.1: "both X and Y" needs every named credential', async () => {
+  const { yesNo } = await import(MODULE);
+  const q = 'Do you hold both PMP and PRINCE2?';
+  assert.equal(yesNo(q, { experience: { items: { pmp: true } }, policy: {} }, 'UK'), null);
+  assert.equal(yesNo(q, { experience: { items: { pmp: true, prince2: false } }, policy: {} }, 'UK'), 'No');
+  assert.equal(yesNo(q, { experience: { items: { pmp: true, prince2: true } }, policy: {} }, 'UK'), 'Yes');
+});
+
+test('0.5.1: more ways of writing a level count as a level', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = { experience: { items: { 'cipd level 5': true } }, policy: {} };
+  for (const q of ['Do you hold CIPD L7?', 'Do you hold CIPD level-7?', 'Do you hold CIPD Level Seven?']) assert.equal(yesNo(q, b, 'UK'), null, q);
+  assert.equal(yesNo('Do you hold CIPD Level 5?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold CIPD L5?', b, 'UK'), 'Yes');
+});
+
+test('0.5.1: a concentration joined by a hyphen is a different credential', async () => {
+  const { yesNo } = await import(MODULE);
+  assert.equal(yesNo('Do you hold the CISSP-ISSAP?', { experience: { items: { cissp: true } }, policy: {} }, 'UK'), null);
+  assert.equal(yesNo('Do you hold the CISSP certification?', { experience: { items: { cissp: true } }, policy: {} }, 'UK'), 'Yes');
+});
+
+test('0.5.1: zero notice picks "immediately", else only a range from zero', async () => {
+  const { pickOption } = await import(MODULE);
+  const b = { ...bank, notice: { weeks: 0 } };
+  assert.equal(pickOption('Notice period', ['Select an option', 'Less than 2 weeks', '1 month'], b, 'UK'), 'Less than 2 weeks');
+  assert.equal(pickOption('Notice period', ['Select an option', '1 week', '2 weeks', '1 month'], b, 'UK'), null);
+  assert.equal(pickOption('Notice period', ['Select an option', 'Immediately', 'Less than 2 weeks'], b, 'UK'), 'Immediately');
+});
+
+test('0.5.1: only the exact general software question counts as total years', async () => {
+  const { years } = await import(MODULE);
+  assert.equal(years('How many years of experience do you have in object-oriented software development?', bank), '5');
+  assert.equal(years('How many years of professional experience do you have in software engineering?', bank), '5');
+  for (const q of ['How many years of Rust experience do you have in software development?', 'How many years of experience do you have in development for iOS?',
+    'How many years of experience do you have in programming languages such as Go?']) assert.equal(years(q, bank), null, q);
+  assert.equal(years('How many years of relevant experience do you have in software development?', { role_family: 'hr-recruiting', experience: { total_years: 6, items: {} } }), null);
+});
+
+test('0.5.1 review: "or" and "and/or" are satisfied by any held credential', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = { experience: { items: { pmp: true, prince2: false } }, policy: {} };
+  assert.equal(yesNo('Do you hold PMP and/or PRINCE2?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold PMP or PRINCE2?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold PMP or PRINCE2?', { experience: { items: { pmp: false, prince2: false } }, policy: {} }, 'UK'), 'No');
+  assert.equal(yesNo('Do you hold PMP or PRINCE2?', { experience: { items: { pmp: false } }, policy: {} }, 'UK'), null);
+  assert.equal(yesNo('Do you hold both PMP and PRINCE2?', b, 'UK'), 'No');
+});

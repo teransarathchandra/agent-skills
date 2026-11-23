@@ -4,6 +4,20 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Fixed
+- `job-application-assistant` 0.5.1: the answer rules only ever get more cautious. A wrong "Yes" on a credential is a false claim on a real application, so every change here turns a possible wrong answer into a question for the candidate, never the reverse.
+  - A credential named after "not", "non-", "other than", "besides", "except" or "instead of" is not claimed ("PRINCE2 (not PMP)", "a non-PMP certification").
+  - "Both PMP and PRINCE2" needs every named credential: Yes only when each is held, No when one is not held, otherwise asked.
+  - "PMP or PRINCE2" and "PMP and/or PRINCE2" are satisfied by any held credential: Yes when one is held, No only when each is known not held, otherwise asked.
+  - Levels written as "L7", "level-7" or "Level Seven" count as levels, so they no longer match a different level.
+  - A concentration joined by a hyphen ("CISSP-ISSAP") is not taken for the base credential.
+  - No notice picks "immediately", otherwise only a range that starts at zero ("Less than 2 weeks"), never a fixed length.
+  - The exact general question ("How many years of experience do you have in object-oriented software development?") counts as total years for software and 0.4.0 answer banks; a named skill before "experience" or after "in" is still asked.
+  - Still asked rather than answered (safe, by design): spelled-out names in brackets ("PMP (Project Management Professional)"), versioned keys against version-free questions ("itil 4 foundation" vs "ITIL Foundation?"), and family questions ("ISTQB certification?").
+
+### Added
+- `docs/superpowers/specs/2026-11-23-jaa-roadmap-1.0-design.md`: the roadmap from 0.5.1 to 1.0 (tracker, job sources and sponsor lookup, referrals, interviews and offers).
+
 ### Added
 - `job-application-assistant` 0.5.0: any role, not only engineering. Role profiles for 16 role families plus an any-role fallback (`references/roles/`) cover evidence, ATS keywords, CV shape, portfolio and interview material per family. A QA example bank is included.
 - Layoff guidance (`references/layoff.md`): explaining the layoff, references from the old employer, notice and garden-leave answers for forms (severance is never asked), a weekly pace plan, and visa grace periods for 10 countries from official sources.

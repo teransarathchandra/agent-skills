@@ -74,11 +74,22 @@ const ROMAN = /^(i{1,3}|iv|v)$/;
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const levelWords = (s) => (s.match(LEVEL_WORDS) || []).map((w) => w.replace(/ship$/, '').replace(/\s+/g, ' '));
 const stripLevels = (s) => norm(s.replace(LEVEL_WORDS, ' ').replace(/\blevel\b/g, ' '));
+const LEVEL_NUMBERS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+// Other ways of writing a level ("L7", "level-7", "Level Seven") read as "level 7".
+const spellLevels = (s) => s
+  .replace(/\bl\s?(\d+)\b/g, 'level $1')
+  .replace(/\blevel-(\d+)\b/g, 'level $1')
+  .replace(/\blevel[\s-](one|two|three|four|five|six|seven|eight|nine|ten)\b/g, (_, w) => 'level ' + LEVEL_NUMBERS[w]);
+// "not PMP", "non-PMP", "other than PMP": the credential named there is not the one asked about.
+const EXCLUDED_BEFORE = '(?:\\bnot\\b|\\bnon-?\\s*|\\bother than\\b|\\bbesides\\b|\\bapart from\\b|\\bexcept\\b|\\binstead of\\b)\\s*(?:[a-z0-9]+\\s+){0,2}';
+// "CISSP-ISSAP": a concentration joined by a hyphen is a different credential (Roman levels excepted).
+const HYPHEN_SUFFIX = '-(?!(?:i{1,3}|iv|v)(?![a-z0-9]))[a-z]{2,}';
 
 /** A boolean credential split into its name and the levels it was recorded at. */
 function credentialKey(key) {
-  const levels = levelWords(key);
-  const words = stripLevels(key).split(' ');
+  const spelled = spellLevels(key);
+  const levels = levelWords(spelled);
+  const words = stripLevels(spelled).split(' ');
   if (words.length > 1 && ROMAN.test(words[words.length - 1])) levels.push('r:' + words.pop());
   return { base: words.join(' '), levels };
 }
@@ -86,15 +97,39 @@ function credentialKey(key) {
 /**
  * 'Yes' or 'No' from the boolean items for a credential question, null when the question names
  * a level the matching key lacks, undefined when no key names the credential. The longest
- * matching key decides.
+ * matching key decides. "Both PMP and PRINCE2" needs every part answered: Yes only when each is
+ * held, No when one is not held, otherwise null.
  */
-function credential(q, items) {
+function credential(question, items) {
+  // "PMP and/or PRINCE2" asks for either, like "PMP or PRINCE2".
+  const q = spellLevels(question).replace(/\band\s*\/\s*or\b/g, ' or ');
+  if (credentialPart(q, items) === undefined) return undefined;
+  const alternatives = q.split(/\bor\b/);
+  if (alternatives.length < 2) return credentialAll(q, items);
+  // Any held alternative answers Yes; No only when every alternative is known not held.
+  const answers = alternatives.map((part) => credentialAll(part, items));
+  if (answers.includes('Yes')) return 'Yes';
+  return answers.every((a) => a === 'No') ? 'No' : null;
+}
+
+/** "Both PMP and PRINCE2": Yes only when every part is held, No when one is not, else null. */
+function credentialAll(q, items) {
+  const parts = q.split(/\band\b|&|\bas well as\b/);
+  if (parts.length < 2) return credentialPart(q, items);
+  const answers = parts.map((part) => credentialPart(part, items));
+  if (answers.includes('No')) return 'No';
+  return answers.every((a) => a === 'Yes') ? 'Yes' : null;
+}
+
+function credentialPart(q, items) {
   const qBase = stripLevels(q);
   const qWords = levelWords(q);
   const keys = Object.entries(items)
     .filter(([, v]) => typeof v === 'boolean')
     .map(([k, v]) => ({ ...credentialKey(k), v }))
     .filter((c) => c.base && hasKey(qBase, c.base))
+    .filter((c) => !new RegExp(EXCLUDED_BEFORE + escapeRe(c.base) + '(?![a-z0-9])').test(qBase))
+    .filter((c) => !new RegExp('(?<![a-z0-9])' + escapeRe(c.base) + HYPHEN_SUFFIX).test(qBase))
     .sort((a, b) => b.base.length - a.base.length || b.levels.length - a.levels.length);
   if (!keys.length) return undefined;
   for (const c of keys) {
@@ -200,6 +235,12 @@ export function years(question, bank) {
   // asked: a "with / using / on / in <thing>" qualifier means a skill the bank does not cover.
   const unqualified = !/\b(with|using|on|in)\b/.test(q.replace(/\bin (this|a similar|similar|the same) (role|roles|position)\b/g, ''));
   const fam = bank && bank.role_family;
+  // The general software question, exactly ("... experience do you have in object-oriented
+  // software development?"), counts as total years for a software bank (or one with no family).
+  if ((!fam || fam === 'software-engineering') && total !== undefined
+    && /^how many years of (?:(?:work|professional|relevant|commercial|industry) )?experience(?: do you have)? in (?:object.?oriented |full.?stack |web )?(?:software )?(?:development|engineering|programming)\??$/.test(q)) {
+    return String(total);
+  }
   const family = FAMILY_WORDS[fam];
   // 2. The candidate's own field ("recruiting experience" for an hr-recruiting bank).
   if (unqualified && family && total !== undefined && familyPhrase(family).test(q)) return String(total);
@@ -313,7 +354,12 @@ function noticeOption(opts, notice) {
     return opts.find((o) => { const r = noticeWeeks(o); return r && r[0] === given[0] && r[1] === given[1]; }) || null;
   }
   const weeks = given[0];
-  if (weeks === 0) return opts.find((o) => IMMEDIATE.test(low(o))) || null;
+  if (weeks === 0) {
+    // No notice: "immediately", else only a range that starts at zero ("Less than 2 weeks").
+    const now = opts.find((o) => IMMEDIATE.test(low(o)));
+    if (now) return now;
+    return opts.find((o) => { const r = noticeWeeks(o); return r && r[0] === 0 && r[1] > 0; }) || null;
+  }
   const parsed = opts.map((o) => [o, noticeWeeks(o)]).filter(([, r]) => r && !(r[0] === 0 && r[1] === 0));
   const within = parsed.filter(([, [a, b]]) => a !== b && weeks >= a && weeks <= b);
   if (within.length) return within[0][0];
