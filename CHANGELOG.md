@@ -8,6 +8,7 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - `job-application-assistant` 0.5.1: the answer rules only ever get more cautious. A wrong "Yes" on a credential is a false claim on a real application, so every change here turns a possible wrong answer into a question for the candidate, never the reverse.
   - A credential named after "not", "non-", "other than", "besides", "except" or "instead of" is not claimed ("PRINCE2 (not PMP)", "a non-PMP certification").
   - "Both PMP and PRINCE2" needs every named credential: Yes only when each is held, No when one is not held, otherwise asked.
+  - "PMP or PRINCE2" and "PMP and/or PRINCE2" are satisfied by any held credential: Yes when one is held, No only when each is known not held, otherwise asked.
   - Levels written as "L7", "level-7" or "Level Seven" count as levels, so they no longer match a different level.
   - A concentration joined by a hyphen ("CISSP-ISSAP") is not taken for the base credential.
   - No notice picks "immediately", otherwise only a range that starts at zero ("Less than 2 weeks"), never a fixed length.

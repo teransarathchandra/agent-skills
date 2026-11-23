@@ -360,3 +360,13 @@ test('0.5.1: only the exact general software question counts as total years', as
     'How many years of experience do you have in programming languages such as Go?']) assert.equal(years(q, bank), null, q);
   assert.equal(years('How many years of relevant experience do you have in software development?', { role_family: 'hr-recruiting', experience: { total_years: 6, items: {} } }), null);
 });
+
+test('0.5.1 review: "or" and "and/or" are satisfied by any held credential', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = { experience: { items: { pmp: true, prince2: false } }, policy: {} };
+  assert.equal(yesNo('Do you hold PMP and/or PRINCE2?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold PMP or PRINCE2?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold PMP or PRINCE2?', { experience: { items: { pmp: false, prince2: false } }, policy: {} }, 'UK'), 'No');
+  assert.equal(yesNo('Do you hold PMP or PRINCE2?', { experience: { items: { pmp: false } }, policy: {} }, 'UK'), null);
+  assert.equal(yesNo('Do you hold both PMP and PRINCE2?', b, 'UK'), 'No');
+});

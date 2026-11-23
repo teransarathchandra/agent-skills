@@ -101,11 +101,21 @@ function credentialKey(key) {
  * held, No when one is not held, otherwise null.
  */
 function credential(question, items) {
-  const q = spellLevels(question);
+  // "PMP and/or PRINCE2" asks for either, like "PMP or PRINCE2".
+  const q = spellLevels(question).replace(/\band\s*\/\s*or\b/g, ' or ');
+  if (credentialPart(q, items) === undefined) return undefined;
+  const alternatives = q.split(/\bor\b/);
+  if (alternatives.length < 2) return credentialAll(q, items);
+  // Any held alternative answers Yes; No only when every alternative is known not held.
+  const answers = alternatives.map((part) => credentialAll(part, items));
+  if (answers.includes('Yes')) return 'Yes';
+  return answers.every((a) => a === 'No') ? 'No' : null;
+}
+
+/** "Both PMP and PRINCE2": Yes only when every part is held, No when one is not, else null. */
+function credentialAll(q, items) {
   const parts = q.split(/\band\b|&|\bas well as\b/);
   if (parts.length < 2) return credentialPart(q, items);
-  const whole = credentialPart(q, items);
-  if (whole === undefined) return undefined;
   const answers = parts.map((part) => credentialPart(part, items));
   if (answers.includes('No')) return 'No';
   return answers.every((a) => a === 'Yes') ? 'Yes' : null;
