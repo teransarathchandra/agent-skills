@@ -313,82 +313,50 @@ test('PR review: a one-letter key does not match C# or C++', async () => {
   assert.equal(years('How many years of work experience do you have with C#?', none), null);
 });
 
-test('0.5.1: a level word inside a credential\'s own name does not block the answer', async () => {
+test('0.5.1: an excluded credential is never claimed', async () => {
   const { yesNo } = await import(MODULE);
-  const b = { experience: { items: { pmp: true, cissp: true, 'psm i': true } }, policy: {} };
-  assert.equal(yesNo('Do you hold a PMP (Project Management Professional) certification?', b, 'UK'), 'Yes');
-  assert.equal(yesNo('Are you CISSP (Certified Information Systems Security Professional) certified?', b, 'UK'), 'Yes');
-  assert.equal(yesNo('Do you hold the Professional Scrum Master I (PSM I) certification?', b, 'UK'), 'Yes');
-  assert.equal(yesNo('Do you hold the Professional Scrum Master II (PSM II) certification?', b, 'UK'), null);
+  const b = { experience: { items: { pmp: true } }, policy: {} };
+  for (const q of ['Do you hold PRINCE2 (not PMP)?', 'Do you hold a non-PMP certification?', 'Do you hold a project certification other than PMP?']) {
+    assert.equal(yesNo(q, b, 'UK'), null, q);
+  }
+  assert.equal(yesNo('Do you hold PMP? (Not required)', b, 'UK'), 'Yes');
 });
 
-test('0.5.1: versioned credential keys answer general questions but never another version', async () => {
+test('0.5.1: "both X and Y" needs every named credential', async () => {
   const { yesNo } = await import(MODULE);
-  const b = { experience: { items: { 'itil 4 foundation': true, 'istqb advanced level test analyst': true } }, policy: {} };
-  assert.equal(yesNo('Do you have an ITIL Foundation certification?', b, 'UK'), 'Yes');
-  assert.equal(yesNo('Do you have an ITIL certification?', b, 'UK'), 'Yes');
-  assert.equal(yesNo('Do you hold ITIL v3 Foundation?', b, 'UK'), null);
-  assert.equal(yesNo('Do you hold an ISTQB certification?', b, 'UK'), 'Yes');
-  assert.equal(yesNo('Do you hold the ISTQB Test Manager certification?', b, 'UK'), null);
+  const q = 'Do you hold both PMP and PRINCE2?';
+  assert.equal(yesNo(q, { experience: { items: { pmp: true } }, policy: {} }, 'UK'), null);
+  assert.equal(yesNo(q, { experience: { items: { pmp: true, prince2: false } }, policy: {} }, 'UK'), 'No');
+  assert.equal(yesNo(q, { experience: { items: { pmp: true, prince2: true } }, policy: {} }, 'UK'), 'Yes');
 });
 
-test('0.5.1: no notice matches an under-2-weeks option when there is no "immediately"', async () => {
+test('0.5.1: more ways of writing a level count as a level', async () => {
+  const { yesNo } = await import(MODULE);
+  const b = { experience: { items: { 'cipd level 5': true } }, policy: {} };
+  for (const q of ['Do you hold CIPD L7?', 'Do you hold CIPD level-7?', 'Do you hold CIPD Level Seven?']) assert.equal(yesNo(q, b, 'UK'), null, q);
+  assert.equal(yesNo('Do you hold CIPD Level 5?', b, 'UK'), 'Yes');
+  assert.equal(yesNo('Do you hold CIPD L5?', b, 'UK'), 'Yes');
+});
+
+test('0.5.1: a concentration joined by a hyphen is a different credential', async () => {
+  const { yesNo } = await import(MODULE);
+  assert.equal(yesNo('Do you hold the CISSP-ISSAP?', { experience: { items: { cissp: true } }, policy: {} }, 'UK'), null);
+  assert.equal(yesNo('Do you hold the CISSP certification?', { experience: { items: { cissp: true } }, policy: {} }, 'UK'), 'Yes');
+});
+
+test('0.5.1: zero notice picks "immediately", else only a range from zero', async () => {
   const { pickOption } = await import(MODULE);
   const b = { ...bank, notice: { weeks: 0 } };
-  assert.equal(pickOption('Notice period', ['Select an option', 'Less than 2 weeks', '1 month', '3 months'], b, 'UK'), 'Less than 2 weeks');
+  assert.equal(pickOption('Notice period', ['Select an option', 'Less than 2 weeks', '1 month'], b, 'UK'), 'Less than 2 weeks');
+  assert.equal(pickOption('Notice period', ['Select an option', '1 week', '2 weeks', '1 month'], b, 'UK'), null);
+  assert.equal(pickOption('Notice period', ['Select an option', 'Immediately', 'Less than 2 weeks'], b, 'UK'), 'Immediately');
 });
 
-test('0.5.1: general software wording after "in" still counts as total years on a 0.4.0 bank', async () => {
+test('0.5.1: only the exact general software question counts as total years', async () => {
   const { years } = await import(MODULE);
   assert.equal(years('How many years of experience do you have in object-oriented software development?', bank), '5');
-  assert.equal(years('How many years of experience do you have in software development?', bank), '5');
-  assert.equal(years('How many years of experience do you have in Kubernetes?', bank), null);
-});
-
-test('0.5.1 review: a level or version in brackets still counts', async () => {
-  const { yesNo } = await import(MODULE);
-  const b = { experience: { items: { 'itil 4 foundation': true, 'aws solutions architect associate': true, 'istqb foundation': true, 'aws developer associate': true } }, policy: {} };
-  for (const q of ['Do you hold ITIL (Managing Professional)?', 'Do you hold AWS Solutions Architect (Professional)?',
-    'Do you hold an ISTQB certification (Advanced Level)?', 'Do you hold ITIL Foundation (v3)?',
-    'Do you hold a Professional-level certification (AWS)?']) assert.equal(yesNo(q, b, 'UK'), null, q);
-});
-
-test('0.5.1 review: a version written out is never taken for the key\'s version', async () => {
-  const { yesNo } = await import(MODULE);
-  const b = { experience: { items: { 'itil 4 foundation': true } }, policy: {} };
-  for (const q of ['Do you hold ITIL version 3 Foundation?', 'Do you hold ITIL Foundation, version 3?', 'Do you hold ITIL® v3 Foundation?',
-    'Do you hold ITIL Foundation (2011 edition)?', 'Do you hold an ITIL version 3 certification?']) assert.equal(yesNo(q, b, 'UK'), null, q);
-  assert.equal(yesNo('Do you hold ITIL 4 Foundation?', b, 'UK'), 'Yes');
-});
-
-test('0.5.1 review: the family fallback only says Yes, never for generic words or exclusions', async () => {
-  const { yesNo } = await import(MODULE);
-  assert.equal(yesNo('Do you hold a testing certification other than ISTQB?', { experience: { items: { 'istqb advanced level test analyst': true } }, policy: {} }, 'UK'), null);
-  assert.equal(yesNo('Are you certified (e.g. CISSP)?', { experience: { items: { 'certified kubernetes administrator': true } }, policy: {} }, 'UK'), null);
-  assert.equal(yesNo('Do you hold an AWS certification?', { experience: { items: { 'aws solutions architect': false } }, policy: {} }, 'UK'), null);
-  assert.equal(yesNo('Do you hold an AWS certification?', { experience: { items: { 'aws solutions architect': false, 'aws developer associate': true } }, policy: {} }, 'UK'), 'Yes');
-});
-
-test('0.5.1 review: "in software development" only counts for a software bank, at the end of the question', async () => {
-  const { years } = await import(MODULE);
-  for (const fam of ['qa-testing', 'hr-recruiting', 'marketing', 'it-customer-support']) {
-    assert.equal(years('How many years of relevant experience do you have in software development?', { role_family: fam, experience: { total_years: 6, items: {} } }), null, fam);
-  }
-  assert.equal(years('How many years of recruiting experience do you have in software engineering?', { role_family: 'hr-recruiting', experience: { total_years: 6, items: {} } }), null);
-  for (const q of ['How many years of experience do you have in development for iOS?', 'How many years of experience do you have in development of embedded systems?',
+  assert.equal(years('How many years of professional experience do you have in software engineering?', bank), '5');
+  for (const q of ['How many years of Rust experience do you have in software development?', 'How many years of experience do you have in development for iOS?',
     'How many years of experience do you have in programming languages such as Go?']) assert.equal(years(q, bank), null, q);
-});
-
-test('0.5.1 review: zero notice never picks a fixed length', async () => {
-  const { pickOption } = await import(MODULE);
-  assert.equal(pickOption('Notice period', ['Select an option', '1 week', '2 weeks', '1 month'], { ...bank, notice: { weeks: 0 } }, 'UK'), null);
-  assert.equal(pickOption('Notice period', ['Select an option', 'Less than 1 month', '1-3 months'], { ...bank, notice: { weeks: 0 } }, 'UK'), 'Less than 1 month');
-});
-
-test('0.5.1 review: an excluded credential is not claimed; any held alternative is', async () => {
-  const { yesNo } = await import(MODULE);
-  assert.equal(yesNo('Do you hold PRINCE2 (not PMP)?', { experience: { items: { pmp: true } }, policy: {} }, 'UK'), null);
-  assert.equal(yesNo('Do you hold PRINCE2 (or PMP)?', { experience: { items: { prince2: false, pmp: true } }, policy: {} }, 'UK'), 'Yes');
-  assert.equal(yesNo('Do you hold ITIL4 Foundation?', { experience: { items: { 'itil 4 foundation': true } }, policy: {} }, 'UK'), 'Yes');
-  assert.equal(yesNo('Do you hold an ISTQB Foundation?', { experience: { items: { 'istqb foundation level': false, 'istqb advanced level test analyst': true } }, policy: {} }, 'UK'), 'No');
+  assert.equal(years('How many years of relevant experience do you have in software development?', { role_family: 'hr-recruiting', experience: { total_years: 6, items: {} } }), null);
 });

@@ -74,101 +74,61 @@ const ROMAN = /^(i{1,3}|iv|v)$/;
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const levelWords = (s) => (s.match(LEVEL_WORDS) || []).map((w) => w.replace(/ship$/, '').replace(/\s+/g, ' '));
 const stripLevels = (s) => norm(s.replace(LEVEL_WORDS, ' ').replace(/\blevel\b/g, ' '));
+const LEVEL_NUMBERS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+// Other ways of writing a level ("L7", "level-7", "Level Seven") read as "level 7".
+const spellLevels = (s) => s
+  .replace(/\bl\s?(\d+)\b/g, 'level $1')
+  .replace(/\blevel-(\d+)\b/g, 'level $1')
+  .replace(/\blevel[\s-](one|two|three|four|five|six|seven|eight|nine|ten)\b/g, (_, w) => 'level ' + LEVEL_NUMBERS[w]);
+// "not PMP", "non-PMP", "other than PMP": the credential named there is not the one asked about.
+const EXCLUDED_BEFORE = '(?:\\bnot\\b|\\bnon-?\\s*|\\bother than\\b|\\bbesides\\b|\\bapart from\\b|\\bexcept\\b|\\binstead of\\b)\\s*(?:[a-z0-9]+\\s+){0,2}';
+// "CISSP-ISSAP": a concentration joined by a hyphen is a different credential (Roman levels excepted).
+const HYPHEN_SUFFIX = '-(?!(?:i{1,3}|iv|v)(?![a-z0-9]))[a-z]{2,}';
 
-const VERSION = /^v?\d+(\.\d+)?$/;
-// Words a level-free family question may contain after the credential name ("ISTQB certification?").
-const FAMILY_FILLER = /^(certif\w*|qualif\w*|credential\w*|exam|any|current|valid|active|accredit\w*|licen[cs]e\w*)$/;
-
-/** A boolean credential split into its name, its version ("itil 4") and the levels it was recorded at. */
+/** A boolean credential split into its name and the levels it was recorded at. */
 function credentialKey(key) {
-  const levels = levelWords(key);
-  const words = stripLevels(key).split(' ');
+  const spelled = spellLevels(key);
+  const levels = levelWords(spelled);
+  const words = stripLevels(spelled).split(' ');
   if (words.length > 1 && ROMAN.test(words[words.length - 1])) levels.push('r:' + words.pop());
-  const ver = words.find((w) => VERSION.test(w));
-  const bare = words.filter((w) => !VERSION.test(w));
-  return { base: words.join(' '), bare: bare.join(' '), family: bare[0] || '', ver: ver ? ver.replace(/^v/, '') : undefined, levels };
-}
-
-// Words too general to be a credential family ("Are you certified?", "a professional certification").
-const GENERIC_FAMILY = /^(certif\w*|certified|qualif\w*|professional|associate|chartered|registered|licensed|accredited|senior|junior|lead|cloud|data|security|testing|project|agile)$/;
-// "other than X", "besides X": the question is about something else.
-const EXCLUSION = /\bother than\b|\bbesides\b|\bapart from\b|\bexcept\b|\binstead of\b|\bnon-|\bnot\b/;
-const VERSIONISH = /\d|\bversion\b|\bedition\b/;
-const ACRONYM_STOP = new Set(['of', 'and', 'the', 'for', 'in', '&', 'a', 'an']);
-const initials = (words) => words.map((w) => w.replace(/[^a-z0-9]/g, '')).filter((w) => w && !ACRONYM_STOP.has(w)).map((w) => w[0]).join('');
-
-/**
- * Spelled-out acronyms are names, not levels: "PMP (Project Management Professional)" is judged
- * as "PMP", and "Professional Scrum Master I (PSM I)" as "PSM I". Any other bracket stays in
- * the text, so a level or version inside it ("ITIL (Managing Professional)", "(v3)") still counts.
- */
-function liftAcronyms(q) {
-  let out = q;
-  const kept = [];
-  for (let m = /\(([^)]*)\)/.exec(out); m; m = /\(([^)]*)\)/.exec(out)) {
-    const before = out.slice(0, m.index).trim().split(/\s+/).filter(Boolean);
-    const after = out.slice(m.index + m[0].length);
-    const inside = m[1].trim().split(/\s+/).filter(Boolean);
-    const prev = (before[before.length - 1] || '').replace(/[^a-z0-9]/g, '');
-    let next = null;
-    if (prev.length >= 2 && initials(inside) === prev) next = before.join(' ') + ' ' + after; // name (expansion)
-    else {
-      const acr = (inside[0] || '').replace(/[^a-z0-9]/g, '');
-      const rest = inside.slice(1);
-      for (let n = acr.length; acr.length >= 2 && n <= acr.length + 3 && n <= before.length; n++) {
-        let tail = before.slice(before.length - n);
-        if (rest.length && tail.slice(-rest.length).join(' ') === rest.join(' ')) tail = tail.slice(0, tail.length - rest.length);
-        if (initials(tail) === acr) { next = before.slice(0, before.length - n).join(' ') + ' ' + inside.join(' ') + ' ' + after; break; }
-      }
-    }
-    if (next === null) { kept.push(m[1]); next = out.slice(0, m.index) + ' \u0000' + (kept.length - 1) + '\u0000 ' + after; }
-    out = next;
-  }
-  return norm(out.replace(/\u0000(\d+)\u0000/g, (_, i) => kept[Number(i)]));
+  return { base: words.join(' '), levels };
 }
 
 /**
  * 'Yes' or 'No' from the boolean items for a credential question, null when the question names
- * a level or version the matching key lacks, undefined when no key names the credential. The
- * longest matching key decides.
+ * a level the matching key lacks, undefined when no key names the credential. The longest
+ * matching key decides. "Both PMP and PRINCE2" needs every part answered: Yes only when each is
+ * held, No when one is not held, otherwise null.
  */
 function credential(question, items) {
-  const q = liftAcronyms(question);
+  const q = spellLevels(question);
+  const parts = q.split(/\band\b|&|\bas well as\b/);
+  if (parts.length < 2) return credentialPart(q, items);
+  const whole = credentialPart(q, items);
+  if (whole === undefined) return undefined;
+  const answers = parts.map((part) => credentialPart(part, items));
+  if (answers.includes('No')) return 'No';
+  return answers.every((a) => a === 'Yes') ? 'Yes' : null;
+}
+
+function credentialPart(q, items) {
   const qBase = stripLevels(q);
   const qWords = levelWords(q);
-  const all = Object.entries(items).filter(([, v]) => typeof v === 'boolean').map(([k, v]) => ({ ...credentialKey(k), v }));
-  // By name; or by the name without its version ("itil 4 foundation" answers "ITIL Foundation?"),
-  // but only when the question names no version or edition at all, other than the key's own.
-  const ownVersionGone = (c) => (c.ver ? q.replace(new RegExp('(?<![a-z0-9])' + escapeRe(c.bare) + '\\s*v?' + escapeRe(c.ver) + '(?![0-9])', 'g'), ' ') : q);
-  // "PRINCE2 (not PMP)": a credential named after an exclusion is not the one asked about.
-  const excluded = (name) => new RegExp('(?:\\bnot\\b|other than|besides|apart from|except|instead of)\\s+(?:[a-z0-9]+\\s+){0,2}' + escapeRe(name) + '(?![a-z0-9])').test(qBase);
-  let keys = all.filter((c) => c.base && !excluded(c.bare || c.base) && (hasKey(qBase, c.base)
-    || (c.ver && c.bare && hasKey(qBase, c.bare + c.ver)) // "ITIL4" written without a space
-    || (c.ver && c.bare && hasKey(qBase, c.bare) && !VERSIONISH.test(stripLevels(ownVersionGone(c)).replace(/\blevel\s*\d+\b/g, ' ')))));
-  // A plain question about a whole family ("Do you hold an ISTQB certification?") is answered
-  // Yes by a held key of that family. It never answers No (another certificate of the family may
-  // be held), never for generic words, and never when the question excludes something.
-  if (!keys.length && !qWords.length && !EXCLUSION.test(q) && !VERSIONISH.test(q)) {
-    keys = all.filter((c) => {
-      if (!c.v || c.family.length < 3 || GENERIC_FAMILY.test(c.family) || !hasKey(qBase, c.family)) return false;
-      const after = qBase.slice(qBase.search(new RegExp('(?<![a-z0-9])' + escapeRe(c.family))) + c.family.length);
-      return after.split(/[^a-z0-9+#]+/).filter((w) => w && !FAMILY_FILLER.test(w)).length === 0;
-    });
-  }
-  keys.sort((a, b) => b.base.length - a.base.length || b.levels.length - a.levels.length);
+  const keys = Object.entries(items)
+    .filter(([, v]) => typeof v === 'boolean')
+    .map(([k, v]) => ({ ...credentialKey(k), v }))
+    .filter((c) => c.base && hasKey(qBase, c.base))
+    .filter((c) => !new RegExp(EXCLUDED_BEFORE + escapeRe(c.base) + '(?![a-z0-9])').test(qBase))
+    .filter((c) => !new RegExp('(?<![a-z0-9])' + escapeRe(c.base) + HYPHEN_SUFFIX).test(qBase))
+    .sort((a, b) => b.base.length - a.base.length || b.levels.length - a.levels.length);
   if (!keys.length) return undefined;
-  const judged = keys.map((c) => {
+  for (const c of keys) {
     const roman = qBase.match(new RegExp('(?<![a-z0-9])' + escapeRe(c.base) + '\\s*-?\\s*(i{1,3}|iv|v)(?![a-z0-9])'));
-    // A version named in the question must be the key's own ("ITIL v3" is not "ITIL 4").
-    const v = c.bare && qBase.match(new RegExp('(?<![a-z0-9])' + escapeRe(c.bare) + '\\s*v?(\\d+(?:\\.\\d+)?)(?![a-z0-9])'));
-    const asked = [...qWords, ...(roman ? ['r:' + roman[1]] : []), ...(v && v[1] !== c.ver ? ['ver:' + v[1]] : [])];
-    return { c, asked, covered: asked.every((w) => c.levels.includes(w)) };
-  });
-  // Held at this level (or a level-free question) by any matching key: Yes, so "PRINCE2 (or
-  // PMP)" is Yes for a PMP holder. "No" only for the same levels, or a level-free key that says
-  // the candidate holds none of this credential.
-  if (judged.some(({ c, covered }) => c.v && covered)) return 'Yes';
-  for (const { c, asked, covered } of judged) {
+    const asked = [...qWords, ...(roman ? ['r:' + roman[1]] : [])];
+    const covered = asked.every((w) => c.levels.includes(w));
+    // Held at this level (or a level-free question): Yes. "No" only for the same levels, or a
+    // level-free key that says the candidate holds none of this credential.
+    if (c.v && covered) return 'Yes';
     if (!c.v && (c.levels.length === 0 || (covered && asked.length === c.levels.length))) return 'No';
   }
   return null;
@@ -263,13 +223,14 @@ export function years(question, bank) {
   for (const [k, v] of own) if (hasKey(q, k)) return v;
   // Role wording ("in this role", "QA experience") counts only when nothing more specific is
   // asked: a "with / using / on / in <thing>" qualifier means a skill the bank does not cover.
+  const unqualified = !/\b(with|using|on|in)\b/.test(q.replace(/\bin (this|a similar|similar|the same) (role|roles|position)\b/g, ''));
   const fam = bank && bank.role_family;
-  const softwareBank = !fam || fam === 'software-engineering';
-  // For a software bank only, general software wording ending the question ("... in
-  // object-oriented software development?") names the field, not a specific skill.
-  let rest = q.replace(/\bin (this|a similar|similar|the same) (role|roles|position)\b/g, '');
-  if (softwareBank) rest = rest.replace(/\bin (?:object.?oriented |full.?stack |web )?(?:software )?(?:development|engineering|programming)\s*\??$/, ' software development');
-  const unqualified = !/\b(with|using|on|in)\b/.test(rest);
+  // The general software question, exactly ("... experience do you have in object-oriented
+  // software development?"), counts as total years for a software bank (or one with no family).
+  if ((!fam || fam === 'software-engineering') && total !== undefined
+    && /^how many years of (?:(?:work|professional|relevant|commercial|industry) )?experience(?: do you have)? in (?:object.?oriented |full.?stack |web )?(?:software )?(?:development|engineering|programming)\??$/.test(q)) {
+    return String(total);
+  }
   const family = FAMILY_WORDS[fam];
   // 2. The candidate's own field ("recruiting experience" for an hr-recruiting bank).
   if (unqualified && family && total !== undefined && familyPhrase(family).test(q)) return String(total);
@@ -284,6 +245,7 @@ export function years(question, bank) {
   }
   // 4. Generic wording. The software wording counts as total years only for a software
   //    engineer, or a 0.4.0 bank with no role_family; "professional" only in the anchored form.
+  const softwareBank = !fam || fam === 'software-engineering';
   const generic = /years of (work |professional |relevant )?experience( do you have)?\??$/.test(q)
     || (unqualified && (/in this role|relevant experience|similar role/.test(q)
       || (softwareBank && /software|engineering|development|programming|full.?stack|web|object.?oriented/.test(q))));

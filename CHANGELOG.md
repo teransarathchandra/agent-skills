@@ -5,14 +5,14 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 ## [Unreleased]
 
 ### Fixed
-- `job-application-assistant` 0.5.1, answer rules:
-  - A level word inside a credential's spelled-out name no longer blocks the answer ("PMP (Project Management Professional)", "CISSP (Certified Information Systems Security Professional)"). Bracketed text is judged on its own, so "Professional Scrum Master I (PSM I)" still matches only PSM I.
-  - A versioned credential ("itil 4 foundation") answers level-free and version-free questions ("ITIL Foundation?", "ITIL certification?"), but never a different version ("ITIL v3").
-  - Any key of a credential family answers a plain family question ("Do you hold an ISTQB certification?"), unless the question names another module ("ISTQB Test Manager").
-  - Only spelled-out acronyms in brackets are treated as names; any other bracket keeps its level or version words ("ITIL (Managing Professional)", "(v3)"). A version written out ("version 3", "2011 edition") is never taken for the key's version. The family fallback only ever answers Yes, never for generic words, and never when the question excludes something ("other than ISTQB").
-  - A credential named after "not", "other than" or similar is not claimed ("PRINCE2 (not PMP)"); any held alternative is ("PRINCE2 (or PMP)"). "ITIL4" matches "itil 4".
-  - No notice matches an "under 2 weeks" option when the form has no "immediately", and never a fixed length such as "1 week".
-  - "Experience in object-oriented software development" counts as total years again on software and 0.4.0 answer banks, only when it ends the question; other role families are not affected.
+- `job-application-assistant` 0.5.1: the answer rules only ever get more cautious. A wrong "Yes" on a credential is a false claim on a real application, so every change here turns a possible wrong answer into a question for the candidate, never the reverse.
+  - A credential named after "not", "non-", "other than", "besides", "except" or "instead of" is not claimed ("PRINCE2 (not PMP)", "a non-PMP certification").
+  - "Both PMP and PRINCE2" needs every named credential: Yes only when each is held, No when one is not held, otherwise asked.
+  - Levels written as "L7", "level-7" or "Level Seven" count as levels, so they no longer match a different level.
+  - A concentration joined by a hyphen ("CISSP-ISSAP") is not taken for the base credential.
+  - No notice picks "immediately", otherwise only a range that starts at zero ("Less than 2 weeks"), never a fixed length.
+  - The exact general question ("How many years of experience do you have in object-oriented software development?") counts as total years for software and 0.4.0 answer banks; a named skill before "experience" or after "in" is still asked.
+  - Still asked rather than answered (safe, by design): spelled-out names in brackets ("PMP (Project Management Professional)"), versioned keys against version-free questions ("itil 4 foundation" vs "ITIL Foundation?"), and family questions ("ISTQB certification?").
 
 ### Added
 - `docs/superpowers/specs/2026-11-23-jaa-roadmap-1.0-design.md`: the roadmap from 0.5.1 to 1.0 (tracker, job sources and sponsor lookup, referrals, interviews and offers).
